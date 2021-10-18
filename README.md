@@ -1,3 +1,3 @@
-# Classroom Clone
+# Classroom Clone Front-end
 ------------------------------------------------
-Web in course Advanced Web
+FE using React to clone classroom, in course Advanced Web
