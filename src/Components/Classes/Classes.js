@@ -1,4 +1,11 @@
 import { useState, useEffect } from "react";
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
+import Classroom from "../Classroom/Classroom";
+import {DOMAIN_API}  from '../../config/const';
+
+
 
 export default function Classes(){
     const [error, setError] = useState(null);
@@ -9,7 +16,7 @@ export default function Classes(){
     // this useEffect will run once
     // similar to componentDidMount()
     useEffect(() => {
-        fetch("http://localhost:3000/classes")
+        fetch(DOMAIN_API+"classes")
         .then(res => res.json())
         .then(
             (result) => {
@@ -32,13 +39,22 @@ export default function Classes(){
         return <div>Loading...</div>;
     } else {
         return (
-        <ul>
-            {items.map(item => (
-            <li key={item.id}>
-                {item.className}
-            </li>
-            ))}
-        </ul>
+            <Box sx={{ flexGrow: 1, 
+                        mx: 'auto',
+                        p: 1,
+                        m: 1,
+                        textAlign: 'center',
+                        borderRadius: 1,
+                    }}>
+                <Grid container spacing={{ xs: 2, md: 3 }}>
+                    {items.map(item => (
+                        <Grid item xs={12} sm={6} md={3}>
+                            <Classroom key={item.id} title={item.className}>
+                            </Classroom>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
         );
     }
 }

@@ -15,6 +15,16 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -27,44 +37,6 @@
     <title>Classroom Clone</title>
   </head>
   <body>
-    <button type="button" id="btn_addClass" onclick="clickAddHandler();">Add</button>
-    <div style='display:none' id='frm-add'>
-      <input type='text' name='className' id='className' maxlength='50' placeholder="Enter class's name"></input>
-      <button id='btn-submit' onclick='clickSubmitHandler();'>Submit</button>
-    </div>
     <div id="root"></div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  
-    <script>
-      function clickAddHandler(){
-        console.log("clickAddHandler");
-        $("#frm-add").attr("style","display:visible");
-        $("#btn_addClass").attr("style","display:none");
-      }
-      function clickSubmitHandler(){
-        console.log('submit button name class');
-        const className = $("#className").val();
-        console.log(className);
-        if (className.length > 0){
-          $.getJSON(`http://localhost:3000/classes/isExistedClassName?checked_name=${className}`, function(data){
-              console.log(data);
-              if (data===true){
-                alert('Name is existed. Please enter another name!')
-              }
-              else{
-                console.log('Send post data');
-                const data = {'className':className}
-                $.post('http://localhost:3000/classes/', data, function(data){
-                  document.location.href = 'http://localhost:3001/';
-                })
-              }
-          })
-        }
-        else{
-          alert('Name can not empty!');
-        }
-      }
-    </script>
   </body>
 </html>
