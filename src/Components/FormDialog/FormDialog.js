@@ -43,7 +43,7 @@ export default function FormDialog({sx}) {
                 setOpenExistedClass((openExistedClass) => {return true});
             }
             else{
-            const data = {'className':classAdded}
+            const data = {'ClassName':classAdded}
             $.post(DOMAIN_API+`classes/`, data, function(data){
                 setOpenAddSuccess((openAddSuccess) => {return true});
             })

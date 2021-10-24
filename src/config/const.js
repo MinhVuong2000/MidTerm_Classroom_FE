@@ -5,7 +5,7 @@ const EXISTED_CLASS_DESC = 'Please enter another name!';
 const NOT_NULL_CLASS_TITLE = 'Name can not empty';
 const NOT_NULL_CLASS_DESC = `Please enter class's name!`;
 const ADD_SUCCESS_TITLE = 'Add Successfully';
-const ADD_SUCCESS_DESC = "You added new class has name is {} successfully!";
+const ADD_SUCCESS_DESC = "You added new class its name is {} successfully!";
 
 module.exports = {
     DOMAIN_API, 
