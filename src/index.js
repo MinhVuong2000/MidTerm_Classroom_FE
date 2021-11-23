@@ -1,22 +1,21 @@
 import ReactDOM from 'react-dom';
-import Classes from './Components/Classes/Classes';
-import FormDialog from './Components/FormDialog/FormDialog';
-import Header from './Components/Header/Header';
+import App from './App'
+import React  from 'react';
 
-
-function App(){
-  return (
-    <div>
-      <Header/>
-      <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/>
-      <Classes/>
-    </div>
-  )
-}
-
+// function App(){
+//   return (
+//     <div>
+//       <Header/>
+//       {/* <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/> */}
+//       <Classes/>
+//     </div>
+//   )
+// }
+ 
 // -------
-
 ReactDOM.render(
-  <App/>,
+    <App/>,
   document.getElementById('root')
 );
+
+   
