@@ -22,7 +22,9 @@ export default function Classes(){
           .then(
             (result) => {
               setIsLoaded(true);
+              console.log(result);
               setItems(result);
+              
             },
             // Note: it's important to handle errors here
             // instead of a catch() block so that we don't swallow
@@ -50,7 +52,7 @@ export default function Classes(){
                 <Grid container spacing={{ xs: 2, md: 3 }}>
                     {items.map(item => 
                         <Grid item xs={12} sm={6} md={3}>
-                            <Classroom key={item.id} title={item.class_name}>
+                            <Classroom title={item.class_name} description={item.description} idclass={item.id} >
                             </Classroom>
                         </Grid>
                     )}

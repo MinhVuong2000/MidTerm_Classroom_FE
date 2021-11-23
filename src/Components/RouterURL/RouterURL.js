@@ -10,6 +10,8 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import Member from '../ClassDetail/Member/Member';
+import { Switch } from '@mui/material';
 
 
 
@@ -19,7 +21,9 @@ export default function RouterURL() {
         <Routes>
           <Route exact path='/' element={<Classes/>} />
           <Route path='/detail' element={<Detail/>} />
-          <Route path='/notfound' component={<NotFound/>} />
+          <Route path='/notfound' element={<NotFound/>} />
+          <Route path='/classes/:idclass' element= {<ClassDetail/>}/>
+          
         </Routes>
       </BrowserRouter>
   )

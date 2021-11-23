@@ -13,12 +13,12 @@ import Scores from './Scores/Scores';
 export default function ClassDetail() {
     const [value, setValue] = React.useState(0);
 
-    const [isShowNews, setIsShowNews] = React.useState(false)
+    const [isShowNews, setIsShowNews] = React.useState(true)
     const [isShowMember, setIsShowMember] = React.useState(false)
     const [isShowScores, setIsShowScores] = React.useState(false)
 
+    const {idclass} = useParams();
     const handleChange = (event, newValue) => {
-        console.log("value", newValue)
         
         if (newValue == "0") {
             setIsShowNews(true);
@@ -132,7 +132,7 @@ export default function ClassDetail() {
       {isShowScores && < Scores data={mockData}Scores />} */}
 
                 {isShowNews && < News data={mockDataNew} />}
-                {isShowMember && < Member />}
+                {isShowMember && < Member idclass = {idclass}/>}
                 {isShowScores && < Scores />}
             </div>
         </Box>
