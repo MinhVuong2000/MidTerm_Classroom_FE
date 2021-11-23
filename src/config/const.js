@@ -1,6 +1,6 @@
 const DOMAIN_API = 'http://localhost:3000/';
 const DOMAIN_FE = 'http://localhost:3001/';
-// const DOMAIN_API = 'https://classroom-clone-api.herokuapp.com/';//backend
+// const DOMAIN_API = 'https://classroom-clon-api-midterm.herokuapp.com/';//backend
 // const DOMAIN_FE = 'https://classroom-clone-fe.herokuapp.com/';//frontend
 const EXISTED_CLASS_TITLE = "Name {} is existed";
 const EXISTED_CLASS_DESC = 'Please enter another name!';

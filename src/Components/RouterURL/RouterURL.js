@@ -3,6 +3,10 @@ import Classes from '../Classes/Classes';
 import Detail from '../Detail/Detail';
 import ClassDetail from '../ClassDetail/ClassDetail';
 import NotFound from '../NotFound/NotFound';
+import Register from '../Register/Register';
+import Login from '../Login/Login';
+import LogOut from '../LogOut/LogOut';
+import Profile from '../Profile/Profile';
 import React, {Component} from 'react'
 import {
   BrowserRouter,
@@ -22,34 +26,12 @@ export default function RouterURL() {
           <Route exact path='/' element={<Classes/>} />
           <Route path='/detail' element={<Detail/>} />
           <Route path='/notfound' element={<NotFound/>} />
-          <Route path='/classes/:idclass' element= {<ClassDetail/>}/>
-          
+          <Route path='/classes/:idclass' element= {<ClassDetail/>}/>         
+          <Route path='/register' element={<Register/>} />
+          <Route path='/login' element={<Login/>} />
+          <Route path='/profile' element={<Profile/>} />
+          <Route path='/logout' element={<LogOut/>} />
         </Routes>
       </BrowserRouter>
   )
 }
-
-// const routes = [
-//     {
-//         path : '/',
-//         exact : true,
-//         main : () => <Classes />
-//     },
-//     {
-//         path : '/detail',
-//         exact : false,
-//         main : () => <Detail />
-//     },
-//     {
-//         path : '/notfound',
-//         exact : false,
-//         main : () => <NotFound />
-//     },
-//     // {
-//     //     path : '/products',
-//     //     exact : false,
-//     //     main : ({ match, location }) => <Products match={match} location={location} />
-//     // }
-// ];
-
-// export default routes;
