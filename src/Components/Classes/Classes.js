@@ -12,63 +12,27 @@ export default function Classes(){
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
     console.log("===================================")
-    const data=[
-        {
-            ID: "1",
-            ClassName: "Class1"
-        },
-        {
-            ID: "2",
-            ClassName: "Class2"
-        },
-        {
-            ID: "3",
-            ClassName: "Class3"
-        },
-        {
-            ID: "4",
-            ClassName: "Class4"
-        },
-        {
-            ID: "5",
-            ClassName: "Class5"
-        },
-        {
-            ID: "6",
-            ClassName: "Class6"
-        }
-
-
-    ]
+    
     // Note: the empty deps array [] means
     // this useEffect will run once
     // similar to componentDidMount()
     useEffect(() => {
-        // fetch(DOMAIN_API+"classes")
-        // .then(res => res.json())
-        // .then(
-        //     (result) => {
-        //     setIsLoaded(true);
-        //     setItems(result);
-        //     },
-        //     // Note: it's important to handle errors here
-        //     // instead of a catch() block so that we don't swallow
-        //     // exceptions from actual bugs in components.
-        //     (error) => {
-        //     setIsLoaded(true);
-        //     setError(error);
-        //     }
-        // )
-            setIsLoaded(true);
-            setItems(data);
+        fetch("http://localhost:3000/classes")
+          .then(res => res.json())
+          .then(
+            (result) => {
+              setIsLoaded(true);
+              setItems(result);
             },
             // Note: it's important to handle errors here
             // instead of a catch() block so that we don't swallow
             // exceptions from actual bugs in components.
             (error) => {
-            setIsLoaded(true);
-            setError(error);
-    }, [])
+              setIsLoaded(true);
+              setError(error);
+            }
+          )
+      }, [])
     
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -84,12 +48,12 @@ export default function Classes(){
                         borderRadius: 1,
                     }}>
                 <Grid container spacing={{ xs: 2, md: 3 }}>
-                    {items.map(item => (
+                    {items.map(item => 
                         <Grid item xs={12} sm={6} md={3}>
-                            <Classroom key={item.ID} title={item.ClassName}>
+                            <Classroom key={item.id} title={item.class_name}>
                             </Classroom>
                         </Grid>
-                    ))}
+                    )}
                 </Grid>
             </Box>
         );
