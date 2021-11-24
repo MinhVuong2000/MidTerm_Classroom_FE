@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-
+import  { Navigate } from 'react-router-dom';
 import Classroom from "../Classroom/Classroom";
 import {DOMAIN_API}  from '../../config/const';
 
@@ -26,7 +26,7 @@ export default function Classes(){
             (result) => {
                 console.log(result)
                 setIsLoaded(true);
-                setItems(result);
+                setItems(result.message?null:result);
             },
             // Note: it's important to handle errors here
             // instead of a catch() block so that we don't swallow
@@ -43,22 +43,30 @@ export default function Classes(){
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
-        return (
-            <Box sx={{ flexGrow: 1, 
-                        mx: 'auto',
-                        p: 1,
-                        m: 1,
-                        textAlign: 'center',
-                        borderRadius: 1,
-                    }}>
-                <Grid container spacing={{ xs: 2, md: 3 }}>
-                    {items.map(item => 
-                        <Grid item xs={12} sm={6} md={3}>
-                            <Classroom title={item.class_name} description={item.description} idclass={item.id} />
-                        </Grid>
-                    )}
-                </Grid>
-            </Box>
-        );
+        if (items!==null)
+            return (
+                <Box sx={{ flexGrow: 1, 
+                            mx: 'auto',
+                            p: 1,
+                            m: 1,
+                            textAlign: 'center',
+                            borderRadius: 1,
+                        }}>
+                    <Grid container spacing={{ xs: 2, md: 3 }}>
+                        {items.map(item => 
+                            <Grid item xs={12} sm={6} md={3}>
+                                <Classroom title={item.class_name} description={item.description} idclass={item.id} />
+                            </Grid>
+                        )}
+                    </Grid>
+                </Box>
+            )
+        else{
+            return (
+                <div>
+                    <Navigate to="/login"/>
+                </div>
+            )
+        }
     }
 }
