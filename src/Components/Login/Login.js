@@ -1,9 +1,7 @@
-import signin_image from '../../static/images/signin-image.jpeg';
-//import '../Login/Login.css';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css"
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { DOMAIN_API } from '../../config/const';
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -21,7 +19,7 @@ export default function Login() {
         event.preventDefault();
         if (username !== '' && password !== '') {
 
-            const url = DOMAIN_API + "users/login";
+            const url = DOMAIN_API + "login";
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -30,15 +28,28 @@ export default function Login() {
             fetch(url, requestOptions)
                 .then(res => res.json())
                 .then((result) => {
-                    localStorage.setItem('access_token', result.access_token);
+                    if (result.access_token==='error_username'){window.alert("Username không tồn tại!")}
+                    else if (result.access_token==='error_password'){window.alert("Password không đúng!")}
+                    else{
+                        localStorage.setItem('access_token', result.access_token);
+                        console.log(localStorage.getItem('access_token'));
+                        setPassword('');
+                    }
                 })
                 .catch(error => console.log('Form submit error', error))
         }
-        else {
-            window.alert("Username and Password must not empty!");
+        else{
+            window.alert("Username và Password không được trống!");
         }
-
     }
+
+    if (localStorage.getItem('access_token')){
+        return (
+            <Navigate to="/"/>
+        )
+    }
+
+
     return (
         <div className="App">
 
@@ -61,28 +72,28 @@ export default function Login() {
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <form>
-                        <h3>Sign In</h3>
+                        <h3>Đăng nhập</h3>
 
                         <div className="form-group">
-                            <label>User name</label>
-                            <input type="email" className="form-control" placeholder="Enter User name" />
+                            <label>Username</label>
+                            <input type="text" name="username" id="username" className="form-control" placeholder="Nhập Username" value={username} onChange={handleChangeUsername}/>
                         </div>
 
                         <div className="form-group">
                             <label>Password</label>
-                            <input type="password" className="form-control" placeholder="Enter password" />
+                            <input type="password" name="password" id="password" className="form-control" placeholder="Nhập password" value={password} onChange={handleChangePassword}/>
                         </div>
 
                         <div className="form-group">
                             <div className="custom-control custom-checkbox">
                                 <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                                <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
+                                <label className="custom-control-label" htmlFor="customCheck1">Nhớ đăng nhập</label>
                             </div>
                         </div>
                         <br />
-                        <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                        <button type="submit" className="btn btn-primary btn-block" onClick={handleSubmit} name="signin" id="signin" class="form-submit" value="Đăng nhập">Đăng nhập</button>
                         <p className="forgot-password text-right">
-                            Forgot <a href="#">password?</a>
+                            <a href="#">Quên mật khẩu?</a>
                         </p>
                     </form>
                 </div>
