@@ -13,15 +13,12 @@ export default function Classes(){
     const [items, setItems] = useState([]);
     console.log("===================================")
     
-    // Note: the empty deps array [] means
-    // this useEffect will run once
-    // similar to componentDidMount()
-    localStorage.setItem('access_token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjozLCJ1c2VybmFtZSI6InZ1b25nXzMyMSIsImZ1bGxfbmFtZSI6Ik5ndXnhu4VuIFRo4buLIE1pbmggVsaw4bujbmciLCJpZF91bmkiOiIzMjEiLCJlbWFpbCI6bnVsbCwiYWRkcmVzcyI6bnVsbCwicGhvbmUiOm51bGwsImlzX3NvY2lhbF9sb2dpbiI6ZmFsc2V9LCJpYXQiOjE2Mzc2ODY4MDksImV4cCI6MTYzNzY5NzYwOX0.yG715Teaa_OzRCfVYa8Nh1GoekAAclevdRAQKWCMTUQ")
+    let actoken = localStorage.getItem('access_token');
     useEffect(() => {
         fetch(DOMAIN_API+"classes",{
             method: "GET",
             headers: new Headers({
-                "x-access-token": localStorage.getItem('access_token')
+                "x-access-token": actoken
             })
         })
         .then(res => res.json())

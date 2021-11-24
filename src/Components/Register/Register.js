@@ -34,8 +34,12 @@ export default function Register()  {
                                 <input type="text" name="address" id="txtAddress" placeholder="Địa chỉ"/>
                             </div>
                             <div class="form-group">
-                                <label for="txtDOB"><i class="fa fa-birthday-cake"></i></label>
-                                <input type="text" name="raw_dob" id="txtDOB" placeholder="Ngày sinh"/>
+                                <label for="txtMSSV"><i class="fa fa-map-marker"></i></label>
+                                <input type="text" name="mssv" id="txtMssv" placeholder="MSSV"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtPhone"><i class="fa fa-birthday"></i></label>
+                                <input type="text" name="phone" id="txtPhone" placeholder="Số điện thoại"/>
                             </div>
                             <div class="form-group form-button">
                                 <input type="submit" name="signup" id="signup" class="form-submit" value="Đăng kí"/>
