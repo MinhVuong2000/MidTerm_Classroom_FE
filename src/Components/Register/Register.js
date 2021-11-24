@@ -1,57 +1,61 @@
-import signup_image from '../../static/images/signup-image.jpeg';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+export default class Register extends Component {
+    render() {
+        return (
+            <div className="App">
 
-export default function Register()  {
-    return (
-        <section class="signup">
-            <div class="container">
-                <div class="signup-content">
-                    <div class="signup-form">
-                        <h2 class="form-title">Đăng kí</h2>
-                        <form method="POST" class="register-form" id="formRegister">
-                            <div class="form-group">
-                                <label for="txtUsername"><i class="fa fa-user"></i></label>
-                                <input type="text" name="username" id="txtUsername" placeholder="Nhập username"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtPassword"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="raw_password" id="txtPassword" placeholder="Nhập mật khẩu"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtConfirm"><i class="zmdi zmdi-lock-outline"></i></label>
-                                <input type="password" name="re_pass" id="txtConfirm" placeholder="Xác nhận mật khẩu"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtName"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="name" id="txtName" placeholder="Tên đầy đủ"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtEmail"><i class="zmdi zmdi-email"></i></label>
-                                <input type="text" name="email" id="txtEmail" placeholder="Email của bạn (ví dụ:abc@gmail.com)"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtAddress"><i class="fa fa-map-marker"></i></label>
-                                <input type="text" name="address" id="txtAddress" placeholder="Địa chỉ"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtMSSV"><i class="fa fa-map-marker"></i></label>
-                                <input type="text" name="mssv" id="txtMssv" placeholder="MSSV"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtPhone"><i class="fa fa-birthday"></i></label>
-                                <input type="text" name="phone" id="txtPhone" placeholder="Số điện thoại"/>
-                            </div>
-                            <div class="form-group form-button">
-                                <input type="submit" name="signup" id="signup" class="form-submit" value="Đăng kí"/>
-                            </div>
-                        </form>
+                <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+                    <div className="container">
+                        <Link className="navbar-brand" to={"/sign-in"}>Classroom</Link>
+                        <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                            <ul className="navbar-nav ml-auto">
+                                <li className="nav-item">
+                                    <Link className="nav-link" to={"/login"}>Login</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to={"/register"}>Sign up</Link>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="signup-image">
-                        <figure><img src={signup_image} alt="sing up image"/></figure>
-                        <a href="/login" class="signup-image-link">Tôi đã có tài khoản rồi</a>
+                </nav>
+
+                <div className="auth-wrapper">
+                    <div className="auth-inner">
+                        <form>
+
+                            <h3>Sign Up</h3>
+
+                            <div className="form-group">
+                                <label>First name</label>
+                                <input type="text" className="form-control" placeholder="First name" />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Last name</label>
+                                <input type="text" className="form-control" placeholder="Last name" />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Email address</label>
+                                <input type="email" className="form-control" placeholder="Enter email" />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Password</label>
+                                <input type="password" className="form-control" placeholder="Enter password" />
+                            </div>
+                            <br />
+                            <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
+                            <p className="forgot-password text-right">
+                                Already registered <a href="#">sign in?</a>
+                            </p>
+                        </form>
                     </div>
                 </div>
             </div>
-        </section>
-    );
+        );
+    }
 }

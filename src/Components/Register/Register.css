@@ -1,6 +1,5 @@
 .App {
     text-align: center;
-    border-top: "15px";
 }
 
 .App-logo {
@@ -28,7 +27,7 @@
 }
 
 body {
-    background: #ffffff !important;
+    background: #1C8EF9 !important;
     min-height: 100vh;
     display: flex;
     font-weight: 400;

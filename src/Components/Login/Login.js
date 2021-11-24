@@ -1,24 +1,25 @@
 import signin_image from '../../static/images/signin-image.jpeg';
 import '../Login/Login.css';
 import { useState, useEffect } from "react";
-import {DOMAIN_API}  from '../../config/const';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { DOMAIN_API } from '../../config/const';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    function handleChangeUsername(event){
+    function handleChangeUsername(event) {
         setUsername(event.target.value)
     }
-    function handleChangePassword(event){
+    function handleChangePassword(event) {
         setPassword(event.target.value)
     }
     function handleSubmit(event) {
         console.log(`${username}`);
         console.log(`${password}`);
         event.preventDefault();
-        if(username!==''&&password!==''){
-         
-            const url = DOMAIN_API+"users/login";
+        if (username !== '' && password !== '') {
+
+            const url = DOMAIN_API + "users/login";
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -31,53 +32,59 @@ export default function Login() {
                 })
                 .catch(error => console.log('Form submit error', error))
         }
-        else{
+        else {
             window.alert("Username and Password must not empty!");
         }
-        
+
     }
     return (
-        <div class="main">
-            <div>BC<br/><br/><br/><br/>BR</div>
-            <div class="sign-in">
-                <div class="container">
-                    <div class="signin-content">
-                        <div class="signin-image">
-                            <figure><img src={signin_image} alt="signin image"/></figure>
-                            <a href="/register" class="signup-image-link">Tạo tài khoản mới</a>
+        <div className="App">
+
+            <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+                <div className="container">
+                    <Link className="navbar-brand" to={"/sign-in"}>Classroom</Link>
+                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/login"}>Login</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/register"}>Sign up</Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div className="auth-wrapper">
+                <div className="auth-inner">
+                    <form>
+                        <h3>Sign In</h3>
+
+                        <div className="form-group">
+                            <label>Email address</label>
+                            <input type="email" className="form-control" placeholder="Enter email" />
                         </div>
 
-                        <div class="signin-form">
-                            <h2 class="form-title">Đăng nhập</h2>
-                            
-                            <form method="POST" class="register-form" id="login-form" action="">
-                                <div class="form-group">
-                                    <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                    <input type="text" name="username" id="username" placeholder="Username" value={username}
-                        onChange={handleChangeUsername}/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password"><i class="zmdi zmdi-lock"></i></label>
-                                    <input type="password" name="password" id="password" placeholder="Password" value={password}
-                        onChange={handleChangePassword}/>
-                                </div>
-                                <div className="alignright">
-                                    <a id="forgot_pass" class="label-agree-term text-danger" href="/reset-password">Quên mật khẩu</a>
-                                </div>
-                                <div class="form-group form-button">
-                                    <input type="submit" onClick={handleSubmit} name="signin" id="signin" class="form-submit" value="Đăng nhập"/>
-                                </div>
-                            </form>
-                            <div class="social-login">
-                                <span class="social-label">Hoặc đăng nhập bằng</span>
-                                <ul class="socials">
-                                    <li><a href="/auth/google"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
-                                </ul>
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input type="password" className="form-control" placeholder="Enter password" />
+                        </div>
+
+                        <div className="form-group">
+                            <div className="custom-control custom-checkbox">
+                                <input type="checkbox" className="custom-control-input" id="customCheck1" />
+                                <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
                             </div>
                         </div>
-                    </div>
+                        <br />
+                        <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                        <p className="forgot-password text-right">
+                            Forgot <a href="#">password?</a>
+                        </p>
+                    </form>
                 </div>
             </div>
         </div>
     )
-  }
+}
