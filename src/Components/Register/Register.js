@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 export default class Register extends Component {
     render() {
@@ -29,13 +30,13 @@ export default class Register extends Component {
                             <h3>Sign Up</h3>
 
                             <div className="form-group">
-                                <label>First name</label>
-                                <input type="text" className="form-control" placeholder="First name" />
+                                <label>User name</label>
+                                <input type="text" className="form-control" placeholder="User name" />
                             </div>
 
                             <div className="form-group">
-                                <label>Last name</label>
-                                <input type="text" className="form-control" placeholder="Last name" />
+                                <label>Full name</label>
+                                <input type="text" className="form-control" placeholder="Full name" />
                             </div>
 
                             <div className="form-group">

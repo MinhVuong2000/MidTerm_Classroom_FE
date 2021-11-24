@@ -1,5 +1,7 @@
 import signin_image from '../../static/images/signin-image.jpeg';
-import '../Login/Login.css';
+//import '../Login/Login.css';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import "./Login.css"
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { DOMAIN_API } from '../../config/const';
@@ -62,8 +64,8 @@ export default function Login() {
                         <h3>Sign In</h3>
 
                         <div className="form-group">
-                            <label>Email address</label>
-                            <input type="email" className="form-control" placeholder="Enter email" />
+                            <label>User name</label>
+                            <input type="email" className="form-control" placeholder="Enter User name" />
                         </div>
 
                         <div className="form-group">
