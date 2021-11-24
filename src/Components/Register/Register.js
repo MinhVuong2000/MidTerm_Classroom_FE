@@ -27,31 +27,31 @@ export default class Register extends Component {
                     <div className="auth-inner">
                         <form>
 
-                            <h3>Sign Up</h3>
+                            <h3>Đăng kí tài khoản</h3>
 
                             <div className="form-group">
-                                <label>User name</label>
+                                <label>Username</label>
                                 <input type="text" className="form-control" placeholder="User name" />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Full name</label>
-                                <input type="text" className="form-control" placeholder="Full name" />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Email address</label>
-                                <input type="email" className="form-control" placeholder="Enter email" />
                             </div>
 
                             <div className="form-group">
                                 <label>Password</label>
                                 <input type="password" className="form-control" placeholder="Enter password" />
                             </div>
+
+                            <div className="form-group">
+                                <label>Tên đầy đủ</label>
+                                <input type="text" className="form-control" placeholder="Full name" />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Địa chỉ Email</label>
+                                <input type="email" className="form-control" placeholder="Enter email" />
+                            </div>
                             <br />
                             <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
                             <p className="forgot-password text-right">
-                                Already registered <a href="#">sign in?</a>
+                                Bạn đã có tài khoản? <a href="#">Đăng nhập</a>
                             </p>
                         </form>
                     </div>
