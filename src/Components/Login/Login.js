@@ -14,8 +14,6 @@ export default function Login() {
         setPassword(event.target.value)
     }
     function handleSubmit(event) {
-        console.log(`${username}`);
-        console.log(`${password}`);
         event.preventDefault();
         if (username !== '' && password !== '') {
 

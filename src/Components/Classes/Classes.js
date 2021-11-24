@@ -30,9 +30,13 @@ export default function Classes(){
                 if(result != null){
                     if(result.message){
                         setItems([]);
+                        setIsLoaded(true);
                     }
-                    setIsLoaded(true);
-                    setItems(result);
+                    else{
+                        setIsLoaded(true);
+                        setItems(result);
+                    }
+                    
                 }
                 if(result==null){
                     setItems(null);
@@ -53,24 +57,33 @@ export default function Classes(){
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
-        if (items!==null)
-            return (
-                <Box sx={{ flexGrow: 1, 
-                            mx: 'auto',
-                            p: 1,
-                            m: 1,
-                            textAlign: 'center',
-                            borderRadius: 1,
-                        }}>
-                    <Grid container spacing={{ xs: 2, md: 3 }}>
-                        {items.map(item => 
-                            <Grid item xs={12} sm={6} md={3}>
-                                <Classroom title={item.class_name} description={item.description} idclass={item.id} />
-                            </Grid>
-                        )}
-                    </Grid>
-                </Box>
-            )
+        if (items!==null){
+            console.log("kiem tra item []",items)
+            if(items.length == 0){
+                return <div>You haven't got any Classroom yet!</div>;
+            }
+            else{
+             
+                return (
+                    <Box sx={{ flexGrow: 1, 
+                                mx: 'auto',
+                                p: 1,
+                                m: 1,
+                                textAlign: 'center',
+                                borderRadius: 1,
+                            }}>
+                        <Grid container spacing={{ xs: 2, md: 3 }}>
+                            {items.map(item => 
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <Classroom title={item.class_name} description={item.description} idclass={item.id} />
+                                </Grid>
+                            )}
+                        </Grid>
+                    </Box>
+                )
+                
+            }
+        }
         else{
             return (
                 <div>
