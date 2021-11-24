@@ -25,6 +25,7 @@ export default function FormDialog({sx}) {
   const [openExistedClass, setOpenExistedClass] = React.useState(false);
   const [openAddSuccess, setOpenAddSuccess] = React.useState(false);
   const [classAdded, setClassAdded] = React.useState("");
+  const [description, setDescription] = React.useState("");
 
   const handleClickOpen = () => {
     setOpenForm((openForm) => {return true});
@@ -44,10 +45,21 @@ export default function FormDialog({sx}) {
                 setOpenExistedClass((openExistedClass) => {return true});
             }
             else{
-            const data = {'class_name':classAdded}
-            $.post(DOMAIN_API+`classes/`, data, function(data){
+            const data = {'class_name':classAdded, 'description': description}
+            $.ajax({
+              url: DOMAIN_API+`classes/`,
+              type: 'post',
+              data: data,
+              headers: {
+                "x-access-token": localStorage.access_token
+              },
+              dataType: 'json',
+              success: function (data) {
                 setOpenAddSuccess((openAddSuccess) => {return true});
-            })
+              }
+          });
+
+
             }
         })
     }
@@ -79,6 +91,17 @@ export default function FormDialog({sx}) {
             variant="standard"
             value={classAdded}
             onChange={e => setClassAdded(e.target.value)}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="description"
+            label="description"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
           />
         </DialogContent>
         <DialogActions>

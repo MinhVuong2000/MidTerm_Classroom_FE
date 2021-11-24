@@ -21,6 +21,7 @@ export default function ClassDetail() {
     const [isTeacher, setIsTeacher] = useState(false);
     const [class_name, setClassname] = useState('');
     const [description, setDescription] = useState('');
+    const [invitelink, setInviteLink] = useState('');
     const [isLoaded, setIsLoaded] = useState(false);
     const [isShowNews, setIsShowNews] = React.useState(true)
     const [isShowMember, setIsShowMember] = React.useState(false)
@@ -30,6 +31,7 @@ export default function ClassDetail() {
     let actoken = localStorage.getItem('access_token');
     
     const url = DOMAIN_API+`classes/detail/${idclass}`;
+    let linkin='';
     useEffect(() => {
         fetch(url,{
             method: "GET",
@@ -53,6 +55,11 @@ export default function ClassDetail() {
                         setTeachers(result.list_teacher);
                         setStudents(result.list_student);
                         setClassname(result.class_name);
+                        linkin = DOMAIN_API + 'classes/inviteclass/' + result.invitelink;
+                        if(result.isTeacher){
+                            
+                            setInviteLink(linkin);
+                        }
                         setDescription(result.description);
                         console.log(description);
                     }
@@ -91,6 +98,7 @@ export default function ClassDetail() {
     const mockDataNew ={
         name: class_name,
         info: description,
+        invite: linkin,
         news: [
             {
                 user: "Khanh Nguyen Huy",

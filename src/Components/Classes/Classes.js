@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Classroom from "../Classroom/Classroom";
 import {DOMAIN_API}  from '../../config/const';
-
+import FormDialog from '../FormDialog/FormDialog';
 
 
 export default function Classes(){
@@ -65,21 +65,25 @@ export default function Classes(){
             else{
              
                 return (
-                    <Box sx={{ flexGrow: 1, 
-                                mx: 'auto',
-                                p: 1,
-                                m: 1,
-                                textAlign: 'center',
-                                borderRadius: 1,
-                            }}>
-                        <Grid container spacing={{ xs: 2, md: 3 }}>
-                            {items.map(item => 
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <Classroom title={item.class_name} description={item.description} idclass={item.id} />
-                                </Grid>
-                            )}
-                        </Grid>
-                    </Box>
+                    <div>
+                        <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/>    
+                        <Box sx={{ flexGrow: 1, 
+                                    mx: 'auto',
+                                    p: 1,
+                                    m: 1,
+                                    textAlign: 'center',
+                                    borderRadius: 1,
+                                }}>
+                            <Grid container spacing={{ xs: 2, md: 3 }}>
+                                {items.map(item => 
+                                    <Grid item xs={12} sm={6} md={3}>
+                                        <Classroom title={item.class_name} description={item.description} idclass={item.id} />
+                                    </Grid>
+                                )}
+                            </Grid>
+                        </Box>
+                    </div>
+                    
                 )
                 
             }
