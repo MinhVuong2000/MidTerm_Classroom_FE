@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-<<<<<<< HEAD
 import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-=======
-import  { Navigate } from 'react-router-dom';
->>>>>>> 4ec6238e1ee115a7e0cabc06d069c587cf32ace7
 import Classroom from "../Classroom/Classroom";
 import {DOMAIN_API}  from '../../config/const';
 
@@ -30,21 +26,19 @@ export default function Classes(){
         .then(res => res.json())
         .then(
             (result) => {
-<<<<<<< HEAD
-                if(result == null){
-                    setError(1);
-                }
-                else{
-                    console.log(result)
+                console.log(result)
+                if(result != null){
+                    if(result.message){
+                        setItems([]);
+                    }
                     setIsLoaded(true);
                     setItems(result);
                 }
+                if(result==null){
+                    setItems(null);
+                    setIsLoaded(true);
+                }
                 
-=======
-                console.log(result)
-                setIsLoaded(true);
-                setItems(result.message?null:result);
->>>>>>> 4ec6238e1ee115a7e0cabc06d069c587cf32ace7
             },
             (error) => {
                 setIsLoaded(true);
@@ -55,9 +49,7 @@ export default function Classes(){
     }, [])
     
     if (error) {
-        return (
-            <Navigate to="/login"/>
-        );
+        return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {

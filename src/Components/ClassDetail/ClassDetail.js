@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-
+import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -11,9 +11,11 @@ import News from './News/News';
 import Member from './Member/Member';
 import Scores from './Scores/Scores';
 import { DOMAIN_API } from '../../config/const';
+import { SentimentNeutralOutlined } from '@mui/icons-material';
 export default function ClassDetail() {
     const [value, setValue] = React.useState(0);
     const [error, setError] = useState(null);
+    const [enroll, setEnroll] = useState(true);
     const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -34,19 +36,20 @@ export default function ClassDetail() {
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result);
+                
                 if(result != null){
-                    setIsLoaded(true);
-                    setTeachers(result.list_teacher);
-                    setStudents(result.list_student);
-                }
-                else{
-                    setError(1);
+                    if(result.message){
+                        console.log(result.message);
+                        setEnroll(false);
+                        setIsLoaded(true);
+                    }
+                    else{
+                        setIsLoaded(true);
+                        setTeachers(result.list_teacher);
+                        setStudents(result.list_student);
+                    }
                 }
             },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
             (error) => {
                 setIsLoaded(true);
                 setError(error);
@@ -98,15 +101,25 @@ export default function ClassDetail() {
         handleChange()
     }, []);
 
-
+    if(localStorage.access_token == null){
+        return (
+            <div>
+                <Navigate to="/login"/>
+            </div>
+        )
+    }
+    if(!enroll){
+        return <div>You not enroll this class</div>;
+    }
     if (error) {
-        return <div>Error: Oops, you not enroll in this class</div>;
+        return <div>Error: {error.message}</div>;
     } 
     else 
         if (!isLoaded) {
         return <div>Loading...</div>;
         } 
         else {
+            
             return (
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                     <Tabs value={value} onChange={handleChange} centered>
@@ -121,5 +134,6 @@ export default function ClassDetail() {
                     </div>
                 </Box>
             );
+            
         }
 }
