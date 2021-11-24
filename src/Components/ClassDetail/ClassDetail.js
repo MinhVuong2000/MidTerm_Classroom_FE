@@ -18,6 +18,9 @@ export default function ClassDetail() {
     const [enroll, setEnroll] = useState(true);
     const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
+    const [isTeacher, setIsTeacher] = useState(false);
+    const [class_name, setClassname] = useState('');
+    const [description, setDescription] = useState('');
     const [isLoaded, setIsLoaded] = useState(false);
     const [isShowNews, setIsShowNews] = React.useState(true)
     const [isShowMember, setIsShowMember] = React.useState(false)
@@ -25,6 +28,7 @@ export default function ClassDetail() {
 
     const {idclass} = useParams();
     let actoken = localStorage.getItem('access_token');
+    
     const url = DOMAIN_API+`classes/detail/${idclass}`;
     useEffect(() => {
         fetch(url,{
@@ -44,9 +48,13 @@ export default function ClassDetail() {
                         setIsLoaded(true);
                     }
                     else{
+                        console.log(result.isTeacher);
                         setIsLoaded(true);
                         setTeachers(result.list_teacher);
                         setStudents(result.list_student);
+                        setClassname(result.class_name);
+                        setDescription(result.description);
+                        console.log(description);
                     }
                 }
             },
@@ -81,8 +89,8 @@ export default function ClassDetail() {
     };
 
     const mockDataNew ={
-        name: "Web nâng cao",
-        info: "Trường Đại học Khoa học Tự nhiên, Đại học Quốc gia Thành phố Hồ Chí Minh là một trong những trường đại học đào tạo và nghiên cứu khoa học cơ bản & ứng dụng hàng đầu Việt Nam, trực thuộc Đại học Quốc gia Thành phố Hồ Chí Minh, được xếp vào nhóm trường đại học trọng điểm quốc gia Việt Nam",
+        name: class_name,
+        info: description,
         news: [
             {
                 user: "Khanh Nguyen Huy",
@@ -129,7 +137,7 @@ export default function ClassDetail() {
                     </Tabs>
                     <div>
                         {isShowNews && < News data={mockDataNew} />}
-                        {isShowMember && < Member teachers = {teachers} students = {students}/>}
+                        {isShowMember && < Member idclass = {idclass} isTeacher={isTeacher} class_name = {class_name}/>}
                         {isShowScores && < Scores />}
                     </div>
                 </Box>
