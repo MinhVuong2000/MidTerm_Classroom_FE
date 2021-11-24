@@ -9,7 +9,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AlertDialog from '../AlertDialog/AlertDialog';
 import Tooltip from '@mui/material/Tooltip';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
+import LoginIcon from '@mui/icons-material/Login';
 import { DOMAIN_API, DOMAIN_FE,
     EXISTED_CLASS_TITLE, EXISTED_CLASS_DESC,
     NOT_NULL_CLASS_TITLE, NOT_NULL_CLASS_DESC,
@@ -19,7 +20,7 @@ import { DOMAIN_API, DOMAIN_FE,
 const $ = require("jquery");
 
 
-export default function FormDialog({sx}) {
+export default function JoinClass({sx}) {
   const [openForm, setOpenForm] = React.useState(false);
   const [openNotNullNameClass, setOpenNotNullNameClass] = React.useState(false);
   const [openExistedClass, setOpenExistedClass] = React.useState(false);
@@ -55,25 +56,25 @@ export default function FormDialog({sx}) {
   
   return (
     <div style={sx}>
-      <Tooltip title="Create Class">
+      <Tooltip title="Join Class">
         <Button variant="outlined" onClick={handleClickOpen}>
-        <AddCircleOutlineIcon color="primary" /> Create Class
+        <LoginIcon color="success" /> 
         </Button>
       </Tooltip>
       {openExistedClass && <AlertDialog title={EXISTED_CLASS_TITLE.replace("{}",classAdded)} msg={EXISTED_CLASS_DESC} callback={() => {setOpenExistedClass((openExistedClass) => {return false})}}/>}
       {openNotNullNameClass && <AlertDialog title={NOT_NULL_CLASS_TITLE} msg={NOT_NULL_CLASS_DESC} callback={() => {setOpenNotNullNameClass((openNotNullNameClass) => {return false})}}/>}
       {openAddSuccess && <AlertDialog title={ADD_SUCCESS_TITLE} msg={ADD_SUCCESS_DESC.replace("{}",classAdded)} callback={() => {document.location.href = DOMAIN_FE;}}/>}
       <Dialog open={openForm} onClose={handleClose}>
-        <DialogTitle>Add new Class</DialogTitle>
+        <DialogTitle>Join Class</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To add new classroom, please enter its name here. It is display name for this new class
+            To join new classroom, please enter its link here.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="className"
-            label="Class's Name"
+            label="Class's Link"
             type="text"
             fullWidth
             variant="standard"
@@ -83,7 +84,7 @@ export default function FormDialog({sx}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAdd}>Add</Button>
+          <Button onClick={handleAdd}>Join</Button>
         </DialogActions>
       </Dialog>
     </div>
