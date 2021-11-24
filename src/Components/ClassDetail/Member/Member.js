@@ -29,14 +29,14 @@ const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
-export default function Member({idclass}) {
-    const [error, setError] = useState(null);
+export default function Member({teachers, students}) {
+    /*const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
     const [teachers, setTeachers] = useState([]);
-    const [students, setStudents] = useState([]);
+    const [students, setStudents] = useState([]);*/
 
-    useEffect(() => {
+    /*useEffect(() => {
         fetch(`http://localhost:3000/classes/detail/${idclass}`)
           .then(res => res.json())
           .then(
@@ -58,48 +58,50 @@ export default function Member({idclass}) {
             } else if (!isLoaded) {
                 return <div>Loading...</div>;
             } else {
-                return (
-                    <div className="row" >
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                                <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                                    Giảng viên
-                                </Typography>
-                                <Demo>
-                                    <List >
-                                        {teachers.map(teacher => 
-                                            <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        Ava
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText>{teacher.full_name}</ListItemText>
-                                            </ListItem>
-                                        )}
-                                    </List>
-                                </Demo>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                                    Sinh viên
-                                </Typography>
-                                <Demo>
-                                    <List>
-                                        {students.map(std => 
-                                            <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        Ava
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText>{std.full_name}</ListItemText>
-                                            </ListItem>
-                                        )}
-                                    </List>
-                                </Demo>
-                            </Grid>
-                        </Grid>
-                    </div>
-                )
-        }}
+                
+        }}*/
+        return (
+            <div className="row" >
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+                            Giảng viên
+                        </Typography>
+                        <Demo>
+                            <List >
+                                {teachers.map(teacher => 
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                Ava
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText>{teacher.full_name}</ListItemText>
+                                    </ListItem>
+                                )}
+                            </List>
+                        </Demo>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+                            Sinh viên
+                        </Typography>
+                        <Demo>
+                            <List>
+                                {students.map(std => 
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                Ava
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText>{std.full_name}</ListItemText>
+                                    </ListItem>
+                                )}
+                            </List>
+                        </Demo>
+                    </Grid>
+                </Grid>
+            </div>
+        )
+}

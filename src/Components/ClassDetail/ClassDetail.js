@@ -10,14 +10,49 @@ import Tab from '@mui/material/Tab';
 import News from './News/News';
 import Member from './Member/Member';
 import Scores from './Scores/Scores';
+import { DOMAIN_API } from '../../config/const';
 export default function ClassDetail() {
     const [value, setValue] = React.useState(0);
-
+    const [error, setError] = useState(null);
+    const [teachers, setTeachers] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [isShowNews, setIsShowNews] = React.useState(true)
     const [isShowMember, setIsShowMember] = React.useState(false)
     const [isShowScores, setIsShowScores] = React.useState(false)
 
     const {idclass} = useParams();
+    let actoken = localStorage.getItem('access_token');
+    const url = DOMAIN_API+`classes/detail/${idclass}`;
+    useEffect(() => {
+        fetch(url,{
+            method: "GET",
+            headers: new Headers({
+                "x-access-token": actoken
+            })
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result);
+                if(result != null){
+                    setIsLoaded(true);
+                    setTeachers(result.list_teacher);
+                    setStudents(result.list_student);
+                }
+                else{
+                    setError(1);
+                }
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+                setIsLoaded(true);
+                setError(error);
+            }
+        )
+    }, [])
     const handleChange = (event, newValue) => {
         
         if (newValue == "0") {
@@ -59,82 +94,32 @@ export default function ClassDetail() {
         ]
     }
 
-    // const getDataById = async () => {
-    //     try {
-
-    //         if (id) {
-    //             // const response = await API.findOne(id);
-    //             // console.log("aaaa",response)                  
-    //             const res_user = await axiosClient.get(`/user/${id}?fields=["$all"]`);
-    //             const arr_user = res_user.results.object;
-
-    //             arr_user.birthday = arr_user.birthday.slice(0, 10);
-    //             arr_user.posts = arr_user.posts || "0";
-    //             arr_user.nickname = arr_user.nickname || "Null";
-    //             arr_user.user = arr_user.user || "Null";
-
-    //             console.log("data res_user ne", arr_user)
-    //             setInfoUser(arr_user);
-
-    //             //Follower
-    //             const res_follower = await axiosClient.get('/user?fields=["$all"]');
-    //             const arr_follower = [];
-    //             res_follower.results.objects.rows.map((val) => {
-    //                 arr_follower.push({
-    //                     id: val.id,
-    //                     posts: val.posts,
-    //                     user: val.user || "test user",
-    //                     email: val.email,
-    //                     fullname: val.fullname || "test full name",
-    //                     phone: val.phone || "",
-    //                     image: val.avatar || "langbiang-logo.png",
-    //                 });
-    //             });
-    //             setMockDataFollower(arr_follower);
-
-    //             //Following
-    //             const res_following = await axiosClient.get('/user?fields=["$all"]');
-    //             const arr_following = [];
-    //             res_following.results.objects.rows.map((val) => {
-    //                 arr_following.push({
-    //                     id: val.id,
-    //                     posts: val.posts,
-    //                     user: val.user || "test user",
-    //                     email: val.email,
-    //                     fullname: val.fullname || "test full name",
-    //                     phone: val.phone || "",
-    //                     image: val.avatar || "langbiang-logo.png",
-    //                 });
-    //             });
-    //             setMockDataFollowing(arr_following);
-
-    //         }
-    //     }
-    //     catch (error) {
-
-    //     }
-    // }
-
     useEffect(() => {
         handleChange()
     }, []);
 
-    return (
-        <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            <Tabs value={value} onChange={handleChange} centered>
-                <Tab label="Bảng tin" />
-                <Tab label="Danh sách thành viên" />
-                <Tab label="Điểm số" />
-            </Tabs>
-            <div>
-                {/* {isShowNews && < News data={mockDataNew} />}
-      {isShowMember && < Member data={mockDataMember} />}
-      {isShowScores && < Scores data={mockData}Scores />} */}
 
-                {isShowNews && < News data={mockDataNew} />}
-                {isShowMember && < Member idclass = {idclass}/>}
-                {isShowScores && < Scores />}
-            </div>
-        </Box>
-    );
+    if (error) {
+        return <div>Error: Oops, you not enroll in this class</div>;
+    } 
+    else 
+        if (!isLoaded) {
+        return <div>Loading...</div>;
+        } 
+        else {
+            return (
+                <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                    <Tabs value={value} onChange={handleChange} centered>
+                        <Tab label="Bảng tin" />
+                        <Tab label="Danh sách thành viên" />
+                        <Tab label="Điểm số" />
+                    </Tabs>
+                    <div>
+                        {isShowNews && < News data={mockDataNew} />}
+                        {isShowMember && < Member teachers = {teachers} students = {students}/>}
+                        {isShowScores && < Scores />}
+                    </div>
+                </Box>
+            );
+        }
 }

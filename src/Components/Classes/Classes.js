@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-
+import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Classroom from "../Classroom/Classroom";
 import {DOMAIN_API}  from '../../config/const';
 
@@ -14,6 +14,8 @@ export default function Classes(){
     console.log("===================================")
     
     let actoken = localStorage.getItem('access_token');
+    console.log(actoken);
+    
     useEffect(() => {
         fetch(DOMAIN_API+"classes",{
             method: "GET",
@@ -24,22 +26,28 @@ export default function Classes(){
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result)
-                setIsLoaded(true);
-                setItems(result);
+                if(result == null){
+                    setError(1);
+                }
+                else{
+                    console.log(result)
+                    setIsLoaded(true);
+                    setItems(result);
+                }
+                
             },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
             (error) => {
                 setIsLoaded(true);
                 setError(error);
             }
+            
         )
     }, [])
     
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return (
+            <Navigate to="/login"/>
+        );
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
