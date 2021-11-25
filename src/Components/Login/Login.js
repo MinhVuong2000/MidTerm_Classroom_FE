@@ -95,6 +95,9 @@ export default function Login() {
                         <p className="forgot-password text-right">
                             <a href="#">Quên mật khẩu?</a>
                         </p>
+                        <p className="forgot-password text-right">
+                            <a href="/register">Bạn chưa có tài khoản?</a>
+                        </p>
                     </form>
                     <div class="social-login">
                         <span class="social-label">Hoặc đăng nhập bằng </span>
