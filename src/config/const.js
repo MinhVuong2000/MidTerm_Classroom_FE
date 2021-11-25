@@ -9,6 +9,9 @@ const NOT_NULL_CLASS_DESC = `Please enter class's name!`;
 const ADD_SUCCESS_TITLE = 'Add Successfully';
 const ADD_SUCCESS_DESC = "You added new class its name is {} successfully!";
 
+const googleClientID = '1091140274470-msvgch2pntvkv0pltbq5osuqpgk3to3e.apps.googleusercontent.com';
+const googleClientSecret = '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';
+
 module.exports = {
     DOMAIN_API, 
     DOMAIN_FE,
@@ -17,5 +20,7 @@ module.exports = {
     NOT_NULL_CLASS_TITLE,
     NOT_NULL_CLASS_DESC,
     ADD_SUCCESS_TITLE,
-    ADD_SUCCESS_DESC
+    ADD_SUCCESS_DESC,
+    googleClientID,
+    googleClientSecret
 }

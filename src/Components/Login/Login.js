@@ -1,8 +1,13 @@
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css"
 import { useState, useEffect } from "react";
-import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import GoogleIcon from '@mui/icons-material/Google';
+import IconButton from '@mui/material/IconButton';
+import { useNavigate, Redirect, Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { DOMAIN_API } from '../../config/const';
+import LoginByGoogle from './GoogleLogin/GoogleLogin';
+
+
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -48,7 +53,6 @@ export default function Login() {
     }
     return (
         <div className="App">
-
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
                     <Link className="navbar-brand" to={"/sign-in"}>Classroom</Link>
@@ -92,6 +96,16 @@ export default function Login() {
                             <a href="#">Quên mật khẩu?</a>
                         </p>
                     </form>
+                    <div class="social-login">
+                        <span class="social-label">Hoặc đăng nhập bằng </span>
+                        {/* <IconButton linkButton={true} onTouchTap={editLink} tooltip="Tài khoản Google">
+                            <GoogleIcon style={{ color: 'red' }} />
+                        </IconButton> */}
+                        {/* <IconButton onClick={LoginGoogle} target='_blank'>
+                            <GoogleIcon style={{ color: 'red' }} />
+                        </IconButton> */}
+                        <LoginByGoogle reload={setPassword}/>
+                    </div>
                 </div>
             </div>
         </div>
