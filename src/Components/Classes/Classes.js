@@ -60,7 +60,9 @@ export default function Classes(){
         if (items!==null){
             console.log("kiem tra item []",items)
             if(items.length == 0){
-                return <div>You haven't got any Classroom yet!</div>;
+                return <div>You haven't got any Classroom yet!
+                    <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/>    
+                </div>;
             }
             else{
              

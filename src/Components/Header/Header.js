@@ -123,7 +123,7 @@ export default function PrimarySearchAppBar() {
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
-      <MenuItem >Join the class</MenuItem>
+      <MenuItem ><a href='/profile' style={{color: 'black'}}>Profile</a></MenuItem>
       <MenuItem >Create class</MenuItem>
       <Divider />
       <MenuItem >
