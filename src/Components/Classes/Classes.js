@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Navigate} from 'react-router-dom';
 import Classroom from "../Classroom/Classroom";
 import {DOMAIN_API}  from '../../config/const';
 import FormDialog from '../FormDialog/FormDialog';
@@ -23,49 +23,60 @@ export default function Classes(){
                 "x-access-token": actoken
             })
         })
-        .then(res => res.json())
+        .then(res => {
+            console.log(res.status)
+            console.log(res)
+            if (res.status == 401){
+                console.log('res.status == 401');
+                setItems('401');
+            }
+            if (res.status == 400){
+                console.log('res.status == 400');
+                setItems('400');
+            }
+            else res.json()})
         .then(
             (result) => {
-                console.log(result)
-                if(result != null){
-                    if(result.message){
-                        setItems([]);
-                        setIsLoaded(true);
-                    }
-                    else{
-                        setIsLoaded(true);
-                        setItems(result);
-                    }
-                    
-                }
-                if(result==null){
-                    setItems(null);
-                    setIsLoaded(true);
-                }
-                
+                console.log('items:', items);
+                console.log("result:",result);
+                if (items!='401' && items!='400'){setItems(result);}
+                setIsLoaded(true);
             },
             (error) => {
+                console.log("Error");
                 setIsLoaded(true);
                 setError(error);
             }
-            
         )
-    }, [])
+    },[])
     
     if (error) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
-        if (items!==null){
+        if (items=='401'){
+            return (
+                <div>
+                    <Navigate to="/login"/>
+                </div>
+            )
+        }
+        else if (items=='400'){
+            return (
+                <div>
+                    <Navigate to="/logout"/>
+                </div>
+            )
+        }
+        else {
             console.log("kiem tra item []",items)
             if(items.length == 0){
-                return <div>You haven't got any Classroom yet!
+                return <div>Bạn chưa tham gia lớp nào!
                     <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/>    
                 </div>;
             }
             else{
-             
                 return (
                     <div>
                         <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/>    
@@ -89,13 +100,6 @@ export default function Classes(){
                 )
                 
             }
-        }
-        else{
-            return (
-                <div>
-                    <Navigate to="/login"/>
-                </div>
-            )
         }
     }
 }

@@ -10,6 +10,7 @@ import Tab from '@mui/material/Tab';
 import News from './News/News';
 import Member from './Member/Member';
 import Scores from './Scores/Scores';
+import Assignments from './Assignments/Assignments';
 import { DOMAIN_API } from '../../config/const';
 import { SentimentNeutralOutlined } from '@mui/icons-material';
 export default function ClassDetail() {
@@ -26,6 +27,7 @@ export default function ClassDetail() {
     const [isShowNews, setIsShowNews] = React.useState(true)
     const [isShowMember, setIsShowMember] = React.useState(false)
     const [isShowScores, setIsShowScores] = React.useState(false)
+    const [isShowAssignments, setIsShowAssignments] = React.useState(false)
 
     const {idclass} = useParams();
     let actoken = localStorage.getItem('access_token');
@@ -77,18 +79,28 @@ export default function ClassDetail() {
             setIsShowNews(true);
             setIsShowMember(false);
             setIsShowScores(false);
+            setIsShowAssignments(false);
             //console.log("======= news ======== ")
         }
         if (newValue == "1") {
             setIsShowNews(false);
             setIsShowMember(true);
             setIsShowScores(false);
+            setIsShowAssignments(false);
            // console.log("======= member ========")
         }
         if (newValue == "2") {
             setIsShowNews(false);
             setIsShowMember(false);
             setIsShowScores(true);
+            setIsShowAssignments(false);
+            //console.log("====== score =========")
+        }
+        if (newValue == "3") {
+            setIsShowNews(false);
+            setIsShowMember(false);
+            setIsShowScores(false);
+            setIsShowAssignments(true);
             //console.log("====== score =========")
         }
         setValue(newValue);
@@ -142,11 +154,13 @@ export default function ClassDetail() {
                         <Tab label="Bảng tin" />
                         <Tab label="Danh sách thành viên" />
                         <Tab label="Điểm số" />
+                        <Tab label="Bài tập" />
                     </Tabs>
                     <div>
                         {isShowNews && < News data={mockDataNew} />}
                         {isShowMember && < Member idclass = {idclass} isTeacher={isTeacher} class_name = {class_name}/>}
                         {isShowScores && < Scores />}
+                        {isShowAssignments && < Assignments idclass = {idclass}/>}
                     </div>
                 </Box>
             );
