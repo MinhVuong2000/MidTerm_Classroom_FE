@@ -40,7 +40,7 @@ export default function Register() {
     }
     function handleSubmit(event) {
         event.preventDefault();
-        fetch(DOMAIN_API+`users/is-available`,{
+        fetch(DOMAIN_API+`is-available`,{
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, email, mssv })
@@ -51,7 +51,7 @@ export default function Register() {
                 console.log(result);
                 if(result == true){
                     if (username !== '' && password !== '' && mssv !=='' && email!=='' && fullname!=='') {
-                        const url = DOMAIN_API + "users/register";
+                        const url = DOMAIN_API + "register";
                         const requestOptions = {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
