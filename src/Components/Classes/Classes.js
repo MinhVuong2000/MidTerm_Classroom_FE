@@ -62,13 +62,13 @@ export default function Classes(){
             console.log("kiem tra item []",items)
             if(items.length == 0){
                 return <div>Bạn chưa tham gia lớp nào!
-                    <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/>    
+                    <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>    
                 </div>;
             }
             else{
                 return (
                     <div>
-                        <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}}/>    
+                        <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>    
                         <Box sx={{ flexGrow: 1, 
                                     mx: 'auto',
                                     p: 1,

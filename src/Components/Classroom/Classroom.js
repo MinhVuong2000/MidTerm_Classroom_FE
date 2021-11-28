@@ -13,8 +13,27 @@ import Google_Classroom_Logo from '../../static/images/Google_Classroom_Logo.png
 
 
 export default function Classroom({idclass, title, description}) {
-  console.log(idclass);
-  console.log(title);
+  function handleDeleteClass(){
+    return null;
+    // fetch(url, requestOptions)
+    //         .then(res => res.json())
+    //         .then((result) => {
+    //             if (result=='400' || result=='401')
+    //                 setItems(result)
+    //             else {
+    //                 if (result=='403'){
+    //                     setOpenErrorPermission(()=> {return true;})
+    //                 }
+    //                 else{
+    //                     setItems(result);
+    //                     setAssignmentNameAdded('');
+    //                     setAssignmentPointAdded('');
+    //                 }
+    //             }
+    //         })
+    //         .catch(error => console.log('Form submit error', error))
+  }
+  
   return (
       <Card sx={{ maxWidth: 300,
                   bgcolor: 'background.paper',
@@ -36,11 +55,10 @@ export default function Classroom({idclass, title, description}) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">
-          <Link to={`/classes/${idclass}`}>Detail</Link></Button>
+          <Button size="small"><Link to={`/classes/${idclass}`}>Detail</Link></Button>
           <Button size="small">Edit</Button>
           <Tooltip title="Delete">
-            <Button><DeleteIcon /></Button>
+            <Button onClick={handleDeleteClass}><DeleteIcon /></Button>
           </Tooltip>
         </CardActions>
       </Card>

@@ -19,7 +19,7 @@ import { DOMAIN_API, DOMAIN_FE,
 const $ = require("jquery");
 
 
-export default function FormDialog({sx}) {
+export default function FormDialog({sx, setItems}) {
   const [openForm, setOpenForm] = React.useState(false);
   const [openNotNullNameClass, setOpenNotNullNameClass] = React.useState(false);
   const [openExistedClass, setOpenExistedClass] = React.useState(false);
@@ -40,27 +40,33 @@ export default function FormDialog({sx}) {
         setOpenNotNullNameClass((openNotNullNameClass) => {return true});
     }
     else {
-        $.getJSON(DOMAIN_API+`classes/isExistedClassName?checked_name=${classAdded}`, function(data){
-            if (data===true){
-                setOpenExistedClass((openExistedClass) => {return true});
-            }
-            else{
-            const data = {'class_name':classAdded, 'description': description}
-            $.ajax({
-              url: DOMAIN_API+`classes/`,
-              type: 'post',
-              data: data,
-              headers: {
-                "x-access-token": localStorage.access_token
-              },
-              dataType: 'json',
-              success: function (data) {
-                setOpenAddSuccess((openAddSuccess) => {return true});
+        $.ajax({
+            url: DOMAIN_API+`classes/isExistedClassName?checked_name=${classAdded}`,
+            type: 'get',
+            headers: {
+              "x-access-token": localStorage.getItem('access_token')
+            },
+            success: function(data){
+              if (data===true){
+                  setOpenExistedClass((openExistedClass) => {return true});
               }
-          });
-
-
+              else{
+              const data = {'class_name':classAdded, 'description': description}
+              $.ajax({
+                url: DOMAIN_API+`classes/`,
+                type: 'post',
+                data: data,
+                headers: {
+                  "x-access-token": localStorage.getItem('access_token')
+                },
+                dataType: 'json',
+                success: function (data) {
+                  setOpenAddSuccess((openAddSuccess) => {return true});
+                  setItems(data);
+                }
+              });
             }
+          }
         })
     }
   };
@@ -74,7 +80,7 @@ export default function FormDialog({sx}) {
       </Tooltip>
       {openExistedClass && <AlertDialog title={EXISTED_CLASS_TITLE.replace("{}",classAdded)} msg={EXISTED_CLASS_DESC} callback={() => {setOpenExistedClass((openExistedClass) => {return false})}}/>}
       {openNotNullNameClass && <AlertDialog title={NOT_NULL_CLASS_TITLE} msg={NOT_NULL_CLASS_DESC} callback={() => {setOpenNotNullNameClass((openNotNullNameClass) => {return false})}}/>}
-      {openAddSuccess && <AlertDialog title={ADD_SUCCESS_TITLE} msg={ADD_SUCCESS_DESC.replace("{}",classAdded)} callback={() => {document.location.href = DOMAIN_FE;}}/>}
+      {openAddSuccess && <AlertDialog title={ADD_SUCCESS_TITLE} msg={ADD_SUCCESS_DESC.replace("{}",classAdded)} callback={handleClose}/>}
       <Dialog open={openForm} onClose={handleClose}>
         <DialogTitle>Add new Class</DialogTitle>
         <DialogContent>
