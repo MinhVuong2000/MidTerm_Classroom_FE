@@ -86,7 +86,7 @@ export default function Assignments({idclass}){
                             <TextField 
                                 required
                                 autoFocus
-                                margin="dense"
+                                margin="normal"
                                 id="assignmentName"
                                 label="Tên bài tập muốn thêm"
                                 type="text"
@@ -96,8 +96,7 @@ export default function Assignments({idclass}){
                                 onChange={e => setAssignmentNameAdded(e.target.value)}/>
                             <TextField 
                                 required
-                                autoFocus
-                                margin="dense"
+                                margin="normal"
                                 id="assignmentPoint"
                                 label="Điểm số của bài tập muốn thêm"
                                 type="text"
@@ -105,7 +104,7 @@ export default function Assignments({idclass}){
                                 variant="standard"
                                 value={assignmentPointAdded}
                                 onChange={e => setAssignmentPointAdded(e.target.value)}/>
-                            <Button onClick={HandleAdd}/>
+                            <Button onClick={HandleAdd}>Thêm bài tập</Button>
                         </Box>
                         <Box sx={{ flexGrow: 1, 
                                     mx: 'auto',

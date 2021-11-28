@@ -22,7 +22,7 @@ export default function Login() {
         event.preventDefault();
         if (username !== '' && password !== '') {
 
-            const url = DOMAIN_API + "users/login";
+            const url = DOMAIN_API + "login";
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

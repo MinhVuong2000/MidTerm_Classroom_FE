@@ -23,23 +23,12 @@ export default function Classes(){
                 "x-access-token": actoken
             })
         })
-        .then(res => {
-            console.log(res.status)
-            console.log(res)
-            if (res.status == 401){
-                console.log('res.status == 401');
-                setItems('401');
-            }
-            if (res.status == 400){
-                console.log('res.status == 400');
-                setItems('400');
-            }
-            else res.json()})
+        .then(res =>res.json())
         .then(
             (result) => {
                 console.log('items:', items);
                 console.log("result:",result);
-                if (items!='401' && items!='400'){setItems(result);}
+                setItems(result);
                 setIsLoaded(true);
             },
             (error) => {
