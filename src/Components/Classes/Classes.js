@@ -79,7 +79,7 @@ export default function Classes(){
                             <Grid container spacing={{ xs: 2, md: 3 }}>
                                 {items.map(item => 
                                     <Grid item xs={12} sm={6} md={3}>
-                                        <Classroom title={item.class_name} description={item.description} idclass={item.id} />
+                                        <Classroom title={item.class_name} description={item.description} idclass={item.id} setItems={setItems}/>
                                     </Grid>
                                 )}
                             </Grid>

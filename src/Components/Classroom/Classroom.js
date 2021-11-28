@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -7,31 +7,42 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
-import { Link, Router, BrowserRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import AlertDialog from '../AlertDialog/AlertDialog';
+import { DOMAIN_API,
+        ERROR_PERMISSIONS_TITLE,
+        ERROR_PERMISSIONS_DESC} from '../../config/const';
 
 import Google_Classroom_Logo from '../../static/images/Google_Classroom_Logo.png';
 
 
-export default function Classroom({idclass, title, description}) {
+export default function Classroom({idclass, title, description, setItems}) {
+  const [openErrorPermission, setOpenErrorPermission] = useState(false);
+  
   function handleDeleteClass(){
-    return null;
-    // fetch(url, requestOptions)
-    //         .then(res => res.json())
-    //         .then((result) => {
-    //             if (result=='400' || result=='401')
-    //                 setItems(result)
-    //             else {
-    //                 if (result=='403'){
-    //                     setOpenErrorPermission(()=> {return true;})
-    //                 }
-    //                 else{
-    //                     setItems(result);
-    //                     setAssignmentNameAdded('');
-    //                     setAssignmentPointAdded('');
-    //                 }
-    //             }
-    //         })
-    //         .catch(error => console.log('Form submit error', error))
+    const url = DOMAIN_API + `classes/detail/${idclass}`;
+    const requestOptions = {
+      method: "DELETE",
+      headers: new Headers({
+          "x-access-token": localStorage.getItem('access_token')
+      })
+    }
+    fetch(url, requestOptions)
+            .then(res => res.json())
+            .then((result) => {
+                console.log("result fetch delete class",result)
+                if (result=='400' || result=='401')
+                    setItems(result)
+                else {
+                    if (result=='403'){
+                        setOpenErrorPermission(()=> {return true;})
+                    }
+                    else{
+                        setItems(result);
+                    }
+                }
+            })
+            .catch(error => console.log('Form submit error', error))
   }
   
   return (
@@ -61,6 +72,7 @@ export default function Classroom({idclass, title, description}) {
             <Button onClick={handleDeleteClass}><DeleteIcon /></Button>
           </Tooltip>
         </CardActions>
+        {openErrorPermission && <AlertDialog title={ERROR_PERMISSIONS_TITLE} msg={ERROR_PERMISSIONS_DESC} callback={() => {setOpenErrorPermission(() => {return false})}}/>}
       </Card>
   );
 }

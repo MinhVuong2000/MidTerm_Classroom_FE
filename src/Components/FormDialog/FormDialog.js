@@ -1,6 +1,5 @@
-import * as React from 'react';
+import {useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
-import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -20,24 +19,24 @@ const $ = require("jquery");
 
 
 export default function FormDialog({sx, setItems}) {
-  const [openForm, setOpenForm] = React.useState(false);
-  const [openNotNullNameClass, setOpenNotNullNameClass] = React.useState(false);
-  const [openExistedClass, setOpenExistedClass] = React.useState(false);
-  const [openAddSuccess, setOpenAddSuccess] = React.useState(false);
-  const [classAdded, setClassAdded] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [openForm, setOpenForm] = useState(false);
+  const [openNotNullNameClass, setOpenNotNullNameClass] = useState(false);
+  const [openExistedClass, setOpenExistedClass] = useState(false);
+  const [openAddSuccess, setOpenAddSuccess] = useState(false);
+  const [classAdded, setClassAdded] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleClickOpen = () => {
-    setOpenForm((openForm) => {return true});
+    setOpenForm(() => {return true});
   };
 
   const handleClose = () => {
-    setOpenForm((openForm) => {return false});
+    setOpenForm(() => {return false});
   };
 
   const handleAdd = () => {
     if (classAdded === ""){
-        setOpenNotNullNameClass((openNotNullNameClass) => {return true});
+        setOpenNotNullNameClass(() => {return true});
     }
     else {
         $.ajax({
@@ -48,7 +47,7 @@ export default function FormDialog({sx, setItems}) {
             },
             success: function(data){
               if (data===true){
-                  setOpenExistedClass((openExistedClass) => {return true});
+                  setOpenExistedClass(() => {return true});
               }
               else{
               const data = {'class_name':classAdded, 'description': description}
@@ -61,7 +60,7 @@ export default function FormDialog({sx, setItems}) {
                 },
                 dataType: 'json',
                 success: function (data) {
-                  setOpenAddSuccess((openAddSuccess) => {return true});
+                  setOpenAddSuccess(() => {return true});
                   setItems(data);
                 }
               });
@@ -82,10 +81,10 @@ export default function FormDialog({sx, setItems}) {
       {openNotNullNameClass && <AlertDialog title={NOT_NULL_CLASS_TITLE} msg={NOT_NULL_CLASS_DESC} callback={() => {setOpenNotNullNameClass((openNotNullNameClass) => {return false})}}/>}
       {openAddSuccess && <AlertDialog title={ADD_SUCCESS_TITLE} msg={ADD_SUCCESS_DESC.replace("{}",classAdded)} callback={handleClose}/>}
       <Dialog open={openForm} onClose={handleClose}>
-        <DialogTitle>Add new Class</DialogTitle>
+        <DialogTitle>Thêm lớp mới</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To add new classroom, please enter its name here. It is display name for this new class
+            Nhập tên và miêu tả về lớp bạn muốn thêm tại đây.
           </DialogContentText>
           <TextField
             autoFocus
