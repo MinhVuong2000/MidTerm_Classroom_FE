@@ -28,8 +28,14 @@ export default function Classes(){
             (result) => {
                 console.log('items:', items);
                 console.log("result:",result);
-                setItems(result);
-                setIsLoaded(true);
+                if(result.message == 'not enroll class'){
+                    setItems([]);
+                    setIsLoaded(true);
+                }
+                else{
+                    setItems(result);
+                    setIsLoaded(true);
+                }
             },
             (error) => {
                 console.log("Error");

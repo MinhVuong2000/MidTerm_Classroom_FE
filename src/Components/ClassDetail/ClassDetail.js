@@ -28,6 +28,7 @@ export default function ClassDetail() {
     const [isShowMember, setIsShowMember] = React.useState(false)
     const [isShowScores, setIsShowScores] = React.useState(false)
     const [isShowAssignments, setIsShowAssignments] = React.useState(false)
+    const [assignmentList, setAssignmentList] = useState([]);
 
     const {idclass} = useParams();
     let actoken = localStorage.getItem('access_token');
@@ -44,7 +45,6 @@ export default function ClassDetail() {
         .then(res => res.json())
         .then(
             (result) => {
-                
                 if(result != null){
                     if(result.message){
                         console.log(result.message);
@@ -66,13 +66,37 @@ export default function ClassDetail() {
                         console.log(description);
                     }
                 }
+
+                fetch(DOMAIN_API+`classes/detail/${idclass}/assignments`,{
+                    method: "GET",
+                    headers: new Headers({
+                        "x-access-token": actoken
+                    })
+                })
+                    .then(res => res.json())
+                    .then(
+                        (result2) => {
+                            console.log("result trong classdetail:",result2);
+                            setAssignmentList(result2);
+                            setIsLoaded(true);
+                        },
+                        (error) => {
+                            console.log("Error");
+                            setIsLoaded(true);
+                            setError(error);
+                        }
+                    )
+                }, [])
+                
+                
             },
             (error) => {
                 setIsLoaded(true);
                 setError(error);
             }
         )
-    }, [])
+        
+    console.log(" check assignment list: ", assignmentList);  
     const handleChange = (event, newValue) => {
         
         if (newValue == "0") {
@@ -160,7 +184,7 @@ export default function ClassDetail() {
                         {isShowNews && < News data={mockDataNew} />}
                         {isShowMember && < Member idclass = {idclass} isTeacher={isTeacher} class_name = {class_name}/>}
                         {isShowScores && < Scores />}
-                        {isShowAssignments && < Assignments idclass = {idclass}/>}
+                        {isShowAssignments && < Assignments idclass = {idclass} assignments = {assignmentList}/>}
                     </div>
                 </Box>
             );
