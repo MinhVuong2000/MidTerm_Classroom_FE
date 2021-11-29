@@ -36,8 +36,9 @@ export default function Assignments({idclass, assignments}){
     const [openErrorPermission, setOpenErrorPermission] = useState(false);
     const [openNotValueAdd, setOpenNotValueAdd] = useState(false);
     const [openNotTypePoint, setOpenNotTypePoint] = useState(false);
-    const [idAssignmentEdit, setIdAssignmentEdit] = useState();
-    const [isStateEdit, setIsStateEdit] = useState(false);
+    const [idAssignmentEdit, setIdAssignmentEdit] = useState(-1);
+    const [isEditName, setIsEditName] = useState(false);
+    const [isEditPoint, setIsEditPoint] = useState(false);
     
     let actoken = localStorage.getItem('access_token');
 
@@ -152,34 +153,69 @@ export default function Assignments({idclass, assignments}){
             })
             .catch(error => console.log('Form submit error', error))
     }
-    async function handleEdit(id_assignment){
-        const url = DOMAIN_API + `classes/detail/${idclass}/assignments/edit`;
-        const requestOptions = {
-            method: 'POST',
-            headers: new Headers({
-                "x-access-token": actoken
-            }),
-            body: JSON.stringify({ idclass: idclass, idassignment: id_assignment, 
-                name: assignmentNameEdit, point: assignmentPointEdit})
-        };
-        await fetch(url, requestOptions)
-            .then(res => res.json())
-            .then((result) => {
-                console.log("result fetch edit assignment",result)
-                if (result=='400' ||result=='401')
-                    setItems(result)
-                else if (result=='403'){
-                    setOpenErrorPermission(()=> {return true;})
-                }
-                else{
-                    console.log(result);
-                    setItems(result);
-                    updateCharacters(result);
-                    setAssignmentNameEdit('');
-                    setAssignmentPointEdit('');
-                }
-            })
-            .catch(error => console.log('Form submit error', error))
+    async function handleEdit(id_assignment, name, point){
+        //Neu = tuc la ho da chinh sua xong và muon save --> gọi api update (name, point)
+        if(id_assignment == idAssignmentEdit){
+            let newname = '', newpoint;
+            if(isEditName){
+                newname = assignmentNameEdit;
+            }
+            else{
+                newname = name;
+            }
+            if(isEditPoint){
+                newpoint = assignmentPointEdit;
+            }
+            else{
+                newpoint = point;
+            }
+            console.log("newname va new point: ", newname, newpoint);
+            const url = DOMAIN_API + `classes/detail/${idclass}/assignments/edit`;
+            const requestOptions = {
+                method: 'POST',
+                headers: new Headers({
+                    "x-access-token": actoken,
+                    'Content-Type': 'application/json'
+                }),
+                body: JSON.stringify({ idclass: idclass, idassignment: id_assignment, name: newname, point: newpoint})
+            };
+            await fetch(url, requestOptions)
+                .then(res => res.json())
+                .then((result) => {
+                    console.log("result fetch edit assignment",result)
+                    if (result=='400' ||result=='401')
+                        setItems(result)
+                    else if (result=='403'){
+                        setOpenErrorPermission(()=> {return true;})
+                    }
+                    else{
+                        setItems(result);
+                        updateCharacters(result);
+                        setAssignmentNameEdit('');
+                        setAssignmentPointEdit('');
+                        setIsEditName(false);
+                        setIsEditPoint(false);
+                        setIdAssignmentEdit();
+                    }
+                })
+                .catch(error => console.log('Form edit error', error))
+
+        }
+        else{
+            //Luc nay gia su idedit = 4, nhung user nhan vao so 5 thi id_ass = 5, id_edit = 4 => vao che do edit
+            console.log("Sau khi vao else thi id_assigment: ", id_assignment);
+            setIdAssignmentEdit(id_assignment);
+            setAssignmentNameEdit(name);
+            setAssignmentPointEdit(point);
+            setIsEditName(false);
+            setIsEditPoint(false);
+            console.log("sau khi set editId: ", idAssignmentEdit);
+        }
+        if(isEditName){
+            
+        }
+
+        
     }
     useEffect(() => {
         fetch(DOMAIN_API+`classes/detail/${idclass}/assignments`,{
@@ -211,7 +247,7 @@ export default function Assignments({idclass, assignments}){
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
-        console.log("kiem tra item []",items)
+        //console.log("kiem tra item []",items)
         if (items=='401'){
             return (
                 <div>
@@ -322,7 +358,7 @@ export default function Assignments({idclass, assignments}){
                                                             readOnly: id != idAssignmentEdit,
                                                         }}
                                                         value={`${id != idAssignmentEdit? name:assignmentNameEdit}`} 
-                                                        onChange={e => setAssignmentNameEdit(e.target.value)}/>
+                                                        onChange={e => {setAssignmentNameEdit(e.target.value); setIsEditName(true)}}/>
                                                     <TextField 
                                                         {... `${id == idAssignmentEdit ? 'required':''}`} 
                                                         margin="normal"
@@ -335,14 +371,14 @@ export default function Assignments({idclass, assignments}){
                                                             readOnly: id != idAssignmentEdit,
                                                         }}
                                                         value={`${id != idAssignmentEdit? point:assignmentPointEdit}`} 
-                                                        onChange={e => setAssignmentPointEdit(e.target.value)}/>
+                                                        onChange={e => {setAssignmentPointEdit(e.target.value); setIsEditPoint(true)}}/>
                                                 </Box> 
                                                 <div>
                                                     <Button onClick={() => handleDelete(id)} variant="text" color='error' startIcon={<DeleteIcon />}>
                                                         Xoá
                                                     </Button>
                                                     <br/>
-                                                    <Button onClick={() => handleEdit(id)} variant="text" >
+                                                    <Button onClick={() => handleEdit(id, name, point)} variant="text" >
                                                     {`${id != idAssignmentEdit ? 'Chỉnh sửa':'Lưu'}`}
                                                     </Button>
                                                 </div>
