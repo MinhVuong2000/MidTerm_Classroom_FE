@@ -54,6 +54,7 @@ export default function ClassDetail() {
                     else{
                         console.log(result.isTeacher);
                         setIsLoaded(true);
+                        setIsTeacher(result.isTeacher);
                         setTeachers(result.list_teacher);
                         setStudents(result.list_student);
                         setClassname(result.class_name);
@@ -171,21 +172,23 @@ export default function ClassDetail() {
         return <div>Loading...</div>;
         } 
         else {
-            
+            if(isTeacher){
+
+            }
             return (
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                     <Tabs value={value} onChange={handleChange} centered>
                         <Tab label="Bảng tin" />
                         <Tab label="Danh sách thành viên" />
                         <Tab label="Điểm số" />
-                        <Tab label="Bài tập" />
+                        {isTeacher && <Tab label="Bài tập" />}
                     </Tabs>
-                    <div>
-                        {isShowNews && < News data={mockDataNew} />}
-                        {isShowMember && < Member idclass = {idclass} isTeacher={isTeacher} class_name = {class_name}/>}
-                        {isShowScores && < Scores />}
-                        {isShowAssignments && < Assignments idclass = {idclass} assignments = {assignmentList}/>}
-                    </div>
+                        <div>
+                            {isShowNews && < News data={mockDataNew} />}
+                            {isShowMember && < Member idclass = {idclass} isTeacher={isTeacher} class_name = {class_name}/>}
+                            {isShowScores && < Scores />}
+                            {isShowAssignments && isTeacher && < Assignments idclass = {idclass} assignments = {assignmentList}/>}
+                        </div>
                 </Box>
             );
             
