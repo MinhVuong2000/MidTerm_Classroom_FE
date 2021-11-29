@@ -4,9 +4,11 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Navigate, BrowserRouter as Router, Routes, Route, Link , useParams} from 'react-router-dom';
 import Classroom from "../../Classroom/Classroom";
+import "./Assignment.css"
 import {DOMAIN_API,
         ERROR_PERMISSIONS_TITLE,
         ERROR_PERMISSIONS_DESC,
@@ -17,23 +19,67 @@ import {DOMAIN_API,
     }  from '../../../config/const';
 import AlertDialog from '../../AlertDialog/AlertDialog';
 import OneAssignment from './OneAssignment/OneAssignment'; 
-
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function isNumericPositive(val) {
     return /[1-9][0-9]*/.test(val);
 }
 
-export default function Assignments({idclass}){
+export default function Assignments({idclass, assignments}){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
     const [assignmentNameAdded, setAssignmentNameAdded] = useState('');
     const [assignmentPointAdded, setAssignmentPointAdded] = useState('');
+    const [assignmentNameEdit, setAssignmentNameEdit] = useState('');
+    const [assignmentPointEdit, setAssignmentPointEdit] = useState('');
     const [openErrorPermission, setOpenErrorPermission] = useState(false);
     const [openNotValueAdd, setOpenNotValueAdd] = useState(false);
     const [openNotTypePoint, setOpenNotTypePoint] = useState(false);
+    const [idAssignmentEdit, setIdAssignmentEdit] = useState();
+    const [isStateEdit, setIsStateEdit] = useState(false);
     
     let actoken = localStorage.getItem('access_token');
+
+
+    const [characters, updateCharacters] = useState();
+    async function handleOnDragEnd(result) {
+        if (!result.destination) return;
+        const list_items = Array.from(characters);
+        const [reorderedItem] = list_items.splice(result.source.index, 1);
+        list_items.splice(result.destination.index, 0, reorderedItem);
+        updateCharacters(list_items);
+        const url = DOMAIN_API + `classes/detail/${idclass}/assignments/updateorder`;
+        const requestOptions = {
+            method: 'POST',
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({ idclass: idclass, source: characters[result.source.index].orders, 
+                destination: characters[result.destination.index].orders})
+        };
+        fetch(url, requestOptions)
+            .then(res => res.json())
+            .then((result) => {
+                if (result=='400' || result=='401')
+                    setItems(result)
+                else {
+                    if (result=='403'){
+                        setOpenErrorPermission(()=> {return true;})
+                    }
+                    else{
+                        result.sort((firstItem, secondItem) => firstItem.orders - secondItem.orders);
+                        setItems(result);
+                        updateCharacters(result);
+                        setAssignmentNameAdded('');
+                        setAssignmentPointAdded('');
+                    }
+                }
+            })
+            .catch(error => console.log('Form submit error', error))
+    }
+
 
     function HandleAdd(){
         console.log(assignmentNameAdded,assignmentPointAdded)
@@ -65,6 +111,7 @@ export default function Assignments({idclass}){
                     }
                     else{
                         setItems(result);
+                        updateCharacters(result);
                         setAssignmentNameAdded('');
                         setAssignmentPointAdded('');
                     }
@@ -97,14 +144,43 @@ export default function Assignments({idclass}){
                             new_items.push(items[i]);
                         }
                     }
-                    setItems(new_items)
+                    setItems(new_items);
+                    updateCharacters(new_items);
                     setAssignmentNameAdded('');
                     setAssignmentPointAdded('');
                 }
             })
             .catch(error => console.log('Form submit error', error))
     }
-    
+    async function handleEdit(id_assignment){
+        const url = DOMAIN_API + `classes/detail/${idclass}/assignments/edit`;
+        const requestOptions = {
+            method: 'POST',
+            headers: new Headers({
+                "x-access-token": actoken
+            }),
+            body: JSON.stringify({ idclass: idclass, idassignment: id_assignment, 
+                name: assignmentNameEdit, point: assignmentPointEdit})
+        };
+        await fetch(url, requestOptions)
+            .then(res => res.json())
+            .then((result) => {
+                console.log("result fetch edit assignment",result)
+                if (result=='400' ||result=='401')
+                    setItems(result)
+                else if (result=='403'){
+                    setOpenErrorPermission(()=> {return true;})
+                }
+                else{
+                    console.log(result);
+                    setItems(result);
+                    updateCharacters(result);
+                    setAssignmentNameEdit('');
+                    setAssignmentPointEdit('');
+                }
+            })
+            .catch(error => console.log('Form submit error', error))
+    }
     useEffect(() => {
         fetch(DOMAIN_API+`classes/detail/${idclass}/assignments`,{
             method: "GET",
@@ -117,7 +193,9 @@ export default function Assignments({idclass}){
             (result) => {
                 console.log('items:', items);
                 console.log("result:",result);
+                result.sort((firstItem, secondItem) => firstItem.orders - secondItem.orders);
                 setItems(result);
+                updateCharacters(result)
                 setIsLoaded(true);
             },
             (error) => {
@@ -155,29 +233,29 @@ export default function Assignments({idclass}){
                     {openNotValueAdd && <AlertDialog title={NOT_NULL_VALUE_ADD_ASSIGNMENT_TITLE} msg={NOT_NULL_VALUE_ADD_ASSIGNMENT_DESC} callback={() => {setOpenNotValueAdd(() => {return false})}}/>}
                     {openNotTypePoint && <AlertDialog title={ERROR_TYPE_POINT_TITLE} msg={ERROR_TYPE_POINT_DESC} callback={() => {setOpenNotTypePoint(() => {return false})}}/>}
                     <Box component='form'>
-                            <TextField 
-                                required
-                                autoFocus
-                                margin="normal"
-                                id="assignmentName"
-                                label="Tên bài tập muốn thêm"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                value={assignmentNameAdded}
-                                onChange={e => setAssignmentNameAdded(e.target.value)}/>
-                            <TextField 
-                                required
-                                margin="normal"
-                                id="assignmentPoint"
-                                label="Điểm số của bài tập muốn thêm"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                value={assignmentPointAdded}
-                                onChange={e => setAssignmentPointAdded(e.target.value)}/>
-                            <Button onClick={HandleAdd}>Thêm bài tập</Button>
-                        </Box> 
+                        <TextField 
+                            required
+                            autoFocus
+                            margin="normal"
+                            id="assignmentName"
+                            label="Tên bài tập muốn thêm"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={assignmentNameAdded}
+                            onChange={e => setAssignmentNameAdded(e.target.value)}/>
+                        <TextField 
+                            required
+                            margin="normal"
+                            id="assignmentPoint"
+                            label="Điểm số của bài tập muốn thêm"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={assignmentPointAdded}
+                            onChange={e => setAssignmentPointAdded(e.target.value)}/>
+                        <Button onClick={HandleAdd}>Thêm bài tập</Button>
+                    </Box> 
                 </div>;
             }
             else{
@@ -217,20 +295,69 @@ export default function Assignments({idclass}){
                                     textAlign: 'center',
                                     borderRadius: 1,
                                 }}>
-                            <Grid container spacing={{ xs: 2, md: 3 }}>
-                                {items.map(item => 
-                                    <Grid item xs={12} sm={6} md={3}>
-                                        <OneAssignment name={item.name} point={item.point}/>
-                                        <Button variant="contained" startIcon={<EditIcon />}>
-                                        Chỉnh sửa
-                                        </Button>
-                                        <Button onClick={() => handleDelete(item.id)} variant="contained" color='error' startIcon={<DeleteIcon />}>
-                                        Xoá
-                                        </Button>
-                                    </Grid>
-                                )}
-                            </Grid>
+                            
                         </Box>
+                        <div className="App">
+                                <h1>Danh sách bài tập</h1>
+                                <DragDropContext onDragEnd={handleOnDragEnd}>
+                                <Droppable droppableId="characters">
+                                    {(provided) => (
+                                    <ul className="characters" {...provided.droppableProps} ref={provided.innerRef}>
+                                        {characters.map(({id, point, name, orders}, index) => {
+                                        return (
+                                            <Draggable key={id.toString()} draggableId={id.toString()} index={index}>
+                                            {(provided) => (
+                                                <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                <Box component='form'>
+                                                    <TextField 
+                                                        {... `${id == idAssignmentEdit ? 'required':''}`} 
+                                                        autoFocus
+                                                        margin="normal"
+                                                        id={id}
+                                                        label="Tên bài tập"
+                                                        type="text"
+                                                        fullWidth
+                                                        variant="standard"
+                                                        InputProps={{
+                                                            readOnly: id != idAssignmentEdit,
+                                                        }}
+                                                        value={`${id != idAssignmentEdit? name:assignmentNameEdit}`} 
+                                                        onChange={e => setAssignmentNameEdit(e.target.value)}/>
+                                                    <TextField 
+                                                        {... `${id == idAssignmentEdit ? 'required':''}`} 
+                                                        margin="normal"
+                                                        id={point}
+                                                        label="Điểm số"
+                                                        type="text"
+                                                        fullWidth
+                                                        variant="standard"
+                                                        InputProps={{
+                                                            readOnly: id != idAssignmentEdit,
+                                                        }}
+                                                        value={`${id != idAssignmentEdit? point:assignmentPointEdit}`} 
+                                                        onChange={e => setAssignmentPointEdit(e.target.value)}/>
+                                                </Box> 
+                                                <div>
+                                                    <Button onClick={() => handleDelete(id)} variant="text" color='error' startIcon={<DeleteIcon />}>
+                                                        Xoá
+                                                    </Button>
+                                                    <br/>
+                                                    <Button onClick={() => handleEdit(id)} variant="text" >
+                                                    {`${id != idAssignmentEdit ? 'Chỉnh sửa':'Lưu'}`}
+                                                    </Button>
+                                                </div>
+                                                
+                                                </li>
+                                            )}
+                                            </Draggable>
+                                        );
+                                        })}
+                                        {provided.placeholder}
+                                    </ul>
+                                    )}
+                                </Droppable>
+                                </DragDropContext>
+                            </div>
                     </div>
                 )
             }
