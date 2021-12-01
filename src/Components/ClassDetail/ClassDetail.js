@@ -30,6 +30,10 @@ export default function ClassDetail() {
     const [isShowAssignments, setIsShowAssignments] = React.useState(false)
     const [assignmentList, setAssignmentList] = useState([]);
 
+    //Tạm thui
+    const [name_work,setName_work]=useState([]);
+    //const [point_work, setPoint_work]=useState([]);
+
     const {idclass} = useParams();
     let actoken = localStorage.getItem('access_token');
     
@@ -79,6 +83,10 @@ export default function ClassDetail() {
                         (result2) => {
                             console.log("result trong classdetail:",result2);
                             setAssignmentList(result2);
+                            //Tạm
+                            setName_work(result2);
+                            //setPoint_work(result2);
+                            //Tạm
                             setIsLoaded(true);
                         },
                         (error) => {
@@ -136,6 +144,7 @@ export default function ClassDetail() {
         name: class_name,
         info: description,
         invite: linkin,
+        grade_structure: name_work,
         news: [
             {
                 user: "Khanh Nguyen Huy",

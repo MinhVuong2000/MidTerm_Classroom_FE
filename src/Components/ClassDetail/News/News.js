@@ -26,6 +26,12 @@ const message = `Truncation should be conditionally applicable on this long line
 export default function News(props) {
   console.log("props ne:   ", props.data);
   const data = props.data;
+  const structure = data.grade_structure.map((data)=>
+  <tr>
+                <td>{data.name}</td>
+                <td style={{textAlign :"center"}}>{data.point}</td>
+              </tr>
+  )
   const list_news = data.news.map((data) =>
     <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
       <CardHeader
@@ -86,7 +92,8 @@ export default function News(props) {
                 <th width="75%">Thành phần</th>
                 <th width="25%"style={{textAlign :"center"}}>Điểm</th>
               </tr>
-              <tr>
+              {structure}
+              {/* <tr>
                 <td>Điểm bài tập</td>
                 <td style={{textAlign :"center"}}>20</td>
               </tr>
@@ -101,7 +108,7 @@ export default function News(props) {
               <tr>
                 <td>Điểm cuối kỳ</td>
                 <td style={{textAlign :"center"}}>40</td>
-              </tr>
+              </tr> */}
             </table>
           </Container>
         </div>
