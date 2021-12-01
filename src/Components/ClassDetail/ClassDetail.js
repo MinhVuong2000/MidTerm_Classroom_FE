@@ -31,83 +31,100 @@ export default function ClassDetail() {
     const [assignmentList, setAssignmentList] = useState([]);
 
     //Tạm thui
-    const [name_work,setName_work]=useState([]);
+    const [name_work, setName_work] = useState([]);
     //const [point_work, setPoint_work]=useState([]);
 
-    const {idclass} = useParams();
+    const { idclass } = useParams();
     let actoken = localStorage.getItem('access_token');
-    
-    const url = DOMAIN_API+`classes/detail/${idclass}`;
-    let linkin='';
+
+    const url = DOMAIN_API + `classes/detail/${idclass}`;
+    let linkin = '';
     useEffect(() => {
-        fetch(url,{
+        fetch(url, {
             method: "GET",
             headers: new Headers({
                 "x-access-token": actoken
             })
         })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                if(result != null){
-                    if(result.message){
-                        console.log(result.message);
-                        setEnroll(false);
-                        setIsLoaded(true);
-                    }
-                    else{
-                        console.log(result.isTeacher);
-                        setIsLoaded(true);
-                        setIsTeacher(result.isTeacher);
-                        setTeachers(result.list_teacher);
-                        setStudents(result.list_student);
-                        setClassname(result.class_name);
-                        linkin = DOMAIN_API + 'classes/inviteclass/' + result.invitelink;
-                        if(result.isTeacher){
-                            
-                            setInviteLink(linkin);
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if (result != null) {
+                        if (result.message) {
+                            console.log(result.message);
+                            setEnroll(false);
+                            setIsLoaded(true);
                         }
-                        setDescription(result.description);
-                        console.log(description);
-                    }
-                }
+                        else {
+                            console.log(result.isTeacher);
+                            setIsLoaded(true);
+                            setIsTeacher(result.isTeacher);
+                            setTeachers(result.list_teacher);
+                            setStudents(result.list_student);
+                            setClassname(result.class_name);
+                            linkin = DOMAIN_API + 'classes/inviteclass/' + result.invitelink;
+                            if (result.isTeacher) {
 
-                fetch(DOMAIN_API+`classes/detail/${idclass}/assignments`,{
-                    method: "GET",
-                    headers: new Headers({
-                        "x-access-token": actoken
-                    })
-                })
-                    .then(res => res.json())
-                    .then(
-                        (result2) => {
-                            console.log("result trong classdetail:",result2);
-                            setAssignmentList(result2);
-                            //Tạm
-                            setName_work(result2);
-                            //setPoint_work(result2);
-                            //Tạm
-                            setIsLoaded(true);
-                        },
-                        (error) => {
-                            console.log("Error");
-                            setIsLoaded(true);
-                            setError(error);
+                                setInviteLink(linkin);
+                            }
+                            setDescription(result.description);
+                            console.log(description);
                         }
-                    )
-                }, [])
-                
-                
+                    }
+
+                    fetch(DOMAIN_API + `classes/detail/${idclass}/assignments`, {
+                        method: "GET",
+                        headers: new Headers({
+                            "x-access-token": actoken
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(
+                            (result2) => {
+                                console.log("result trong classdetail:", result2);
+                                setAssignmentList(result2);
+                                //Tạm
+                                setName_work(result2);
+                                //setPoint_work(result2);
+                                //Tạm
+                                setIsLoaded(true);
+                            },
+                            (error) => {
+                                console.log("Error");
+                                setIsLoaded(true);
+                                setError(error);
+                            }
+                        )
+                }, [name_work])
+
+
+    },
+        (error) => {
+            setIsLoaded(true);
+            setError(error);
+        }
+    )
+    const mockDataNew = {
+        name: class_name,
+        info: description,
+        invite: linkin,
+        grade_structure: name_work,
+        news: [
+            {
+                user: "Khanh Nguyen Huy",
+                content: "For the next meeting with Fossil to be effective, please send your feedback for the last session and your wishes for the next session in the form below.",
+                time: "Nov 21"
             },
-            (error) => {
-                setIsLoaded(true);
-                setError(error);
+            {
+                user: "Vuong Nguyen",
+                content: "For the next meeting with Fossil to be effective, please send your feedback for the last session and your wishes for the next session in the form below.",
+                time: "Nov 20"
             }
-        )
-        
-    console.log(" check assignment list: ", assignmentList);  
+        ]
+    }
+    console.log(" check assignment list: ", assignmentList);
     const handleChange = (event, newValue) => {
-        
+
         if (newValue == "0") {
             setIsShowNews(true);
             setIsShowMember(false);
@@ -120,7 +137,7 @@ export default function ClassDetail() {
             setIsShowMember(true);
             setIsShowScores(false);
             setIsShowAssignments(false);
-           // console.log("======= member ========")
+            // console.log("======= member ========")
         }
         if (newValue == "2") {
             setIsShowNews(false);
@@ -137,51 +154,34 @@ export default function ClassDetail() {
             //console.log("====== score =========")
         }
         setValue(newValue);
-        
+
     };
 
-    const mockDataNew ={
-        name: class_name,
-        info: description,
-        invite: linkin,
-        grade_structure: name_work,
-        news: [
-            {
-                user: "Khanh Nguyen Huy",
-                content: "For the next meeting with Fossil to be effective, please send your feedback for the last session and your wishes for the next session in the form below.",
-                time: "Nov 21"   
-            },
-            {
-                user: "Vuong Nguyen",
-                content: "For the next meeting with Fossil to be effective, please send your feedback for the last session and your wishes for the next session in the form below.",
-                time: "Nov 20"   
-            }
-        ]
-    }
+
 
     useEffect(() => {
         handleChange()
     }, []);
 
-    if(localStorage.access_token == null){
+    if (localStorage.access_token == null) {
         return (
             <div>
-                <Navigate to="/login"/>
+                <Navigate to="/login" />
             </div>
         )
     }
-    if(!enroll){
+    if (!enroll) {
         return <div>You not enroll this class</div>;
     }
     if (error) {
         return <div>Error: {error.message}</div>;
-    } 
-    else 
+    }
+    else
         if (!isLoaded) {
-        return <div>Loading...</div>;
-        } 
+            return <div>Loading...</div>;
+        }
         else {
-            if(isTeacher){
+            if (isTeacher) {
 
             }
             return (
@@ -192,14 +192,16 @@ export default function ClassDetail() {
                         <Tab label="Điểm số" />
                         {isTeacher && <Tab label="Bài tập" />}
                     </Tabs>
-                        <div>
-                            {isShowNews && < News data={mockDataNew} />}
-                            {isShowMember && < Member idclass = {idclass} isTeacher={isTeacher} class_name = {class_name}/>}
-                            {isShowScores && < Scores />}
-                            {isShowAssignments && isTeacher && < Assignments idclass = {idclass} assignments = {assignmentList}/>}
-                        </div>
+                    <div>
+                        {isShowNews && < News data={mockDataNew} />}
+                        {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
+                        {isShowScores && < Scores />}
+                        {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
+                            data_structure={(result) => setName_work(result)} />}
+                        {/* data_structure={(value) => setName_work(value)} */}
+                    </div>
                 </Box>
             );
-            
+
         }
 }

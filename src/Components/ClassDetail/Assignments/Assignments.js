@@ -25,7 +25,7 @@ function isNumericPositive(val) {
     return /[1-9][0-9]*/.test(val);
 }
 
-export default function Assignments({idclass, assignments}){
+export default function Assignments({idclass, assignments,data_structure}){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
@@ -231,6 +231,7 @@ export default function Assignments({idclass, assignments}){
                 console.log("result:",result);
                 result.sort((firstItem, secondItem) => firstItem.orders - secondItem.orders);
                 setItems(result);
+                data_structure([...result]);
                 updateCharacters(result)
                 setIsLoaded(true);
             },
@@ -240,7 +241,7 @@ export default function Assignments({idclass, assignments}){
                 setError(error);
             }
         )
-    }, [])
+    }, [items])
     
     if (error) {
         return <div>Error: {error.message}</div>;
