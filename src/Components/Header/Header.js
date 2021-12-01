@@ -123,7 +123,7 @@ export default function PrimarySearchAppBar() {
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
-      <MenuItem ><a href='/profile' style={{color: 'black'}}>Profile</a></MenuItem>
+      <MenuItem ><a href='/profile' style={{color: 'black', textDecoration: 'none'}}>Profile</a></MenuItem>
       <MenuItem >Create class</MenuItem>
       <Divider />
       <MenuItem >
@@ -161,7 +161,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            <a href="/" style={{ color: 'white' }}>Classroom TVT</a>
+            <a href="/" style={{ color: 'white',textDecoration: 'none' }}>Classroom TVT</a>
           </Typography>
           <Search>
             <SearchIconWrapper>

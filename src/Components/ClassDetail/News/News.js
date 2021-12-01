@@ -26,8 +26,8 @@ const message = `Truncation should be conditionally applicable on this long line
 export default function News(props) {
   console.log("props ne:   ", props.data);
   const data = props.data;
-  const list_news= data.news.map((data) =>
-  <Card sx={{ maxWidth: 600,margin: 'auto',marginBottom: '20px'}}>
+  const list_news = data.news.map((data) =>
+    <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[600] }} aria-label="recipe">
@@ -57,18 +57,18 @@ export default function News(props) {
         </IconButton>
 
       </CardActions>
-      
+
     </Card>)
 
   return (
     <div>
-      <Container>
+      <Container sx={{ paddingLeft: "10px", paddingRight: "10px", marginLeft: "30px" }}>
         <h1> {data.name}</h1>
         {data.info}
       </Container>
       <br />
 
-        {/* <Box sx={{
+      {/* <Box sx={{
           display: 'flex',
           flexWrap: 'wrap',
           '& > :not(style)': {
@@ -78,15 +78,50 @@ export default function News(props) {
           },
         }}>
                </Box> */}
-
-{list_news}
-
-   
-
-            
-
+      <div className="row" >
+        <div className="col-md-3">
+          <Container sx={{ paddingLeft: "10px", paddingRight: "10px", marginLeft: "30px" }}>
+            <table border="0"style={{maxWidth: "400px"}}>
+              <tr>
+                <th width="75%">Thành phần</th>
+                <th width="25%"style={{textAlign :"center"}}>Điểm</th>
+              </tr>
+              <tr>
+                <td>Điểm bài tập</td>
+                <td style={{textAlign :"center"}}>20</td>
+              </tr>
+              <tr>
+                <td>Điểm giữa kỳ</td>
+                <td style={{textAlign :"center"}}>30</td>
+              </tr>
+              <tr>
+                <td>Điểm serrrr saasasasa  asasdaf SDALBF  asjdfk  sakjbk sakfbd asfbeksdv</td>
+                <td style={{textAlign :"center"}}>10</td>
+              </tr>
+              <tr>
+                <td>Điểm cuối kỳ</td>
+                <td style={{textAlign :"center"}}>40</td>
+              </tr>
+            </table>
+          </Container>
         </div>
 
-    )
-      }
-          
+        <div className="col-md-9" >
+          <Card style={{ paddingLeft: "10px", marginLeft: "25px", marginRight: "25px", backgroundColor: "#0099FF" }}>
+            {list_news}
+          </Card>
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+    </div>
+
+  )
+}
+
