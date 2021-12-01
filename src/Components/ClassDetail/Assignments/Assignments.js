@@ -374,12 +374,12 @@ export default function Assignments({idclass, assignments}){
                                                         onChange={e => {setAssignmentPointEdit(e.target.value); setIsEditPoint(true)}}/>
                                                 </Box> 
                                                 <div>
-                                                    <Button onClick={() => handleDelete(id)} variant="text" color='error' startIcon={<DeleteIcon />}>
+                                                    <Button onClick={() => handleDelete(id)} variant="contained" color='error' startIcon={<DeleteIcon />}>
                                                         Xoá
                                                     </Button>
                                                     <br/>
-                                                    <Button onClick={() => handleEdit(id, name, point)} variant="text" >
-                                                    {`${id != idAssignmentEdit ? 'Chỉnh sửa':'Lưu'}`}
+                                                    <Button onClick={() => handleEdit(id, name, point)} variant="contained" startIcon={<EditIcon />}>
+                                                    {`${id != idAssignmentEdit ? 'Sửa':'Lưu'}`}
                                                     </Button>
                                                 </div>
                                                 
