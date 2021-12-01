@@ -114,6 +114,7 @@ export default function Assignments({idclass, assignments,data_structure}){
                     else{
                         setItems(result);
                         updateCharacters(result);
+                        data_structure([...result]);
                         setAssignmentNameAdded('');
                         setAssignmentPointAdded('');
                     }
@@ -148,6 +149,7 @@ export default function Assignments({idclass, assignments,data_structure}){
                     }
                     setItems(new_items);
                     updateCharacters(new_items);
+                    data_structure([...new_items]);
                     setAssignmentNameAdded('');
                     setAssignmentPointAdded('');
                 }
@@ -192,6 +194,7 @@ export default function Assignments({idclass, assignments,data_structure}){
                     else{
                         setItems(result);
                         updateCharacters(result);
+                        data_structure([...result]);
                         setAssignmentNameEdit('');
                         setAssignmentPointEdit('');
                         setIsEditName(false);
@@ -349,7 +352,6 @@ export default function Assignments({idclass, assignments,data_structure}){
                                                 <Box component='form'>
                                                     <TextField 
                                                         {... `${id == idAssignmentEdit ? 'required':''}`} 
-                                                        autoFocus
                                                         margin="normal"
                                                         id={id}
                                                         label="Tên bài tập"
