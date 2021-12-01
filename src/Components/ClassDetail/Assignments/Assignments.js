@@ -241,7 +241,7 @@ export default function Assignments({idclass, assignments,data_structure}){
                 setError(error);
             }
         )
-    }, [items])
+    }, [])
     
     if (error) {
         return <div>Error: {error.message}</div>;
