@@ -61,12 +61,13 @@ export default function Classroom({idclass, title, description, setItems}) {
           <Typography gutterBottom variant="h5" component="div">
             {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" style={{width: "200px", overflow: "hidden",
+                                          whiteSpace: "nowrap",textOverflow: "ellipsis"}} >
             {description}
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small"><Link to={`/classes/${idclass}`}>Detail</Link></Button>
+          <Button size="small"><Link to={`/classes/${idclass}`} style={{textDecoration: 'none' }}>Detail</Link></Button>
           <Button size="small">Edit</Button>
           <Tooltip title="Delete">
             <Button onClick={handleDeleteClass}><DeleteIcon /></Button>
