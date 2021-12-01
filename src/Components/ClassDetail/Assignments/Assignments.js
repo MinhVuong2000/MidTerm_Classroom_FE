@@ -73,6 +73,7 @@ export default function Assignments({idclass, assignments,data_structure}){
                         result.sort((firstItem, secondItem) => firstItem.orders - secondItem.orders);
                         setItems(result);
                         updateCharacters(result);
+                        data_structure([...result]);
                         setAssignmentNameAdded('');
                         setAssignmentPointAdded('');
                     }
@@ -231,7 +232,7 @@ export default function Assignments({idclass, assignments,data_structure}){
                 console.log("result:",result);
                 result.sort((firstItem, secondItem) => firstItem.orders - secondItem.orders);
                 setItems(result);
-                data_structure([...result]);
+                
                 updateCharacters(result)
                 setIsLoaded(true);
             },
