@@ -113,8 +113,8 @@ export default function News(props) {
           </Container>
         </div>
 
-        <div className="col-md-9" >
-          <Card style={{ paddingLeft: "10px", marginLeft: "25px", marginRight: "25px", backgroundColor: "#0099FF" }}>
+        <div className="col-md-8" >
+          <Card style={{ paddingLeft: "10px", marginLeft: "25px", marginRight: "25px", backgroundColor: "	#DDDDDD" }}>
             {list_news}
           </Card>
         </div>
