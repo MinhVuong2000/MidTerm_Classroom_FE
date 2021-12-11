@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -16,7 +16,9 @@ import Typography from '@mui/material/Typography';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from "react";
-import { DOMAIN_API } from '../../../config/const';
+import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
+import DownloadButton from '../../DownloadButton/DownloadButton';
+import StudentListImport from '../../ImportFile/StudentListImport/StudentListImport';
 
 function generate(element) {
     return [0, 1, 2].map((value) =>
@@ -105,10 +107,13 @@ export default function Member({ idclass, isTeacher, class_name }) {
         return <div>Loading...</div>;
     } else {
         console.log('is teacher true ne', checkTeacher);
+        console.log('List student', students);
         if (checkTeacher) {
             return (
                 <div className='container'>
                     <div className="card" style={{paddingLeft: "10px", paddingRight: "10px"}}>
+                    <DownloadButton purpose='student_list'/>
+                    <StudentListImport setStudents={setStudents}/>
                     <div className="row" >
                         <div className='card-header'>
                         <form>
