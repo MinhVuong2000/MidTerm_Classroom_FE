@@ -1,10 +1,14 @@
+import { useState} from 'react';
+import {Navigate} from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import Button from '@mui/material/Button';
 import UploadIcon from '@mui/icons-material/Upload';
+import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 
 
-export default function StudentListImport({setStudents}){
-
+export default function StudentListImport({setStudents, students_ids, id_class}){
+    const [respond, setResponse] = useState(null);
+    
     const handleUpload = (e) => {
         e.preventDefault();
         const f = e.target.files[0];
@@ -19,13 +23,32 @@ export default function StudentListImport({setStudents}){
             /* Convert array to json */
             let dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
             console.log(dataParse);
+            let addStudents = []
             for (let i=1; i<dataParse.length; i++) {
-                dataParse[i] = {
-                    full_name: dataParse[i][1],
-                    id_uni: dataParse[i][0]
+                if (students_ids==null || students_ids.length===0 || !(students_ids.includes(dataParse[i][0].toString()))){
+                    addStudents.push({
+                        full_name: dataParse[i][1],
+                        id_uni: dataParse[i][0]
+                    })
                 }
             }
-            setStudents(dataParse.slice(1));
+            const actoken = localStorage.getItem('access_token');
+            const url = DOMAIN_API + `classes/detail/${id_class}/add-students`;
+            const requestOptions = {
+            method: 'POST',
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(addStudents)
+            };
+            fetch(url, requestOptions)
+            .then(res => res.json())
+            .then((result) => {
+                setStudents(result);
+            })
+            .catch(error => console.log('Form submit error', error))
+            setStudents(addStudents);
         }
         reader.onerror = function(ex) {
             console.log(ex);
