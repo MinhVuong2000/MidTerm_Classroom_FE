@@ -27,8 +27,8 @@ export default function StudentListImport({setStudents, students_ids, id_class})
             for (let i=1; i<dataParse.length; i++) {
                 if (students_ids==null || students_ids.length===0 || !(students_ids.includes(dataParse[i][0].toString()))){
                     addStudents.push({
-                        full_name: dataParse[i][1],
-                        id_uni: dataParse[i][0]
+                        full_name_user: dataParse[i][1],
+                        id_uni_student: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
                     })
                 }
             }
@@ -40,7 +40,10 @@ export default function StudentListImport({setStudents, students_ids, id_class})
                 "x-access-token": actoken,
                 'Content-Type': 'application/json'
             }),
-            body: JSON.stringify(addStudents)
+            body: JSON.stringify({
+                new_students: addStudents,
+                id_class: id_class
+            })
             };
             fetch(url, requestOptions)
             .then(res => res.json())
