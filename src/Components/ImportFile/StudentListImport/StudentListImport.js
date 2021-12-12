@@ -28,7 +28,7 @@ export default function StudentListImport({setStudents, students_ids, id_class})
                 if (students_ids==null || students_ids.length===0 || !(students_ids.includes(dataParse[i][0].toString()))){
                     addStudents.push({
                         full_name_user: dataParse[i][1],
-                        id_uni_student: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
+                        id_uni_user: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
                     })
                 }
             }
@@ -63,7 +63,7 @@ export default function StudentListImport({setStudents, students_ids, id_class})
     return (
         <Button variant='outlined' component="label">
             <UploadIcon/>Upload File
-            <input type="file" accept=".csv, .xlsx" id='upload_student_list' hidden 
+            <input type="file" accept=".csv, .xlsx" hidden 
                 onChange={e => handleUpload(e)}
             />
         </Button>
