@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { DOMAIN_API } from '../../config/const';
 import CallIcon from '@mui/icons-material/Call';
 import AlternateEmailSharpIcon from '@mui/icons-material/AlternateEmailSharp';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SubtitlesIcon from '@mui/icons-material/Subtitles';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import SaveIcon from '@mui/icons-material/Save';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
@@ -15,134 +17,243 @@ import CardActions from '@mui/material/CardActions';
 export default function Profile() {
     const [profile, setProfile] = useState(null);
     const [error, setError] = useState(null);
+    const [isEditting, setIsEditting] = useState(false);
+    const [fullName, setFullName] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [MSSV, setMSSV] = useState(null);
+    const [address, setAddress] = useState(null);
+    const [phone, setPhone] = useState(null);
+    const [email, setEmail] = useState(null);
+
+    let actoken = localStorage.getItem('access_token');
+
+    function handleSaveEditProfile(){
+        setIsEditting(false);
+        const url = DOMAIN_API + `users/update-profile`;
+        const updated_profile = {
+            full_name: fullName,
+            id_uni: MSSV,
+            phone: phone,
+            email: email,
+            address: address
+        }
+        const requestOptions = {
+        method: 'PATCH',
+        headers: new Headers({
+            "x-access-token": actoken,
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({updated_profile: updated_profile})
+        };
+        fetch(url, requestOptions)
+        .catch(error => console.log('Form submit error', error))
+    }
 
     useEffect(() => {
         fetch(DOMAIN_API + "users/profile", {
             method: "GET",
             headers: new Headers({
-                "x-access-token": localStorage.getItem('access_token')
+                "x-access-token": actoken
             })
         })
             .then(res => res.json())
             .then(
                 (result) => {
-                    if (result.message) {
-                        setProfile(null)
+                    console.log("Result profile: ", result);
+                    if (result == '400' || result == '401') {
+                        console.log("result", result);
+                        setProfile(result);
                     }
                     else {
-                        setProfile(result)
+                        setProfile(result);
+                        setFullName(result.full_name)
+                        setMSSV(result.id_uni)
+                        setEmail(result.email)
+                        setPhone(result.phone)
+                        setAddress(result.address)
                     }
                     console.log("Success", result);
                 },
                 (error) => {
-                    setError(() => { return error });
+                    setError(error);
                     console.log("Error", error);
                     return (
-                        <div>
-                            <p>You need login to access this infomation.</p>
-                            <Link to="/login">Login</Link>
-                        </div>
+                        <Navigate to="/logout" />
                     )
                 }
             )
     }, [])
 
-    if (profile != null) {
+    if (profile=='400' || profile=='401'){
         return (
-            // <div style={{display: 'flex',  flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
-            //     <h1>{profile.full_name}</h1>
-            //     <h2>Mã số do trường cung cấp: {profile.id_uni}</h2>
-            //     {profile.email? <h3><br/>Email: {profile.email}</h3>:<h3>Email: trống<br/></h3>}
-            //     {profile.phone? <h3><br/>Số điện thoại: {profile.phone}</h3>:<h3>Số điện thoại: trống<br/></h3>}
-            //     {profile.address? <h3><br/>Địa chỉ: {profile.address}</h3>:<h3>Địa chỉ: trống<br/></h3>}
-            // </div>
+            <Navigate to="/logout" />
+        )
+    }
+    if (profile!=null){
+        return (
             <div className="d-flex justify-content-center">
-                <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
-                    <CardHeader
-                        avatar={
-                            <AccountCircleIcon >
-                            </AccountCircleIcon>
-                        }
-                        title="Họ và tên"
-                        subheader={profile.full_name}
-                    />
+                {isEditting ? 
+                    <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
+                        <TextField
+                            autoFocus
+                            id="fullName"
+                            label="Họ & Tên"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={fullName}
+                            onChange={e => setFullName(e.target.value)}
+                        />
+                        {MSSV==null && <TextField
+                            id="MSSV"
+                            label="Mã số do trường cung cấp"
+                            placeholder="Nhập chính xác vì không thể thay đổi sau này!"
+                            type="text"
+                            variant="standard"
+                            value={MSSV!=null ? MSSV : ''} 
+                            onChange={e => setMSSV(e.target.value)}
+                        />}
+                        <TextField
+                            id="email"
+                            label="Email"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                        <TextField
+                            id="phone"
+                            label="Số điện thoại"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={phone}
+                            onChange={e => setPhone(e.target.value)}
+                        />
+                        <TextField
+                            id="address"
+                            label="Địa chỉ"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={address}
+                            onChange={e => setAddress(e.target.value)}
+                        />
+                        <CardActions disableSpacing>
+                            <IconButton aria-label="share" onClick={() => {handleSaveEditProfile()}}>
+                                <SaveIcon/>
+                            </IconButton>
+                        </CardActions>
+                    </Card> : <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
+                        <CardHeader
+                            avatar={
+                                <AccountCircleIcon >
+                                </AccountCircleIcon>
+                            }
+                            title="Họ và tên"
+                            subheader={fullName}
+                        />
+                        <CardHeader
+                            avatar={
+                                <AccountCircleIcon >
+                                </AccountCircleIcon>
+                            }
+                            title="Username"
+                            subheader={profile.username}
+                        />
 
-                    <CardHeader
-                        avatar={
-                            <SubtitlesIcon >
-                            </SubtitlesIcon>
-                        }
+                        {MSSV ? <CardHeader
+                            avatar={
+                                <SubtitlesIcon >
+                                </SubtitlesIcon>
+                            }
 
-                        title="Mã số do trường cung cấp"
-                        subheader={profile.id_uni}
-                    />
-
-
-                    {profile.email ? <CardHeader
-                        avatar={
-                            <AlternateEmailSharpIcon >
-                            </AlternateEmailSharpIcon>
-                        }
-                        title="Email"
-                        subheader={profile.email}
-                    />
+                            title="Mã số do trường cung cấp"
+                            subheader={MSSV}
+                        />
                         : <CardHeader
+                            avatar={
+                                <SubtitlesIcon >
+                                </SubtitlesIcon>
+                            }
+
+                            title="Mã số do trường cung cấp"
+                            subheader='Chưa có'
+                        />}
+
+                        {email ? <CardHeader
                             avatar={
                                 <AlternateEmailSharpIcon >
                                 </AlternateEmailSharpIcon>
                             }
                             title="Email"
-                            subheader="Chưa có"
-                        />}
-
-                    {profile.phone ?
-                        <CardHeader
-                            avatar={
-                                <CallIcon>
-                                </CallIcon>
-                            }
-                            title="Số điện thoại"
-                            subheader={profile.phone}
+                            subheader={email}
                         />
-                        : <CardHeader
-                            avatar={
-                                <CallIcon>
-                                </CallIcon>
-                            }
-                            title="Số điện thoại"
-                            subheader="Chưa có"
-                        />}
-                    {profile.address ?
-                        <CardHeader
-                            avatar={
-                                <LocationOnIcon >
-                                </LocationOnIcon>
-                            }
-                            title="Địa chỉ"
-                            subheader={profile.address}
-                        /> : <CardHeader
-                            avatar={
-                                <LocationOnIcon >
-                                </LocationOnIcon>
-                            }
-                            title="Địa chỉ"
-                            subheader="Chưa có"
-                        />}
+                            : <CardHeader
+                                avatar={
+                                    <AlternateEmailSharpIcon >
+                                    </AlternateEmailSharpIcon>
+                                }
+                                title="Email"
+                                subheader="Chưa có"
+                            />}
 
-                    <CardActions disableSpacing>
-                        <IconButton aria-label="share">
-                            <ModeEditIcon />
-                        </IconButton>
-                    </CardActions>
-                </Card>
+                        {phone ?
+                            <CardHeader
+                                avatar={
+                                    <CallIcon>
+                                    </CallIcon>
+                                }
+                                title="Số điện thoại"
+                                subheader={phone}
+                            />
+                            : <CardHeader
+                                avatar={
+                                    <CallIcon>
+                                    </CallIcon>
+                                }
+                                title="Số điện thoại"
+                                subheader="Chưa có"
+                            />}
+                        {address ?
+                            <CardHeader
+                                avatar={
+                                    <LocationOnIcon >
+                                    </LocationOnIcon>
+                                }
+                                title="Địa chỉ"
+                                subheader={address}
+                            /> : <CardHeader
+                                avatar={
+                                    <LocationOnIcon >
+                                    </LocationOnIcon>
+                                }
+                                title="Địa chỉ"
+                                subheader="Chưa có"
+                            />}
+
+                        <CardActions disableSpacing>
+                            <IconButton aria-label="share" onClick={() => {setIsEditting(true);}}>
+                                Chỉnh sửa profile<ModeEditIcon/>
+                            </IconButton>
+                        </CardActions>
+                        {!profile.is_social_login && <CardActions disableSpacing>
+                            <IconButton aria-label="share" onClick={() => {return null;}}>
+                                Thay đổi mật khẩu
+                            </IconButton>
+                        </CardActions>}
+                    </Card>
+                }
             </div>
         )
     }
-    else {
-        return (
+    else{
+        return(
             <div>
-                <p>You need login to access this infomation.</p>
-                <Link to="/login">Login</Link>
+                Loading...
+                {/* <h2>Bạn chưa đăng nhập</h2>
+                <Link to='/logout'>Đăng nhập</Link> */}
             </div>
         )
     }
