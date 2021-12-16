@@ -7,10 +7,10 @@ import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 
 
 export default function StudentListImport({setStudents, students_ids, id_class}){
-    const [respond, setResponse] = useState(null);
     
     const handleUpload = (e) => {
         e.preventDefault();
+        let list_student = null;
         const f = e.target.files[0];
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -23,40 +23,87 @@ export default function StudentListImport({setStudents, students_ids, id_class})
             /* Convert array to json */
             let dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
             console.log(dataParse);
-            let addStudents = []
-            for (let i=1; i<dataParse.length; i++) {
-                if (students_ids==null || students_ids.length===0 || !(students_ids.includes(dataParse[i][0].toString()))){
-                    addStudents.push({
+            let newStudents = [];
+            let repeatStudents = [];
+            if (students_ids==null || students_ids.length===0){
+                for (let i=1; i<dataParse.length; i++) {
+                    newStudents.push({
                         full_name_user: dataParse[i][1],
                         id_uni_user: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
                     })
                 }
             }
+            else{
+                for (let i=1; i<dataParse.length; i++) {
+                    dataParse[i][0] = typeof(dataParse[i][0])==="string" ? dataParse[i][0] : dataParse[i][0].toString();
+                    if ((students_ids.includes(dataParse[i][0]))){
+                        repeatStudents.push({
+                            full_name_user: dataParse[i][1],
+                            id_uni_user: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
+                        })
+                    }
+                    else{
+                        newStudents.push({
+                            full_name_user: dataParse[i][1],
+                            id_uni_user: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
+                        })
+                    }
+                }
+            }
+            console.log('repeatStudent:', repeatStudents)
+            console.log('newStudents:', newStudents)
             const actoken = localStorage.getItem('access_token');
-            const url = DOMAIN_API + `classes/detail/${id_class}/add-students`;
-            const requestOptions = {
-            method: 'POST',
-            headers: new Headers({
-                "x-access-token": actoken,
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({
-                new_students: addStudents,
-                id_class: id_class
-            })
-            };
-            fetch(url, requestOptions)
-            .then(res => res.json())
-            .then((result) => {
-                setStudents(result);
-            })
-            .catch(error => console.log('Form submit error', error))
-            setStudents(addStudents);
+            if (repeatStudents.length!==0){
+                const url = DOMAIN_API + `classes/detail/${id_class}/update-students-name`;
+                const requestOptions = {
+                    method: 'PATCH',
+                    headers: new Headers({
+                        "x-access-token": actoken,
+                        'Content-Type': 'application/json'
+                    }),
+                    body: JSON.stringify({
+                        repeat_students: repeatStudents,
+                        id_class: id_class
+                    })
+                };
+                fetch(url, requestOptions)
+                .then(res => res.json())
+                .then((result) => {
+                    console.log("Result after update", result)
+                    // list_student = result;
+                    setStudents(result);
+                })
+                .catch(error => console.log('Form submit error', error))
+            }
+            if (newStudents.length!==0){
+                const url = DOMAIN_API + `classes/detail/${id_class}/add-students`;
+                const requestOptions = {
+                    method: 'POST',
+                    headers: new Headers({
+                        "x-access-token": actoken,
+                        'Content-Type': 'application/json'
+                    }),
+                    body: JSON.stringify({
+                        new_students: newStudents,
+                        id_class: id_class
+                    })
+                };
+                fetch(url, requestOptions)
+                .then(res => res.json())
+                .then((result) => {
+                    console.log("Resul after add new student:", result)
+                    // list_student = result;
+                    setStudents(result);
+                })
+                .catch(error => console.log('Form submit error', error))
+            }
         }
         reader.onerror = function(ex) {
             console.log(ex);
         };
-        reader.readAsBinaryString(f)
+        reader.readAsBinaryString(f);
+        // console.log('list_student', list_student);
+        // setStudents(list_student);
         return null;
     }
 
