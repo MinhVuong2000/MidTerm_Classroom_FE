@@ -10,6 +10,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
@@ -26,6 +27,22 @@ export default function Profile() {
     const [email, setEmail] = useState(null);
 
     let actoken = localStorage.getItem('access_token');
+
+    function handleChangePassword(){
+        console.log("New password:", password);
+        const url = DOMAIN_API + `users/update-password`;
+        const requestOptions = {
+        method: 'PATCH',
+        headers: new Headers({
+            "x-access-token": actoken,
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({new_password: password})
+        };
+        fetch(url, requestOptions)
+        .catch(error => console.log('Form submit error', error))
+        setProfile('400');
+    }
 
     function handleSaveEditProfile(){
         setIsEditting(false);
@@ -91,7 +108,7 @@ export default function Profile() {
     }
     if (profile!=null){
         return (
-            <div className="d-flex justify-content-center">
+            <div>
                 {isEditting ? 
                     <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
                         <TextField
@@ -141,108 +158,124 @@ export default function Profile() {
                             onChange={e => setAddress(e.target.value)}
                         />
                         <CardActions disableSpacing>
-                            <IconButton aria-label="share" onClick={() => {handleSaveEditProfile()}}>
+                            <IconButton aria-label="share" onClick={handleSaveEditProfile}>
                                 <SaveIcon/>
                             </IconButton>
                         </CardActions>
-                    </Card> : <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
-                        <CardHeader
-                            avatar={
-                                <AccountCircleIcon >
-                                </AccountCircleIcon>
-                            }
-                            title="Họ và tên"
-                            subheader={fullName}
-                        />
-                        <CardHeader
-                            avatar={
-                                <AccountCircleIcon >
-                                </AccountCircleIcon>
-                            }
-                            title="Username"
-                            subheader={profile.username}
-                        />
+                    </Card> : <Card sx={{ maxWidth: 1000, marginTop: "50px" }}  className="d-flex justify-content-center">
+                        <div>
+                            <CardHeader
+                                avatar={
+                                    <AccountCircleIcon >
+                                    </AccountCircleIcon>
+                                }
+                                title="Họ và tên"
+                                subheader={fullName}
+                            />
+                            <CardHeader
+                                avatar={
+                                    <AccountCircleIcon >
+                                    </AccountCircleIcon>
+                                }
+                                title="Username"
+                                subheader={profile.username}
+                            />
 
-                        {MSSV ? <CardHeader
-                            avatar={
-                                <SubtitlesIcon >
-                                </SubtitlesIcon>
-                            }
+                            {MSSV ? <CardHeader
+                                avatar={
+                                    <SubtitlesIcon >
+                                    </SubtitlesIcon>
+                                }
 
-                            title="Mã số do trường cung cấp"
-                            subheader={MSSV}
-                        />
-                        : <CardHeader
-                            avatar={
-                                <SubtitlesIcon >
-                                </SubtitlesIcon>
-                            }
-
-                            title="Mã số do trường cung cấp"
-                            subheader='Chưa có'
-                        />}
-
-                        {email ? <CardHeader
-                            avatar={
-                                <AlternateEmailSharpIcon >
-                                </AlternateEmailSharpIcon>
-                            }
-                            title="Email"
-                            subheader={email}
-                        />
+                                title="Mã số do trường cung cấp"
+                                subheader={MSSV}
+                            />
                             : <CardHeader
+                                avatar={
+                                    <SubtitlesIcon >
+                                    </SubtitlesIcon>
+                                }
+
+                                title="Mã số do trường cung cấp"
+                                subheader='Chưa có'
+                            />}
+
+                            {email ? <CardHeader
                                 avatar={
                                     <AlternateEmailSharpIcon >
                                     </AlternateEmailSharpIcon>
                                 }
                                 title="Email"
-                                subheader="Chưa có"
-                            />}
-
-                        {phone ?
-                            <CardHeader
-                                avatar={
-                                    <CallIcon>
-                                    </CallIcon>
-                                }
-                                title="Số điện thoại"
-                                subheader={phone}
+                                subheader={email}
                             />
-                            : <CardHeader
-                                avatar={
-                                    <CallIcon>
-                                    </CallIcon>
-                                }
-                                title="Số điện thoại"
-                                subheader="Chưa có"
-                            />}
-                        {address ?
-                            <CardHeader
-                                avatar={
-                                    <LocationOnIcon >
-                                    </LocationOnIcon>
-                                }
-                                title="Địa chỉ"
-                                subheader={address}
-                            /> : <CardHeader
-                                avatar={
-                                    <LocationOnIcon >
-                                    </LocationOnIcon>
-                                }
-                                title="Địa chỉ"
-                                subheader="Chưa có"
-                            />}
+                                : <CardHeader
+                                    avatar={
+                                        <AlternateEmailSharpIcon >
+                                        </AlternateEmailSharpIcon>
+                                    }
+                                    title="Email"
+                                    subheader="Chưa có"
+                                />}
 
-                        <CardActions disableSpacing>
-                            <IconButton aria-label="share" onClick={() => {setIsEditting(true);}}>
-                                Chỉnh sửa profile<ModeEditIcon/>
-                            </IconButton>
-                        </CardActions>
-                        {!profile.is_social_login && <CardActions disableSpacing>
-                            <IconButton aria-label="share" onClick={() => {return null;}}>
+                            {phone ?
+                                <CardHeader
+                                    avatar={
+                                        <CallIcon>
+                                        </CallIcon>
+                                    }
+                                    title="Số điện thoại"
+                                    subheader={phone}
+                                />
+                                : <CardHeader
+                                    avatar={
+                                        <CallIcon>
+                                        </CallIcon>
+                                    }
+                                    title="Số điện thoại"
+                                    subheader="Chưa có"
+                                />}
+                            {address ?
+                                <CardHeader
+                                    avatar={
+                                        <LocationOnIcon >
+                                        </LocationOnIcon>
+                                    }
+                                    title="Địa chỉ"
+                                    subheader={address}
+                                /> : <CardHeader
+                                    avatar={
+                                        <LocationOnIcon >
+                                        </LocationOnIcon>
+                                    }
+                                    title="Địa chỉ"
+                                    subheader="Chưa có"
+                                />}
+
+                            <CardActions disableSpacing>
+                                <IconButton aria-label="share" onClick={() => {setIsEditting(true);}}>
+                                    Chỉnh sửa profile<ModeEditIcon/>
+                                </IconButton>
+                            </CardActions>
+                        </div>
+                        {!profile.is_social_login && <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
+                            <Typography gutterBottom variant="h5" component="div">
                                 Thay đổi mật khẩu
-                            </IconButton>
-                        </CardActions>}
+                            </Typography>
+                            <TextField
+                                id="new_password"
+                                label="Mật khẩu mới"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                            />
+                            <CardActions disableSpacing>
+                                <IconButton onClick={handleChangePassword}>
+                                    Lưu mật khẩu mới<SaveIcon/>
+                                </IconButton>
+                            </CardActions>
+                        </Card>}
                     </Card>
                 }
             </div>
