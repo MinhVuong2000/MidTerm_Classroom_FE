@@ -195,7 +195,7 @@ export default function ClassDetail() {
                     <div>
                         {isShowNews && < News data={mockDataNew} />}
                         {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
-                        {isShowScores && < Scores />}
+                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name}/>}
                         {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
                             data_structure={(result) => setName_work(result)} />}
                         {/* data_structure={(value) => setName_work(value)} */}
