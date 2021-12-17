@@ -20,6 +20,18 @@ import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 import DownloadButton from '../../DownloadButton/DownloadButton';
 import StudentListImport from '../../ImportFile/StudentListImport/StudentListImport';
 
+import Box from '@mui/material/Box';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+
+import PrintIcon from '@mui/icons-material/Print';
+import ShareIcon from '@mui/icons-material/Share';
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+import UploadIcon from '@mui/icons-material/Upload';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
+
 function generate(element) {
     return [0, 1, 2].map((value) =>
         React.cloneElement(element, {
@@ -39,6 +51,27 @@ export default function Member({ idclass, isTeacher, class_name }) {
     const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
     const [checkTeacher, setCheckTeacher] = useState(false);
+
+    const actions = [
+        { icon: <FileDownloadIcon />, name: 'Download templatte', operation: 'download_template' },
+
+        { icon: <UploadIcon />, name: 'Upload file', operation: 'upload_file' },
+
+        //   { icon: <PrintIcon />, name: 'Print' },
+        //   { icon: <ShareIcon />, name: 'Share' },
+    ];
+
+    function handleClickDownUp(e, operation) {
+        e.preventDefault();
+        if (operation == "download_template") {
+            alert("hihi")
+
+        } else if (operation == "upload_file") {
+            alert("huhu")
+
+        }
+    };
+
     let actoken = localStorage.access_token;
     const url = DOMAIN_API + `classes/detail/${idclass}`;
     function handleChangeEmail(event) {
@@ -110,68 +143,103 @@ export default function Member({ idclass, isTeacher, class_name }) {
         console.log('List student', students);
         if (checkTeacher) {
             return (
-                <div className='container'>
-                    <div className="card" style={{paddingLeft: "10px", paddingRight: "10px"}}>
-                    <DownloadButton purpose='student_list'/>
-                    <StudentListImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni_user)} id_class={idclass}/>
-                    <div className="row" >
-                        <div className='card-header'>
-                        <form>
-                            <h3>Mời bạn bè</h3>
+                <div>
+                    <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
+                        <SpeedDial
 
-                            <div className="form-group">
-                                <label>Nhập Email muốn mời</label>
-                                <input type="text" name="email" id="username" className="form-control" placeholder="Nhập Email" value={email} onChange={handleChangeEmail} />
-                            </div>
-                            <button type="submit" onClick={handleSubmit} style={{marginTop: "10px"}} className="btn btn-primary btn-block">Mời</button>
+                            ariaLabel="SpeedDial basic example"
+                            sx={{ position: 'fixed', left: 16 }}
+                            icon={<SpeedDialIcon />}
+                            direction="down"
 
-                        </form>
-                        </div>
-                        <div style={{marginTop: "10px"}}>
-                        <h3>Danh sách thành viên</h3>
-                        </div>
-                        <Grid container spacing={2}>
-                        
-                            <Grid item xs={12} md={6}>
-                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-                                    Giảng viên
-                                </Typography>
-                                <Demo>
-                                    <List >
+                        >
+
+                            {actions.map((action) => (
+                                <SpeedDialAction
+                                    tooltipOpen
+                                    key={action.name}
+                                    icon={action.icon}
+                                    title={action.name}
+                                    tooltipTitle={action.name}
+                                    onClick={(e) => {
+                                        handleClickDownUp(e, action.operation)
+                                    }}
+                                />
+                            ))}
+                            {/* <SpeedDialAction>
+                  <DownloadForOfflineIcon purpose='student_list'  name= 'Download templatte' />
+                  </SpeedDialAction>
+                  <SpeedDialAction>
+                  <UploadIcon setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass}  name= 'Upload file' />
+                  </SpeedDialAction>*/}
+                        </SpeedDial>
+                    </Box>
+                
+                    <div className='container' >
+                        <div className="card" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+                            <DownloadButton purpose='student_list' />
+                            <StudentListImport setStudents={setStudents} students_ids={students.map(student => student.id_uni)} id_class={idclass} />
+                            <div className="row" >
+                                <div className='card-header'>
+                                    <form>
+                                        <h3>Mời sinh viên</h3>
+
+                                        <div className="form-group">
+                                            <label>Nhập Email muốn mời</label>
+                                            <input type="text" name="email" id="username" className="form-control" placeholder="Nhập Email" value={email} onChange={handleChangeEmail} />
+                                        </div>
+                                        <button type="submit" onClick={handleSubmit} style={{ marginTop: "10px" }} className="btn btn-primary btn-block">Mời</button>
+
+                                    </form>
+                                </div>
+                                <div style={{ marginTop: "10px" }}>
+                                    <h3>Danh sách thành viên</h3>
+                                </div>
+                                <div>
+                                    <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                        Giảng viên
+                                    </Typography>
+                                    <Grid container spacing={2}  >
+
                                         {teachers.map(teacher =>
-                                            <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        Ava
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText>{teacher.full_name}</ListItemText>
-                                            </ListItem>
+                                            <Grid item xs={12} md={6}>
+                                                <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            Ava
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText>{teacher.full_name}</ListItemText>
+                                                </ListItem>
+                                            </Grid>
                                         )}
-                                    </List>
-                                </Demo>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-                                    Sinh viên
-                                </Typography>
-                                <Demo>
-                                    <List>
+                                    </Grid>
+
+
+
+                                </div>
+                                <div>
+                                    <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                        Sinh viên
+                                    </Typography>
+                                    <Grid container spacing={2}  >
                                         {students.map(std =>
-                                            <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        Ava
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText>{std.full_name_user}</ListItemText>
-                                            </ListItem>
+                                            <Grid item xs={6}>
+                                                <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            Ava
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText>{std.full_name}</ListItemText>
+                                                </ListItem>
+                                            </Grid>
                                         )}
-                                    </List>
-                                </Demo>
-                            </Grid>
-                        </Grid>
-                    </div>
+
+                                    </Grid>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )
@@ -179,46 +247,51 @@ export default function Member({ idclass, isTeacher, class_name }) {
         else {
             return (
                 <div className="row" >
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
-                            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                                Giảng viên
-                            </Typography>
-                            <Demo>
-                                <List >
-                                    {teachers.map(teacher =>
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                                <Avatar>
-                                                    Ava
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText>{teacher.full_name}</ListItemText>
-                                        </ListItem>
-                                    )}
-                                </List>
-                            </Demo>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                                Sinh viên
-                            </Typography>
-                            <Demo>
-                                <List>
-                                    {students.map(std =>
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                                <Avatar>
-                                                    Ava
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText>{std.full_name_user}</ListItemText>
-                                        </ListItem>
-                                    )}
-                                </List>
-                            </Demo>
-                        </Grid>
-                    </Grid>
+                   <div style={{ marginTop: "10px" }}>
+                                    <h3>Danh sách thành viên</h3>
+                                </div>
+                                <div>
+                                    <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                        Giảng viên
+                                    </Typography>
+                                    <Grid container spacing={2}  >
+                                        {teachers.map(teacher =>
+                                            <Grid item xs={12} md={6}>
+                                                <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            Ava
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText>{teacher.full_name}</ListItemText>
+                                                </ListItem>
+                                            </Grid>
+                                        )}
+                                    </Grid>
+
+
+
+                                </div>
+                                <div>
+                                    <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                        Sinh viên
+                                    </Typography>
+                                    <Grid container spacing={2}  >
+                                        {students.map(std =>
+                                            <Grid item xs={6}>
+                                                <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            Ava
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText>{std.full_name}</ListItemText>
+                                                </ListItem>
+                                            </Grid>
+                                        )}
+
+                                    </Grid>
+                                </div>
                 </div>
             )
         }
