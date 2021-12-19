@@ -44,15 +44,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-
+import { ExportReactCSV } from '../../ExportFile/GradeAssignmentExport/GradeAssignmentExport';
 
 /*<DownloadButton purpose='grade_assignment'/>
   <GradeAssignmentImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass} id_assignment={4}/>*/
 
 function createData(listStudent) {
     let listtemp = []
-    //let example = listStudent.assignmentGrade;
-    //console.log("list Student duoc truyen vao trong createData nè: ", example);
     for (let i = 0; i < listStudent.length; i++){
         let tempStu = {};
         tempStu.name = listStudent[i].username;
@@ -97,47 +95,12 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-    {
-        id: 'name',
-        numeric: false,
-        disablePadding: true,
-        label: 'Name',
-    },
-    {
-        id: 'thuyettrinh',
-        numeric: true,
-        disablePadding: false,
-        label: 'Thuyết trình',
-    },
-    {
-        id: 'baitap',
-        numeric: true,
-        disablePadding: false,
-        label: 'Bài tập',
-    },
-    {
-        id: 'giuaky',
-        numeric: true,
-        disablePadding: false,
-        label: 'Giữa kỳ',
-    },
-    {
-        id: 'cuoiky',
-        numeric: true,
-        disablePadding: false,
-        label: 'Cuối kỳ',
-    },
-];
-
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, listHeader } =
         props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
-    console.log("List Header: ", listHeader);
-    
     let headCells = [
         {
             id: 'name',
@@ -155,7 +118,6 @@ function EnhancedTableHead(props) {
         temp.pointStructure = item.point + ' điểm';
         headCells.push(temp);
     });
-    console.log(listHeader);
     return (
         <TableHead>
             <TableRow>
@@ -342,6 +304,9 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
 
     return (
         <Box sx={{ width: '100%' }}>
+            <div className="col-md-4 center">
+                <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
+            </div>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} selected={selected} classname = {class_name} />
                 <TableContainer>
