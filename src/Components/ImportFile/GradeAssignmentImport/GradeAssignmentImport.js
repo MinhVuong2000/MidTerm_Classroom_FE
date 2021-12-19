@@ -22,17 +22,8 @@ export default function GradeAssignmentImport({setStudents, students_ids, id_cla
             const ws = readedData.Sheets[wsname];
             /* Convert array to json */
             let dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
-            console.log("Export từ file excel ne: ",dataParse);
-            console.log("Danh sach sinh vien ne: ",students_ids);
             let add_user_grade = []
             for (let i=1; i<dataParse.length; i++) {
-                if((students_ids.includes(dataParse[i][0].toString()))){
-                    console.log("!(students_ids.includes true")
-                }
-                else{
-                    console.log("!(students_ids.includes false")
-                }
-                
                 if (students_ids==null || students_ids.length===0 || (students_ids.includes(dataParse[i][0].toString()))){
                     add_user_grade.push({
                         grade: dataParse[i][1],
