@@ -29,6 +29,7 @@ export default function ClassDetail() {
     const [isShowScores, setIsShowScores] = React.useState(false)
     const [isShowAssignments, setIsShowAssignments] = React.useState(false)
     const [assignmentList, setAssignmentList] = useState([]);
+    const [gradeBoard, setGradeBoard] = useState([])
 
     //Tạm thui
     const [name_work, setName_work] = useState([]);
@@ -71,11 +72,34 @@ export default function ClassDetail() {
                             console.log(description);
                         }
                     }
+                    fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
+                        method: "POST",
+                        headers: new Headers({
+                            "x-access-token": actoken,
+                            'Content-Type': 'application/json'
+                        }),
+                        body: JSON.stringify({
+                            id_class: idclass,
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(
+                            (result3) => {
+                                console.log("result trong gradeboard:", result3);
+                                setGradeBoard(result3);
+                                setIsLoaded(true);
+                            },
+                            (error) => {
+                                console.log("Error");
+                                setIsLoaded(true);
+                                setError(error);
+                            }
+                        )
 
                     fetch(DOMAIN_API + `classes/detail/${idclass}/assignments`, {
                         method: "GET",
                         headers: new Headers({
-                            "x-access-token": actoken
+                            "x-access-token": actoken,
                         })
                     })
                         .then(res => res.json())
@@ -122,7 +146,6 @@ export default function ClassDetail() {
             }
         ]
     }
-    console.log(" check assignment list: ", assignmentList);
     const handleChange = (event, newValue) => {
 
         if (newValue == "0") {
@@ -195,7 +218,7 @@ export default function ClassDetail() {
                     <div>
                         {isShowNews && < News data={mockDataNew} />}
                         {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
-                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name}/>}
+                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} />}
                         {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
                             data_structure={(result) => setName_work(result)} />}
                         {/* data_structure={(value) => setName_work(value)} */}

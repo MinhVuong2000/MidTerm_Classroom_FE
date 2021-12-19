@@ -46,182 +46,26 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 
-// function generate(element) {
-//     return [0, 1, 2].map((value) =>
-//         React.cloneElement(element, {
-//             key: value,
-//         }),
-//     );
-// }
+/*<DownloadButton purpose='grade_assignment'/>
+  <GradeAssignmentImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass} id_assignment={4}/>*/
 
-
-
-// const Demo = styled('div')(({ theme }) => ({
-//     backgroundColor: theme.palette.background.paper,
-// }));
-
-// export default function Member({ idclass, isTeacher, class_name }) {
-//     const [error, setError] = useState(null);
-//     const [isLoaded, setIsLoaded] = useState(false);
-//     const [email, setEmail] = useState('');
-//     const [teachers, setTeachers] = useState([]);
-//     const [students, setStudents] = useState([]);
-//     const [checkTeacher, setCheckTeacher] = useState(false);
-//     let actoken = localStorage.access_token;
-//     const url = DOMAIN_API + `classes/detail/${idclass}`;
-    
-//     useEffect(() => {
-//         fetch(url, {
-//             method: "GET",
-//             headers: new Headers({
-//                 "x-access-token": actoken
-//             })
-//         })
-//             .then(res => res.json())
-//             .then(
-//                 (result) => {
-
-//                     if (result != null) {
-//                         if (result.message) {
-//                             console.log(result.message);
-//                             setIsLoaded(true);
-//                         }
-//                         else {
-//                             setIsLoaded(true);
-//                             setTeachers(result.list_teacher);
-//                             setStudents(result.list_student);
-//                             if (result.isTeacher) {
-//                                 setCheckTeacher(true);
-//                             }
-//                         }
-//                     }
-//                 },
-//                 (error) => {
-//                     setIsLoaded(true);
-//                     setError(error);
-//                 }
-//             )
-//     }, [])
-//     if (error) {
-//         return <div>Error: {error.message}</div>;
-//     } else if (!isLoaded) {
-//         return <div>Loading...</div>;
-//     } else {
-//         console.log('is teacher true ne', checkTeacher);
-//         console.log('List student', students);
-//         if (checkTeacher) {
-//             return (
-//                 <div className='container'>
-//                     <div className="card" style={{paddingLeft: "10px", paddingRight: "10px"}}>
-//                     <DownloadButton purpose='grade_assignment'/>
-//                     <GradeAssignmentImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass} id_assignment={4}/>
-//                     <div className="row" >
-                        
-//                         <div style={{marginTop: "10px"}}>
-//                         <h3>Danh sách thành viên</h3>
-//                         </div>
-//                         <Grid container spacing={2}>
-                        
-//                             <Grid item xs={12} md={6}>
-//                                 <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-//                                     Sinh viên
-//                                 </Typography>
-//                                 <Demo>
-//                                     <List>
-//                                         {students.map(std =>
-//                                             <ListItem>
-//                                                 <ListItemAvatar>
-//                                                     <Avatar>
-//                                                         Ava
-//                                                     </Avatar>
-//                                                 </ListItemAvatar>
-//                                                 <ListItemText>{std.full_name}</ListItemText>
-//                                             </ListItem>
-//                                         )}
-//                                     </List>
-//                                 </Demo>
-//                             </Grid>
-//                         </Grid>
-//                     </div>
-//                     </div>
-//                 </div>
-//             )
-//         }
-//         else {
-//             return (
-//                 <div className="row" >
-//                     <Grid container spacing={2}>
-//                         <Grid item xs={12} md={6}>
-//                             <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-//                                 Giảng viên
-//                             </Typography>
-//                             <Demo>
-//                                 <List >
-//                                     {teachers.map(teacher =>
-//                                         <ListItem>
-//                                             <ListItemAvatar>
-//                                                 <Avatar>
-//                                                     Ava
-//                                                 </Avatar>
-//                                             </ListItemAvatar>
-//                                             <ListItemText>{teacher.full_name}</ListItemText>
-//                                         </ListItem>
-//                                     )}
-//                                 </List>
-//                             </Demo>
-//                         </Grid>
-//                         <Grid item xs={12} md={6}>
-//                             <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-//                                 Sinh viên
-//                             </Typography>
-//                             <Demo>
-//                                 <List>
-//                                     {students.map(std =>
-//                                         <ListItem>
-//                                             <ListItemAvatar>
-//                                                 <Avatar>
-//                                                     Ava
-//                                                 </Avatar>
-//                                             </ListItemAvatar>
-//                                             <ListItemText>{std.full_name}</ListItemText>
-//                                         </ListItem>
-//                                     )}
-//                                 </List>
-//                             </Demo>
-//                         </Grid>
-//                     </Grid>
-//                 </div>
-//             )
-//         }
-
-//     }
-// }
-
-function createData(name, thuyettrinh, baitap, giuaky, cuoiky) {
-    return {
-        name,
-        thuyettrinh,
-        baitap,
-        giuaky,
-        cuoiky,
-    };
+function createData(listStudent) {
+    let listtemp = []
+    //let example = listStudent.assignmentGrade;
+    //console.log("list Student duoc truyen vao trong createData nè: ", example);
+    for (let i = 0; i < listStudent.length; i++){
+        let tempStu = {};
+        tempStu.name = listStudent[i].username;
+        tempStu.listGrade = [];
+        for(let j = 0; j<listStudent[i].assignmentGrade.length; j++){
+            tempStu.listGrade.push(listStudent[i].assignmentGrade[j].gradeAssignment)
+        }
+        listtemp.push(tempStu);
+    }
+    console.log("List temp trong create data: ", listtemp);
+    return listtemp;
 }
 
-const rows = [
-    createData('Võ Xuân Đức Thắng', 9, 9, 9, 9),
-    createData('Lê Nguyễn Tuyết Chinh', 9, 9, 9, 9),
-    createData('Nguyễn Phạm Minh Dượng', 9, 9, 9, 9),
-    createData('Lê Dăn Đạt', 9, 9, 9, 9),
-    createData('Nguyễn Diễm My', 9, 9, 9, 9),
-    createData('Nguyễn Văn A', 10, 8, 9, 7),
-    createData('Nguyễn Văn B', 9, 6, 10, 9),
-    createData('Nguyễn Văn C', 9, 9, 9, 9),
-    createData('Nguyễn Văn D', 9, 9, 9, 9),
-    createData('Nguyễn Văn E', 9, 9, 9, 10),
-    createData('Nguyễn Văn F', 9, 9, 9, 9),
-    createData('Nguyễn Văn G', 9, 9, 9, 9),
-    createData('Nguyễn Văn H', 9, 9, 9, 9),
-];
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -287,12 +131,31 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, listHeader } =
         props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
-
+    console.log("List Header: ", listHeader);
+    
+    let headCells = [
+        {
+            id: 'name',
+            numeric: false,
+            disablePadding: true,
+            label: 'Tên học sinh',
+        },
+    ];
+    listHeader.map((item) => {
+        let temp = {};
+        temp.id = item.name;
+        temp.numeric = false;
+        temp.disablePadding = true;
+        temp.label = item.name;
+        temp.pointStructure = item.point + ' điểm';
+        headCells.push(temp);
+    });
+    console.log(listHeader);
     return (
         <TableHead>
             <TableRow>
@@ -320,6 +183,8 @@ function EnhancedTableHead(props) {
                             onClick={createSortHandler(headCell.id)}
                         >
                             {headCell.label}
+                            <br/>
+                            {headCell.pointStructure}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -340,12 +205,13 @@ EnhancedTableHead.propTypes = {
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
+    listHeader: PropTypes.array.isRequired,
 };
 
 
 
 const EnhancedTableToolbar = (props) => {
-    const { numSelected, selected } = props;
+    const { numSelected, selected, classname } = props;
     const handleClickEdit = (event, a) => {
         //const a = selected;
         console.log("@@@@@@", a)
@@ -378,7 +244,7 @@ const EnhancedTableToolbar = (props) => {
                     id="tableTitle"
                     component="div"
                 >
-                    Lớp PTUDWNC
+                    Lớp {classname}
                 </Typography>
             )}
             {numSelected > 0 ? (
@@ -388,18 +254,17 @@ const EnhancedTableToolbar = (props) => {
                     </IconButton>
                 </Tooltip>
             ) : (
-<div style={{position: "absolute",right:"5px"}} >
-
-                <Tooltip title="Download">
-                    <IconButton>
-                        <FileDownloadIcon />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="Upload">
-                    <IconButton>
-                        <FileUploadIcon />
-                    </IconButton>
-                </Tooltip>
+                <div style={{position: "absolute",right:"5px"}} >
+                    <Tooltip title="Download">
+                        <IconButton>
+                            <FileDownloadIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Upload">
+                        <IconButton>
+                            <FileUploadIcon />
+                        </IconButton>
+                    </Tooltip>
                 </div>
             )}
         </Toolbar>
@@ -410,20 +275,21 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function Scores() {
+export default function Scores({idclass, isTeacher, class_name, grade_board}) {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+    const [gradeboard, setGradeBoard] = React.useState(grade_board);
+    const rows = createData(gradeboard.listStudentGrade);
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-
+    
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelecteds = rows.map((n) => n.name);
@@ -477,13 +343,14 @@ export default function Scores() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
+                <EnhancedTableToolbar numSelected={selected.length} selected={selected} classname = {class_name} />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
                         aria-labelledby="tableTitle"
                         size={dense ? 'small' : 'medium'}
                     >
+                        
                         <EnhancedTableHead
                             numSelected={selected.length}
                             order={order}
@@ -491,6 +358,7 @@ export default function Scores() {
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            listHeader = {gradeboard.listAssignment}
                         />
                         <TableBody>
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -500,7 +368,22 @@ export default function Scores() {
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
-
+                                    let listTableCell = [];
+                                    let squareDiv = [];
+                                    console.log("row ne: ", row.listGrade);
+                                    listTableCell.push(<TableCell
+                                                            component="th"
+                                                            id={labelId}
+                                                            scope="row"
+                                                            padding="none"
+                                                        >
+                                                            {row.name}
+                                                        </TableCell>);
+                                    for (let i = 0; i < row.listGrade.length; i++){
+                                        let point = row.listGrade[i];
+                                        listTableCell.push(<TableCell align="left">{point}</TableCell>);
+                                    }
+                                    console.log("List table cell: ", listTableCell);
                                     return (
                                         <TableRow
                                             hover
@@ -520,18 +403,7 @@ export default function Scores() {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                padding="none"
-                                            >
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="right">{row.thuyettrinh}</TableCell>
-                                            <TableCell align="right">{row.baitap}</TableCell>
-                                            <TableCell align="right">{row.giuaky}</TableCell>
-                                            <TableCell align="right">{row.cuoiky}</TableCell>
+                                            {listTableCell}
                                         </TableRow>
                                     );
                                 })}
