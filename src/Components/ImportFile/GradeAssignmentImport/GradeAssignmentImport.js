@@ -6,9 +6,9 @@ import UploadIcon from '@mui/icons-material/Upload';
 import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 
 
-export default function GradeAssignmentImport({setStudents, students_ids, id_class, id_assignment}){
+export default function GradeAssignmentImport({setGradeBoard, students_ids, id_class, id_assignment, name}){
     const [respond, setResponse] = useState(null);
-    
+    console.log("list student trong import file grade: ",students_ids);
     const handleUpload = (e) => {
         e.preventDefault();
         const f = e.target.files[0];
@@ -49,6 +49,28 @@ export default function GradeAssignmentImport({setStudents, students_ids, id_cla
             .then(res => res.json())
             .then((result) => {
                 console.log(result)
+                fetch(DOMAIN_API + `classes/detail/${id_class}/assignments/getgradeboard`, {
+                    method: "POST",
+                    headers: new Headers({
+                        "x-access-token": actoken,
+                        'Content-Type': 'application/json'
+                    }),
+                    body: JSON.stringify({
+                        id_class: id_class,
+                    })
+                  })
+                      .then(res => res.json())
+                      .then(
+                          (result3) => {
+                              console.log("Thay doi vi tri assignment:", result3);
+                              setGradeBoard(result3);
+                              //setIsLoaded(true);
+                          },
+                          (error) => {
+                              console.log("Error getGradeBoard in import grade assignment");
+                             
+                          }
+                      )
             })
             .catch(error => console.log('Form submit error', error))
             //setStudents(add_user_grade);
@@ -62,7 +84,7 @@ export default function GradeAssignmentImport({setStudents, students_ids, id_cla
 
     return (
         <Button variant='outlined' component="label">
-            <UploadIcon/>Upload File
+            <UploadIcon/>Upload File {name}
             <input type="file" accept=".csv, .xlsx" hidden 
                 onChange={e => handleUpload(e)}
             />
