@@ -69,7 +69,7 @@ export default function ClassDetail() {
                                 setInviteLink(linkin);
                             }
                             setDescription(result.description);
-                            console.log(description);
+                            console.log("day la description: ", result.description);
                         }
                     }
                     fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
@@ -90,7 +90,7 @@ export default function ClassDetail() {
                                 setIsLoaded(true);
                             },
                             (error) => {
-                                console.log("Error");
+                                console.log("Error getGradeBoard");
                                 setIsLoaded(true);
                                 setError(error);
                             }
@@ -114,7 +114,7 @@ export default function ClassDetail() {
                                 setIsLoaded(true);
                             },
                             (error) => {
-                                console.log("Error");
+                                console.log("Error get list assignment");
                                 setIsLoaded(true);
                                 setError(error);
                             }
@@ -204,9 +204,6 @@ export default function ClassDetail() {
             return <div>Loading...</div>;
         }
         else {
-            if (isTeacher) {
-
-            }
             return (
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                     <Tabs value={value} onChange={handleChange} centered>

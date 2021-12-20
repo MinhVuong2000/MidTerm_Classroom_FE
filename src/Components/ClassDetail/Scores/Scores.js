@@ -49,21 +49,30 @@ import { ExportReactCSV } from '../../ExportFile/GradeAssignmentExport/GradeAssi
 /*<DownloadButton purpose='grade_assignment'/>
   <GradeAssignmentImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass} id_assignment={4}/>*/
 
-function createData(listStudent) {
-    let listtemp = []
-    for (let i = 0; i < listStudent.length; i++){
-        let tempStu = {};
-        tempStu.name = listStudent[i].username;
-        tempStu.listGrade = [];
-        for(let j = 0; j<listStudent[i].assignmentGrade.length; j++){
-            tempStu.listGrade.push(listStudent[i].assignmentGrade[j].gradeAssignment)
+function createData(board, isteacher) {
+    if(isteacher){
+        let listStudent = board.listStudentGrade;
+        let listtemp = []
+        for (let i = 0; i < listStudent.length; i++){
+            let tempStu = {};
+            tempStu.name = listStudent[i].username;
+            tempStu.listGrade = [];
+            for(let j = 0; j<listStudent[i].assignmentGrade.length; j++){
+                tempStu.listGrade.push(listStudent[i].assignmentGrade[j].gradeAssignment)
+            }
+            listtemp.push(tempStu);
         }
-        listtemp.push(tempStu);
+        console.log("List temp trong create data: ", listtemp);
+        return listtemp;
     }
-    console.log("List temp trong create data: ", listtemp);
-    return listtemp;
+    else{
+        return board;
+    }
+    
 }
-
+function createStudentData(gradeboard){
+    return gradeboard;
+}
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -245,7 +254,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [gradeboard, setGradeBoard] = React.useState(grade_board);
-    const rows = createData(gradeboard.listStudentGrade);
+    const rows = createData(grade_board, isTeacher);
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -302,105 +311,121 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    return (
-        <Box sx={{ width: '100%' }}>
-            <div className="col-md-4 center">
-                <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
-            </div>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} selected={selected} classname = {class_name} />
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
-                    >
-                        
-                        <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                            listHeader = {gradeboard.listAssignment}
-                        />
-                        <TableBody>
-                            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
-                            {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-                                    let listTableCell = [];
-                                    let squareDiv = [];
-                                    console.log("row ne: ", row.listGrade);
-                                    listTableCell.push(<TableCell
-                                                            component="th"
-                                                            id={labelId}
-                                                            scope="row"
-                                                            padding="none"
-                                                        >
-                                                            {row.name}
-                                                        </TableCell>);
-                                    for (let i = 0; i < row.listGrade.length; i++){
-                                        let point = row.listGrade[i];
-                                        listTableCell.push(<TableCell align="left">{point}</TableCell>);
-                                    }
-                                    console.log("List table cell: ", listTableCell);
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={(event) => handleClick(event, row.name)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.name}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId,
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            {listTableCell}
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                
-                <TablePagination
+    if(isTeacher){
+        return (
+            <Box sx={{ width: '100%' }}>
+                <div className="col-md-4 center">
+                    <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
+                </div>
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                    <EnhancedTableToolbar numSelected={selected.length} selected={selected} classname = {class_name} />
+                    <TableContainer>
+                        <Table
+                            sx={{ minWidth: 750 }}
+                            aria-labelledby="tableTitle"
+                            size={dense ? 'small' : 'medium'}
+                        >
+                            
+                            <EnhancedTableHead
+                                numSelected={selected.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={rows.length}
+                                listHeader = {gradeboard.listAssignment}
+                            />
+                            <TableBody>
+                                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                     rows.slice().sort(getComparator(order, orderBy)) */}
+                                {stableSort(rows, getComparator(order, orderBy))
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row, index) => {
+                                        const isItemSelected = isSelected(row.name);
+                                        const labelId = `enhanced-table-checkbox-${index}`;
+                                        let listTableCell = [];
+                                        let squareDiv = [];
+                                        listTableCell.push(<TableCell
+                                                                component="th"
+                                                                id={labelId}
+                                                                scope="row"
+                                                                padding="none"
+                                                            >
+                                                                {row.name}
+                                                            </TableCell>);
+                                        for (let i = 0; i < row.listGrade.length; i++){
+                                            let point = row.listGrade[i];
+                                            listTableCell.push(<TableCell align="left">{point}</TableCell>);
+                                        }
+                                        return (
+                                            <TableRow
+                                                hover
+                                                onClick={(event) => handleClick(event, row.name)}
+                                                role="checkbox"
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.name}
+                                                selected={isItemSelected}
+                                            >
+                                                <TableCell padding="checkbox">
+                                                    <Checkbox
+                                                        color="primary"
+                                                        checked={isItemSelected}
+                                                        inputProps={{
+                                                            'aria-labelledby': labelId,
+                                                        }}
+                                                    />
+                                                </TableCell>
+                                                {listTableCell}
+                                            </TableRow>
+                                        );
+                                    })}
+                                {emptyRows > 0 && (
+                                    <TableRow
+                                        style={{
+                                            height: (dense ? 33 : 53) * emptyRows,
+                                        }}
+                                    >
+                                        <TableCell colSpan={6} />
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                     
-                    rowsPerPageOptions={[10, 20,30]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            
-            </Paper>
-            {/* <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
-            /> */}
-        </Box>
-    );
+                    <TablePagination
+                        
+                        rowsPerPageOptions={[10, 20,30]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                
+                </Paper>
+                {/* <FormControlLabel
+                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    label="Dense padding"
+                /> */}
+            </Box>
+        );
+    }
+    else{
+        //Xử lý UI show điểm ở đây
+        //Rows có dạng: [{nameAssignment: "name1", gradeAssignment: point1}, {nameAssignment: "name2", gradeAssignment: point2}]
+        return(
+            <Grid container spacing={1}  >
+                {rows.map(row =>
+                    <Grid item xs={6}>
+                        <ListItem>
+                            <ListItemText>{row.nameAssignment}: {row.gradeAssignment}</ListItemText>
+                        </ListItem>
+                    </Grid>
+                )}
+            </Grid>
+        );
+    }
+    
 }
