@@ -50,6 +50,7 @@ import { ExportReactCSV } from '../../ExportFile/GradeAssignmentExport/GradeAssi
   <GradeAssignmentImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass} id_assignment={4}/>*/
 
 function createData(board, isteacher) {
+    console.log('grade board sau khi change: ', board)
     if(isteacher){
         let listStudent = board.listStudentGrade;
         let listtemp = []
@@ -312,6 +313,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     if(isTeacher){
+        
         return (
             <Box sx={{ width: '100%' }}>
                 <div className="col-md-4 center">

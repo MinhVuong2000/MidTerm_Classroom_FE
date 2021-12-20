@@ -217,7 +217,7 @@ export default function ClassDetail() {
                         {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
                         {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} />}
                         {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
-                            data_structure={(result) => setName_work(result)} />}
+                            data_structure={(result) => setName_work(result)} grade_structure = {(result3) => setGradeBoard(result3)}/>}
                         {/* data_structure={(value) => setName_work(value)} */}
                     </div>
                 </Box>

@@ -231,7 +231,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                                             Ava
                                                         </Avatar>
                                                     </ListItemAvatar>
-                                                    <ListItemText>{std.full_name}</ListItemText>
+                                                    <ListItemText>{std.full_name_user}</ListItemText>
                                                 </ListItem>
                                             </Grid>
                                         )}
@@ -285,7 +285,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                                             Ava
                                                         </Avatar>
                                                     </ListItemAvatar>
-                                                    <ListItemText>{std.full_name}</ListItemText>
+                                                    <ListItemText>{std.full_name_user}</ListItemText>
                                                 </ListItem>
                                             </Grid>
                                         )}
