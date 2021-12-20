@@ -68,6 +68,7 @@ export default function ClassDetail() {
 
                                 setInviteLink(linkin);
                             }
+
                             setDescription(result.description);
                             console.log("day la description: ", result.description);
                         }

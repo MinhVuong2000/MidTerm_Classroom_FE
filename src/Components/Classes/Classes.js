@@ -3,14 +3,16 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { Navigate} from 'react-router-dom';
 import Classroom from "../Classroom/Classroom";
-import {DOMAIN_API}  from '../../config/const';
+import { DOMAIN_API, ENTER_ID_UNI_TITLE, ENTER_ID_UNI_DESC }  from '../../config/const';
 import FormDialog from '../FormDialog/FormDialog';
+import AlertDialog from '../AlertDialog/AlertDialog';
 
 
 export default function Classes(){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
+    const [hasIdUni, setHasIdUni] = useState(true);
     console.log("===================================")
     
     let actoken = localStorage.getItem('access_token');
@@ -28,7 +30,11 @@ export default function Classes(){
             (result) => {
                 console.log('items:', items);
                 console.log("result:",result);
-                if(result.message == 'not enroll class'){
+                if (result===null){
+                    setItems(result);
+                    setIsLoaded(true);
+                }
+                else if(result.message == 'not enroll class'){
                     setItems([]);
                     setIsLoaded(true);
                 }
@@ -66,6 +72,17 @@ export default function Classes(){
         }
         else {
             console.log("kiem tra item []",items)
+            if (items === null){
+                console.log(hasIdUni);
+                return (
+                    <div>
+                        {hasIdUni ? 
+                        <AlertDialog title={ENTER_ID_UNI_TITLE} msg={ENTER_ID_UNI_DESC} callback={() => {setHasIdUni(false)}}/>
+                         : <Navigate to='/profile'/>
+                        }
+                    </div>
+                )
+            }
             if(items.length == 0){
                 return <div>Bạn chưa tham gia lớp nào!
                     <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>    

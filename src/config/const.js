@@ -14,7 +14,8 @@ const NOT_NULL_VALUE_ADD_ASSIGNMENT_TITLE = 'Tên hoặc điểm số để thê
 const NOT_NULL_VALUE_ADD_ASSIGNMENT_DESC = 'Hãy nhập giá trị vào nhé';
 const ERROR_TYPE_POINT_TITLE = "Sai định dạng"
 const ERROR_TYPE_POINT_DESC = "Điểm phải là con số dương"
-
+const ENTER_ID_UNI_TITLE = "Chưa nhập mã số nhà trường cung cấp"
+const ENTER_ID_UNI_DESC = "Bạn cần nhập mã số do nhà trường cung cấp để có thể xem chi tiết lớp học! Trang sẽ chuyển sang profile để chỉnh sửa nhé."
 
 const googleClientID = '1091140274470-msvgch2pntvkv0pltbq5osuqpgk3to3e.apps.googleusercontent.com';
 const googleClientSecret = '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';
@@ -34,6 +35,8 @@ module.exports = {
     NOT_NULL_VALUE_ADD_ASSIGNMENT_DESC,
     ERROR_TYPE_POINT_TITLE,
     ERROR_TYPE_POINT_DESC,
+    ENTER_ID_UNI_TITLE,
+    ENTER_ID_UNI_DESC,
     googleClientID,
     googleClientSecret
 }
