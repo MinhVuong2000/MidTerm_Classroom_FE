@@ -53,7 +53,7 @@ export default function Profile() {
         };
         fetch(url, requestOptions)
         .catch(error => console.log('Form submit error', error))
-        setProfile('400');
+        setProfile('400'); // to logout
     }
 
     function handleSaveEditProfile(){
@@ -79,7 +79,7 @@ export default function Profile() {
                         const url = DOMAIN_API + `users/update-profile`;
                         const updated_profile = {
                             full_name: fullName,
-                            id_uni: MSSV,
+                            id_uni: MSSV.toString(),
                             phone: phone,
                             email: email,
                             address: address
@@ -94,6 +94,7 @@ export default function Profile() {
                         };
                         fetch(url, requestOptions)
                         .catch(error => console.log('Form submit error', error))
+                        setProfile('400'); // to logout to get new id_uni
                     }
                 },
                 (error) => {
@@ -120,6 +121,7 @@ export default function Profile() {
             };
             fetch(url, requestOptions)
             .catch(error => console.log('Form submit error', error))
+            setProfile('400'); // to logout to get new info
         }
     }
 

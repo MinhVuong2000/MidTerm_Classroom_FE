@@ -13,6 +13,7 @@ export default function Classes(){
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
     const [hasIdUni, setHasIdUni] = useState(true);
+    const [openNotiIdUni, setOpenNotiIdUni] = useState(true);
     console.log("===================================")
     
     let actoken = localStorage.getItem('access_token');
@@ -31,7 +32,7 @@ export default function Classes(){
                 console.log('items:', items);
                 console.log("result:",result);
                 if (result===null){
-                    setItems(result);
+                    setHasIdUni(false);
                     setIsLoaded(true);
                 }
                 else if(result.message == 'not enroll class'){
@@ -72,12 +73,11 @@ export default function Classes(){
         }
         else {
             console.log("kiem tra item []",items)
-            if (items === null){
-                console.log(hasIdUni);
+            if (!hasIdUni){
                 return (
                     <div>
-                        {hasIdUni ? 
-                        <AlertDialog title={ENTER_ID_UNI_TITLE} msg={ENTER_ID_UNI_DESC} callback={() => {setHasIdUni(false)}}/>
+                        {openNotiIdUni ? 
+                        <AlertDialog title={ENTER_ID_UNI_TITLE} msg={ENTER_ID_UNI_DESC} callback={() => {setOpenNotiIdUni(false)}}/>
                          : <Navigate to='/profile'/>
                         }
                     </div>
