@@ -298,7 +298,7 @@ export default function Assignments({ idclass, assignments, data_structure }) {
               variant="standard"
               value={assignmentPointAdded}
               onChange={e => setAssignmentPointAdded(e.target.value)} />
-            <Button onClick={HandleAdd}>Thêm bài tập</Button>
+            <Button variant="contained" onClick={HandleAdd}>Thêm bài tập</Button>
           </Box>
         </div>;
       }

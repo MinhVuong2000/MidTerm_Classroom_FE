@@ -143,9 +143,13 @@ export default function Member({ idclass, isTeacher, class_name }) {
         console.log('List student', students);
         if (checkTeacher) {
             return (
-                <div>
-                    <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
-                        <SpeedDial
+                <div  style={{padding: "20px"}}>
+                <div className="row"> 
+                <div className="col-md-2">
+                <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1,  left: 16 }}>
+                    <DownloadButton purpose='student_list' />
+                    <StudentListImport setStudents={setStudents} students_ids={students.map(student => student.id_uni)} id_class={idclass} />
+                        {/* <SpeedDial
 
                             ariaLabel="SpeedDial basic example"
                             sx={{ position: 'fixed', left: 16 }}
@@ -161,28 +165,26 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                     icon={action.icon}
                                     title={action.name}
                                     tooltipTitle={action.name}
+                                    type={action.type}
+                                    accept={action.accept}
+
                                     onClick={(e) => {
                                         handleClickDownUp(e, action.operation)
                                     }}
                                 />
                             ))}
-                            {/* <SpeedDialAction>
-                  <DownloadForOfflineIcon purpose='student_list'  name= 'Download templatte' />
-                  </SpeedDialAction>
-                  <SpeedDialAction>
-                  <UploadIcon setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass}  name= 'Upload file' />
-                  </SpeedDialAction>*/}
-                        </SpeedDial>
+                             <UploadSpeedDialAction setStudents={setStudents} students_ids={students.map(student => student.id_uni)} id_class={idclass} />
+                        </SpeedDial> */}
                     </Box>
-                
-                    <div className='container' >
+                </div>
+                    
+                    <div className="col-md-10" >
                         <div className="card" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-                            <DownloadButton purpose='student_list' />
-                            <StudentListImport setStudents={setStudents} students_ids={students.map(student => student.id_uni)} id_class={idclass} />
+                           
                             <div className="row" >
                                 <div className='card-header'>
                                     <form>
-                                        <h3>Mời sinh viên</h3>
+                                        <h3>Mời bạn bè</h3>
 
                                         <div className="form-group">
                                             <label>Nhập Email muốn mời</label>
@@ -196,6 +198,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                     <h3>Danh sách thành viên</h3>
                                 </div>
                                 <div>
+
                                     <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
                                         Giảng viên
                                     </Typography>
@@ -219,6 +222,9 @@ export default function Member({ idclass, isTeacher, class_name }) {
 
                                 </div>
                                 <div>
+
+
+
                                     <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
                                         Sinh viên
                                     </Typography>
@@ -231,7 +237,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                                             Ava
                                                         </Avatar>
                                                     </ListItemAvatar>
-                                                    <ListItemText>{std.full_name}</ListItemText>
+                                                    <ListItemText>{std.full_name_user}</ListItemText>
                                                 </ListItem>
                                             </Grid>
                                         )}
@@ -241,6 +247,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             )
         }
@@ -285,7 +292,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                                             Ava
                                                         </Avatar>
                                                     </ListItemAvatar>
-                                                    <ListItemText>{std.full_name}</ListItemText>
+                                                    <ListItemText>{std.full_name_user}</ListItemText>
                                                 </ListItem>
                                             </Grid>
                                         )}

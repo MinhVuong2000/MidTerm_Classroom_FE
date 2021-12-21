@@ -11,8 +11,18 @@ const onClick = (purpose) => {
 
 export default function DownloadButton({purpose}){
     return (
-        <Button onClick={()=> {onClick(purpose)}} variant="contained">
-            <DownloadIcon/>Click to download {purpose} template
-        </Button>
+         // <Button style={{width:"120px"}} onClick={()=> {onClick(purpose)}} variant="contained">
+        //     <DownloadIcon/>Download template
+        // </Button>
+        <Button style={{width:"190px"}} variant='outlined' component="label" onClick={()=> {onClick(purpose)}} variant="contained">
+        <div className="row">
+            <div className=" d-flex justify-content-center">
+        <DownloadIcon  />
+        </div>
+        <div className=" d-flex justify-content-center">
+        Download template
+        </div>
+        </div>
+    </Button>
     )
 }
