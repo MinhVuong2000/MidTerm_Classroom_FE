@@ -217,7 +217,7 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
     const [edit, setEdit]=React.useState(false);
-    const { numSelected, selected, selected2, classname, afterEdit, idclass } = props;
+    const { numSelected, selected, classname, afterEdit, idclass } = props;
     console.log("data select nè:",selected)
    const [numSelec, setNumSelec]=React.useState(numSelected);
 
@@ -229,7 +229,7 @@ const EnhancedTableToolbar = (props) => {
         setEdit(true)
     };
     return (
-        <div>  {edit ? <Edit rowSelected={selected} rowDefault ={selected2} idclass={idclass} Swi={(value,handleSelected) =>{setEdit(value); handleAfterEditEnhanced(handleSelected) }}/> :
+        <div>  {edit ? <Edit rowSelected={selected} idclass={idclass} Swi={(value,handleSelected) =>{setEdit(value); handleAfterEditEnhanced(handleSelected) }}/> :
         <Toolbar
             sx={{
                 pl: { sm: 2 },
@@ -291,7 +291,6 @@ EnhancedTableToolbar.propTypes = {
 
 export default function Scores({idclass, isTeacher, class_name, grade_board, students}) {
     const [rowSelected, setRowSelected]=React.useState([]);
-    const [rowSelectedDefault, setRowSelectedDefault]=React.useState([]);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
@@ -368,10 +367,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
         
         setSelected(newSelected);
         let newRowSelected = [];
-        let newRowSelected2 = [];
         newRowSelected.push(row);
-        newRowSelected2.push(row);
-        setRowSelectedDefault(newRowSelected2)
         setRowSelected(newRowSelected);
     };
 
@@ -500,7 +496,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
 
                 {rows && 
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} selected2={rowSelectedDefault} classname = {class_name} idclass = {idclass} afterEdit={(value)=>handleAfterEdit(value)}  />
+                    <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} classname = {class_name} idclass = {idclass} afterEdit={(value)=>handleAfterEdit(value)}  />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
