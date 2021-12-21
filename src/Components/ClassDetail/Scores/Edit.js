@@ -18,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Edit({ rowSelected, rowDefault, Swi, idclass }) {
+export default function Edit({ rowSelected, Swi, idclass }) {
   console.log("Data truyền vào:   ",rowSelected)
   const tam = []
   for (var i = 0; i < rowSelected[0].listGrade.length - 1; i++) {
@@ -34,10 +34,7 @@ export default function Edit({ rowSelected, rowDefault, Swi, idclass }) {
   const [open, setOpen] = React.useState(true);
   const [nameStudent, setNameStudent]=React.useState(rowSelected[0].name);
   const [idStudent, setidStudent]=React.useState(rowSelected[0].idUserStudent);
-  const [defaultdata, setDefaultData] = React.useState(tam);
   const handleClose = () => {
-    console.log("Sau khi close thi ta duoc: ", rowDefault)
-    setListAssign(tam);
     setOpen(false);
     Swi(false, 0);
   };

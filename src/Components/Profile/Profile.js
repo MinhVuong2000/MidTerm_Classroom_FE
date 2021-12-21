@@ -168,9 +168,9 @@ export default function Profile() {
     }
     if (profile!=null){
         return (
-            <div>
+            <div className="d-flex justify-content-center">
                 {isEditting ? 
-                    <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
+                    <Card sx={{ maxWidth: 600, marginTop: "50px" }}>
                         {openExistedMSSV && <AlertDialog title={EXISTED_MSSV_TITLE} msg={EXISTED_MSSV_DESC} callback={() => {setOpenExistedMSSV(false)}}/>}
                         {openNullMSSV && <AlertDialog title={ENTER_MSSV_TITLE} msg={ENTER_MSSV_DESC} callback={() => {setOpenNullMSSV(false)}}/>}
                         <TextField
