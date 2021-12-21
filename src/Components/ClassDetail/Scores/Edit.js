@@ -12,55 +12,71 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { Box, TextField } from '@mui/material';
+import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Edit({ rowSelected, Swi }) {
+export default function Edit({ rowSelected, rowDefault, Swi, idclass }) {
   console.log("Data truyền vào:   ",rowSelected)
-  var tam = []
+  const tam = []
   for (var i = 0; i < rowSelected[0].listGrade.length - 1; i++) {
+    /*if(rowSelected[0].listGrade[i].gradeAssignment == null){
+      rowSelected[0].listGrade[i].gradeAssignment = '';
+    }*/
     tam.push(rowSelected[0].listGrade[i]);
   }
-  // const [listAssign, setListAssign] = React.useState(rowSelected[0].listGrade);
-
+  
   //listAssign - Là cái list cần lấy ----------------------------------------------------------------
   const [listAssign, setListAssign] = React.useState(tam);
   console.log("Data sau khi xử lý:   ",listAssign)
   const [open, setOpen] = React.useState(true);
   const [nameStudent, setNameStudent]=React.useState(rowSelected[0].name);
-
-
+  const [idStudent, setidStudent]=React.useState(rowSelected[0].idUserStudent);
+  const [defaultdata, setDefaultData] = React.useState(tam);
   const handleClose = () => {
+    console.log("Sau khi close thi ta duoc: ", rowDefault)
+    setListAssign(tam);
     setOpen(false);
     Swi(false, 0);
   };
   const handleChange = (event, index) => {
-    // console.log("event nè", event.target.name)
-    // console.log("key nè", event.target.id)
-    // console.log("value nè", event.target.value)
-    //console.log("index nè", index)
-    //setName(event.target.value);
-    // var temp=listAssign;
-    //temp[0].gradeAssignment=9;
-    //listAssign[event.target.id].gradeAssignment=event.target.value
-    //console.log("list hiện tại nè", listAssign)
-    // setListAssign(temp);
-
     const clonedData = [...listAssign];
-    //console.log("clonedData hiện tại nè", clonedData[index])
+    //console.log("cloneData: ", clonedData)
     clonedData[index].gradeAssignment = event.target.value;
     setListAssign(clonedData);
-
   };
 
+  const handleClickUpdateGrade = () => {
+    console.log("idclass trong edit diem: ", idclass);
+    const url = DOMAIN_API + `classes/detail/${idclass}/assignments/updategradestudent`;
+    const actoken = localStorage.getItem('access_token');
+    const requestOptions = {
+      method: 'POST',
+      headers: new Headers({
+          "x-access-token": actoken,
+          'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+          update_user_grade: listAssign,
+          id_class: idclass,
+          id_uni_user: idStudent
+      })
+    };
+    fetch(url, requestOptions)
+    .then(res => res.json())
+    .then((result) => {
+        console.log(result)
+        setOpen(false);
+        Swi(false, 0);
+    })
+    .catch(error => console.log('Form submit error', error))
+    
+  };
 
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open full-screen dialog
-      </Button> */}
       <Dialog
         fullScreen
         open={open}
@@ -80,31 +96,14 @@ export default function Edit({ rowSelected, Swi }) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Chỉnh sửa điểm học viên
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              Lưu
-            </Button>
           </Toolbar>
         </AppBar>
         <List>
-          {/* <ListItem button>
-            <ListItemText primary="Phone ringtone" secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText
-              primary="Default notification ringtone"
-              secondary="Tethys"
-            />
-          </ListItem> */}
+          
           Student: {nameStudent}
           <Box component='form' className="container" style={{ paddingTop: "10px" }}>
             <div className="card" style={{ padding: "15px" }}>
-              {/* <TextField
-                id="outlined-name"
-                label="Name"
-                value={name}
-                onChange={handleChange}
-              /> */}
+              
               {listAssign.map((arr, index) =>
                 <TextField
                   key={index}
@@ -118,12 +117,10 @@ export default function Edit({ rowSelected, Swi }) {
                   name={arr.nameAssignment}
                   onChange={(e) => handleChange(e, index)}
 
-                // value={assignmentNameAdded}
-                // onChange={e => setAssignmentNameAdded(e.target.value)} 
                 />)
               }
 
-              <Button >Cập nhật</Button>
+              <Button onClick={handleClickUpdateGrade}>Cập nhật</Button>
             </div>
           </Box>
 

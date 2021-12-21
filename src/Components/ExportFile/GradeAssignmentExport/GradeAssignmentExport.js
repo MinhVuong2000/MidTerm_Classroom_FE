@@ -6,7 +6,6 @@ export const ExportReactCSV = ({csvData, fileName}) => {
     const listStudent = csvData.listStudentGrade;
     const listAssignment = csvData.listAssignment;
     let custs = []
-    console.log("List Student ",listStudent[0].username);
     for (let i = 0; i < listStudent.length; i++) {
         let student = listStudent[i];
         let temp = {};

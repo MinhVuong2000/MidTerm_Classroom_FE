@@ -159,19 +159,21 @@ function EnhancedTableHead(props) {
         temp.pointStructure = item.point + ' điểm';
         headCells.push(temp);
     });
+    /*Đoạn check box bên table head
+    <Checkbox
+        color="primary"
+        indeterminate={numSelected > 0 && numSelected < rowCount}
+        checked={rowCount > 0 && numSelected === rowCount}
+        onChange={onSelectAllClick}
+        inputProps={{
+            'aria-label': 'select all desserts',
+        }}
+    />*/
     return (
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
+                    
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -215,22 +217,19 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
     const [edit, setEdit]=React.useState(false);
-    const { numSelected, selected, classname, afterEdit } = props;
+    const { numSelected, selected, classname, afterEdit, idclass } = props;
     console.log("data select nè:",selected)
    const [numSelec, setNumSelec]=React.useState(numSelected);
 
-    const handleAfterEdit=(value) =>{
+    const handleAfterEditEnhanced=(value) =>{
         afterEdit(value);
     }
 
     const handleClickEdit = (event, a) => {
-        //const a = selected;
-        //console.log("@@@@@@", a)
-        //alert("edit")
         setEdit(true)
     };
     return (
-        <div>  {edit ? <Edit rowSelected={selected}  Swi={(value,handleSelected) =>{setEdit(value); handleAfterEdit(handleSelected) }}/> :
+        <div>  {edit ? <Edit rowSelected={selected} rowDefault ={selected} idclass={idclass} Swi={(value,handleSelected) =>{setEdit(value); handleAfterEditEnhanced(handleSelected) }}/> :
         <Toolbar
             sx={{
                 pl: { sm: 2 },
@@ -292,6 +291,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function Scores({idclass, isTeacher, class_name, grade_board, students}) {
     const [rowSelected, setRowSelected]=React.useState([]);
+    const [rowSelectedDefault, setRowSelectedDefault]=React.useState([]);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
@@ -359,54 +359,17 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
-    
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);;
-            setSelected(newSelecteds);
-            setRowSelected(rows);
-            return;
-        }
-        setSelected([]);
-        setRowSelected([]);
-    };
 
     const handleClick = (event, name, row) => {
-        const selectedIndex = selected.indexOf(name);
+        console.log("Name trong handle click: ", name);
+        console.log("select trong handle click: ", selected);
         let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
+        newSelected.push(name);
+        
         setSelected(newSelected);
-
-
-        const rowselectedIndex = rowSelected.indexOf(row);
         let newRowSelected = [];
-
-        if (rowselectedIndex === -1) {
-            newRowSelected = newRowSelected.concat(rowSelected, row);
-        } else if (rowselectedIndex === 0) {
-            newRowSelected = newRowSelected.concat(rowSelected.slice(1));
-        } else if (rowselectedIndex === rowSelected.length - 1) {
-            newRowSelected = newRowSelected.concat(rowSelected.slice(0, -1));
-        } else if (rowselectedIndex > 0) {
-            newRowSelected = newRowSelected.concat(
-                rowSelected.slice(0, rowselectedIndex),
-                rowSelected.slice(rowselectedIndex + 1),
-            );
-        }
-
+        newRowSelected.push(row);
+        setRowSelectedDefault(newRowSelected)
         setRowSelected(newRowSelected);
     };
 
@@ -535,7 +498,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
 
                 {rows && 
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} classname = {class_name}  afterEdit={(value)=>handleAfterEdit(value)}  />
+                    <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} classname = {class_name} idclass = {idclass} afterEdit={(value)=>handleAfterEdit(value)}  />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -548,7 +511,6 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                                 numSelected={selected.length}
                                 order={order}
                                 orderBy={orderBy}
-                                onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
                                 rowCount={rows.length}
                                 listHeader = {gradeboard.listAssignment}
