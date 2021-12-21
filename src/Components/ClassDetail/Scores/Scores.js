@@ -58,9 +58,10 @@ function createData(board, isteacher) {
             for (let i = 0; i < listStudent.length; i++){
                 let tempStu = {};
                 tempStu.name = listStudent[i].username;
+                tempStu.idUserStudent = listStudent[i].id_uni_user;
                 tempStu.listGrade = [];
                 for(let j = 0; j<listStudent[i].assignmentGrade.length; j++){
-                    tempStu.listGrade.push(listStudent[i].assignmentGrade[j].gradeAssignment)
+                    tempStu.listGrade.push(listStudent[i].assignmentGrade[j])
                 }
                 listtemp.push(tempStu);
             }
@@ -569,7 +570,8 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                                                                 {row.name}
                                                             </TableCell>);
                                         for (let i = 0; i < row.listGrade.length; i++){
-                                            let point = row.listGrade[i];
+                                            //let point = row.listGrade[i];
+                                            let point = row.listGrade[i].gradeAssignment;
                                             listTableCell.push(<TableCell align="left">{point}</TableCell>);
                                         }
                                         return (
