@@ -180,8 +180,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                     
                     <div className="col-md-10" >
                         <div className="card" style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-                            <DownloadButton purpose='student_list' />
-                            <StudentListImport setStudents={setStudents} students_ids={students.map(student => student.id_uni_user)} id_class={idclass} />
+                            
                             <div className="row" >
                                 <div className='card-header'>
                                     <form>
