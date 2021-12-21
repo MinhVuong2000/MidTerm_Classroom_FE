@@ -229,7 +229,7 @@ const EnhancedTableToolbar = (props) => {
         setEdit(true)
     };
     return (
-        <div>  {edit ? <Edit rowSelected={selected} rowDefault ={selected} idclass={idclass} Swi={(value,handleSelected) =>{setEdit(value); handleAfterEditEnhanced(handleSelected) }}/> :
+        <div>  {edit ? <Edit rowSelected={selected} idclass={idclass} Swi={(value,handleSelected) =>{setEdit(value); handleAfterEditEnhanced(handleSelected) }}/> :
         <Toolbar
             sx={{
                 pl: { sm: 2 },
@@ -291,7 +291,6 @@ EnhancedTableToolbar.propTypes = {
 
 export default function Scores({idclass, isTeacher, class_name, grade_board, students}) {
     const [rowSelected, setRowSelected]=React.useState([]);
-    const [rowSelectedDefault, setRowSelectedDefault]=React.useState([]);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
@@ -351,7 +350,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                      
                   }
               )
-    }, [])
+    }, [rowSelected])
 
 
     const handleRequestSort = (event, property) => {
@@ -369,7 +368,6 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
         setSelected(newSelected);
         let newRowSelected = [];
         newRowSelected.push(row);
-        setRowSelectedDefault(newRowSelected)
         setRowSelected(newRowSelected);
     };
 
@@ -521,6 +519,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                                 {stableSort(rows, getComparator(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row, index) => {
+                                        console.log("@@@@@@@@@@Row trong doan mapping: ", gradeboard)
                                         const isItemSelected = isSelected(row.name);
                                         const labelId = `enhanced-table-checkbox-${index}`;
                                         let listTableCell = [];
