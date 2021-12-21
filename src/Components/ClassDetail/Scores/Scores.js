@@ -299,6 +299,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [gradeboard, setGradeBoard] = React.useState(grade_board);
+    const [listStudent, setListStudent] = React.useState(students);
     const [listShowAssignment, setListShowAssignment] = React.useState([]);
     const rows = createData(gradeboard, isTeacher);
     const listAssignment = createListButtonName(grade_board, isTeacher);
@@ -319,6 +320,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                   (result3) => {
                       console.log("Thay doi vi tri assignment:", result3);
                       setGradeBoard(result3);
+                      setListStudent(result3.listStudentGrade);
                       //setIsLoaded(true);
                   },
                   (error) => {
@@ -508,7 +510,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                 {rows && 
                 <div>
                     {listAssignment.map(row =>
-                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={students.map(student=>student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name = {row.name}/>
+                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student=>student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name = {row.name}/>
                     )}
                     
                 </div>
@@ -560,7 +562,6 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                                         const isItemSelected = isSelected(row.name);
                                         const labelId = `enhanced-table-checkbox-${index}`;
                                         let listTableCell = [];
-                                        let squareDiv = [];
                                         listTableCell.push(<TableCell
                                                                 component="th"
                                                                 id={labelId}
