@@ -3,7 +3,9 @@ import { Navigate } from 'react-router-dom';
 import { DOMAIN_API, 
     ENTER_PASSWORD_TITLE, ENTER_PASSWORD_DESC ,
     ENTER_MSSV_TITLE, ENTER_MSSV_DESC,
-    EXISTED_MSSV_TITLE, EXISTED_MSSV_DESC } from '../../config/const';
+    EXISTED_MSSV_TITLE, EXISTED_MSSV_DESC,
+    SUCCESS_PASSWORD_TITLE, SUCCESS_PASSWORD_DESC,
+    SUCCESS_PROFILE_TITLE, SUCCESS_PROFILE_DESC } from '../../config/const';
 import CallIcon from '@mui/icons-material/Call';
 import AlternateEmailSharpIcon from '@mui/icons-material/AlternateEmailSharp';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -12,6 +14,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import SaveIcon from '@mui/icons-material/Save';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
@@ -25,6 +28,8 @@ export default function Profile() {
     const [isEditting, setIsEditting] = useState(false);
     const [fullName, setFullName] = useState(null);
     const [password, setPassword] = useState(null);
+    const [openSuccessChangePassword, setOpenSuccessChangePassword] = useState(false);
+    const [openSuccessChangeProfile, setOpenSuccessChangeProfile] = useState(false);
     const [MSSV, setMSSV] = useState(null);
     const [isNullMSSV, setIsNullMSSV] = useState(false);
     const [address, setAddress] = useState(null);
@@ -51,9 +56,11 @@ export default function Profile() {
         }),
         body: JSON.stringify({new_password: password})
         };
-        fetch(url, requestOptions)
-        .catch(error => console.log('Form submit error', error))
-        setProfile('400'); // to logout
+        fetch(url, requestOptions).then(res =>res.json())
+        .then((result) => {
+            setPassword('');
+            setOpenSuccessChangePassword(true);
+        }).catch(error => console.log('Form submit error', error))
     }
 
     function handleSaveEditProfile(){
@@ -74,6 +81,7 @@ export default function Profile() {
                     if (result===false)
                         setOpenExistedMSSV(true)
                     else{
+                        setOpenSuccessChangeProfile(true);
                         setIsEditting(false);
                         setIsNullMSSV(false);
                         const url = DOMAIN_API + `users/update-profile`;
@@ -94,7 +102,6 @@ export default function Profile() {
                         };
                         fetch(url, requestOptions)
                         .catch(error => console.log('Form submit error', error))
-                        setProfile('400'); // to logout to get new id_uni
                     }
                 },
                 (error) => {
@@ -103,6 +110,7 @@ export default function Profile() {
                 })
         }
         else{
+            setOpenSuccessChangeProfile(true);
             setIsEditting(false);
             const url = DOMAIN_API + `users/update-profile`;
             const updated_profile = {
@@ -121,7 +129,6 @@ export default function Profile() {
             };
             fetch(url, requestOptions)
             .catch(error => console.log('Form submit error', error))
-            setProfile('400'); // to logout to get new info
         }
     }
 
@@ -224,10 +231,15 @@ export default function Profile() {
                             <IconButton aria-label="share" onClick={handleSaveEditProfile}>
                                 <SaveIcon/>
                             </IconButton>
+                            <Button aria-label="share" onClick={() => {setIsEditting(false)}}>
+                                Cancel
+                            </Button>
                         </CardActions>
                     </Card> : <Card sx={{ maxWidth: 1000, marginTop: "50px" }}  className="d-flex justify-content-center">
                         <div>
                             {openNullPassword && <AlertDialog title={ENTER_PASSWORD_TITLE} msg={ENTER_PASSWORD_DESC} callback={() => {setOpenNullPassword(false)}}/>}
+                            {openSuccessChangePassword && <AlertDialog title={SUCCESS_PASSWORD_TITLE} msg={SUCCESS_PASSWORD_DESC} callback={() => {setOpenSuccessChangePassword(false)}}/>}
+                            {openSuccessChangeProfile && <AlertDialog title={SUCCESS_PROFILE_TITLE} msg={SUCCESS_PROFILE_DESC} callback={() => {setOpenSuccessChangeProfile(false)}}/>}
                             <CardHeader
                                 avatar={
                                     <AccountCircleIcon >

@@ -22,6 +22,10 @@ const ENTER_MSSV_TITLE = "Mã số do trường cung cấp trống"
 const ENTER_MSSV_DESC = "Bạn cần nhập Mã số do trường cung cấp trước khi muốn cập nhật!"
 const EXISTED_MSSV_TITLE = "Mã số nhà trường cung cấp bị trùng"
 const EXISTED_MSSV_DESC = "Đã có người nhập mã số này. Bạn có nhầm lẫn không?"
+const SUCCESS_PASSWORD_TITLE = "Thành công"
+const SUCCESS_PASSWORD_DESC = "Thay đổi password thành công!"
+const SUCCESS_PROFILE_TITLE = "Thành công"
+const SUCCESS_PROFILE_DESC = "Thay đổi profile thành công!"
 
 const googleClientID = '1091140274470-msvgch2pntvkv0pltbq5osuqpgk3to3e.apps.googleusercontent.com';
 const googleClientSecret = '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';
@@ -38,6 +42,8 @@ module.exports = {
     ENTER_PASSWORD_TITLE, ENTER_PASSWORD_DESC,
     ENTER_MSSV_TITLE, ENTER_MSSV_DESC,
     EXISTED_MSSV_TITLE, EXISTED_MSSV_DESC,
+    SUCCESS_PASSWORD_TITLE, SUCCESS_PASSWORD_DESC,
+    SUCCESS_PROFILE_TITLE, SUCCESS_PROFILE_DESC,
     googleClientID,
     googleClientSecret
 }
