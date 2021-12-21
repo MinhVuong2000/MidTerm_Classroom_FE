@@ -16,9 +16,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Edit({ Swi }) {
+export default function Edit({ rowSelected,Swi }) {
   //const [open, setOpen] = React.useState(false);
-  console.log("@@@@",Swi);
+  console.log("@@@@",rowSelected);
   const [open, setOpen] = React.useState(true);
 //   const handleClickOpen = () => {
 //     setOpen(true);
