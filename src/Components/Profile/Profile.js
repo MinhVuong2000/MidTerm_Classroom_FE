@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { Navigate } from 'react-router-dom';
-import { DOMAIN_API } from '../../config/const';
+import { DOMAIN_API, 
+    ENTER_PASSWORD_TITLE, ENTER_PASSWORD_DESC ,
+    ENTER_MSSV_TITLE, ENTER_MSSV_DESC,
+    EXISTED_MSSV_TITLE, EXISTED_MSSV_DESC } from '../../config/const';
 import CallIcon from '@mui/icons-material/Call';
 import AlternateEmailSharpIcon from '@mui/icons-material/AlternateEmailSharp';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -14,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
+import AlertDialog from '../AlertDialog/AlertDialog';
 
 export default function Profile() {
     const [profile, setProfile] = useState(null);
@@ -22,14 +26,22 @@ export default function Profile() {
     const [fullName, setFullName] = useState(null);
     const [password, setPassword] = useState(null);
     const [MSSV, setMSSV] = useState(null);
+    const [isNullMSSV, setIsNullMSSV] = useState(false);
     const [address, setAddress] = useState(null);
     const [phone, setPhone] = useState(null);
     const [email, setEmail] = useState(null);
+    const [openNullPassword, setOpenNullPassword] = useState(false);
+    const [openNullMSSV, setOpenNullMSSV] = useState(false);
+    const [openExistedMSSV, setOpenExistedMSSV] = useState(false);
 
     let actoken = localStorage.getItem('access_token');
 
     function handleChangePassword(){
         console.log("New password:", password);
+        if (password === '' || password===null){
+            setOpenNullPassword(true);
+            return;
+        }
         const url = DOMAIN_API + `users/update-password`;
         const requestOptions = {
         method: 'PATCH',
@@ -41,29 +53,76 @@ export default function Profile() {
         };
         fetch(url, requestOptions)
         .catch(error => console.log('Form submit error', error))
-        setProfile('400');
+        setProfile('400'); // to logout
     }
 
     function handleSaveEditProfile(){
-        setIsEditting(false);
-        const url = DOMAIN_API + `users/update-profile`;
-        const updated_profile = {
-            full_name: fullName,
-            id_uni: MSSV,
-            phone: phone,
-            email: email,
-            address: address
+        if (MSSV === '' || MSSV===null){
+            setOpenNullMSSV(true);
+            return;
         }
-        const requestOptions = {
-        method: 'PATCH',
-        headers: new Headers({
-            "x-access-token": actoken,
-            'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({updated_profile: updated_profile})
-        };
-        fetch(url, requestOptions)
-        .catch(error => console.log('Form submit error', error))
+        if (isNullMSSV){
+            fetch(DOMAIN_API + `is-available-mssv?mssv=` + MSSV, {
+                method: 'GET',
+                headers: new Headers({
+                    "x-access-token": actoken,
+                }),
+            }).then(res =>res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    if (result===false)
+                        setOpenExistedMSSV(true)
+                    else{
+                        setIsEditting(false);
+                        setIsNullMSSV(false);
+                        const url = DOMAIN_API + `users/update-profile`;
+                        const updated_profile = {
+                            full_name: fullName,
+                            id_uni: MSSV.toString(),
+                            phone: phone,
+                            email: email,
+                            address: address
+                        }
+                        const requestOptions = {
+                        method: 'PATCH',
+                        headers: new Headers({
+                            "x-access-token": actoken,
+                            'Content-Type': 'application/json'
+                        }),
+                        body: JSON.stringify({updated_profile: updated_profile})
+                        };
+                        fetch(url, requestOptions)
+                        .catch(error => console.log('Form submit error', error))
+                        setProfile('400'); // to logout to get new id_uni
+                    }
+                },
+                (error) => {
+                    console.log("Error", error);
+                    setError(error);
+                })
+        }
+        else{
+            setIsEditting(false);
+            const url = DOMAIN_API + `users/update-profile`;
+            const updated_profile = {
+                full_name: fullName,
+                phone: phone,
+                email: email,
+                address: address
+            }
+            const requestOptions = {
+            method: 'PATCH',
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({updated_profile: updated_profile})
+            };
+            fetch(url, requestOptions)
+            .catch(error => console.log('Form submit error', error))
+            setProfile('400'); // to logout to get new info
+        }
     }
 
     useEffect(() => {
@@ -85,6 +144,7 @@ export default function Profile() {
                         setProfile(result);
                         setFullName(result.full_name)
                         setMSSV(result.id_uni)
+                        setIsNullMSSV(result.id_uni===null || result.id_uni==='')
                         setEmail(result.email)
                         setPhone(result.phone)
                         setAddress(result.address)
@@ -111,6 +171,8 @@ export default function Profile() {
             <div>
                 {isEditting ? 
                     <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
+                        {openExistedMSSV && <AlertDialog title={EXISTED_MSSV_TITLE} msg={EXISTED_MSSV_DESC} callback={() => {setOpenExistedMSSV(false)}}/>}
+                        {openNullMSSV && <AlertDialog title={ENTER_MSSV_TITLE} msg={ENTER_MSSV_DESC} callback={() => {setOpenNullMSSV(false)}}/>}
                         <TextField
                             autoFocus
                             id="fullName"
@@ -121,11 +183,12 @@ export default function Profile() {
                             value={fullName}
                             onChange={e => setFullName(e.target.value)}
                         />
-                        {MSSV==null && <TextField
+                        {isNullMSSV && <TextField
                             id="MSSV"
                             label="Mã số do trường cung cấp"
                             placeholder="Nhập chính xác vì không thể thay đổi sau này!"
                             type="text"
+                            fullWidth
                             variant="standard"
                             value={MSSV!=null ? MSSV : ''} 
                             onChange={e => setMSSV(e.target.value)}
@@ -164,6 +227,7 @@ export default function Profile() {
                         </CardActions>
                     </Card> : <Card sx={{ maxWidth: 1000, marginTop: "50px" }}  className="d-flex justify-content-center">
                         <div>
+                            {openNullPassword && <AlertDialog title={ENTER_PASSWORD_TITLE} msg={ENTER_PASSWORD_DESC} callback={() => {setOpenNullPassword(false)}}/>}
                             <CardHeader
                                 avatar={
                                     <AccountCircleIcon >

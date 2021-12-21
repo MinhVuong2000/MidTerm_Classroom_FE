@@ -26,7 +26,7 @@ function isNumericPositive(val) {
   return /[1-9][0-9]*/.test(val);
 }
 
-export default function Assignments({ idclass, assignments, data_structure }) {
+export default function Assignments({ idclass, assignments, data_structure, grade_structure }) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -79,6 +79,29 @@ export default function Assignments({ idclass, assignments, data_structure }) {
             data_structure([...result]);
             setAssignmentNameAdded('');
             setAssignmentPointAdded('');
+            fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
+              method: "POST",
+              headers: new Headers({
+                  "x-access-token": actoken,
+                  'Content-Type': 'application/json'
+              }),
+              body: JSON.stringify({
+                  id_class: idclass,
+              })
+            })
+                .then(res => res.json())
+                .then(
+                    (result3) => {
+                        console.log("Thay doi vi tri assignment:", result3);
+                        grade_structure(result3);
+                        //setIsLoaded(true);
+                    },
+                    (error) => {
+                        console.log("Error getGradeBoard");
+                        setIsLoaded(true);
+                        setError(error);
+                    }
+                )
           }
         }
       })
@@ -120,6 +143,29 @@ export default function Assignments({ idclass, assignments, data_structure }) {
             data_structure([...result]);
             setAssignmentNameAdded('');
             setAssignmentPointAdded('');
+            fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
+              method: "POST",
+              headers: new Headers({
+                  "x-access-token": actoken,
+                  'Content-Type': 'application/json'
+              }),
+              body: JSON.stringify({
+                  id_class: idclass,
+              })
+            })
+                .then(res => res.json())
+                .then(
+                    (result3) => {
+                        console.log("Them assignment: ", result3);
+                        grade_structure(result3);
+                        //setIsLoaded(true);
+                    },
+                    (error) => {
+                        console.log("Error getGradeBoard");
+                        setIsLoaded(true);
+                        setError(error);
+                    }
+                )
           }
         }
       })
@@ -155,6 +201,29 @@ export default function Assignments({ idclass, assignments, data_structure }) {
           data_structure([...new_items]);
           setAssignmentNameAdded('');
           setAssignmentPointAdded('');
+          fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
+            method: "POST",
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id_class: idclass,
+            })
+          })
+              .then(res => res.json())
+              .then(
+                  (result3) => {
+                      console.log("Xoa assignment:", result3);
+                      grade_structure(result3);
+                      //setIsLoaded(true);
+                  },
+                  (error) => {
+                      console.log("Error getGradeBoard");
+                      setIsLoaded(true);
+                      setError(error);
+                  }
+              )
         }
       })
       .catch(error => console.log('Form submit error', error))
@@ -203,6 +272,29 @@ export default function Assignments({ idclass, assignments, data_structure }) {
             setIsEditName(false);
             setIsEditPoint(false);
             setIdAssignmentEdit();
+            fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
+              method: "POST",
+              headers: new Headers({
+                  "x-access-token": actoken,
+                  'Content-Type': 'application/json'
+              }),
+              body: JSON.stringify({
+                  id_class: idclass,
+              })
+            })
+                .then(res => res.json())
+                .then(
+                    (result3) => {
+                        console.log("Chinh sua ten assignment:", result3);
+                        grade_structure(result3);
+                        //setIsLoaded(true);
+                    },
+                    (error) => {
+                        console.log("Error getGradeBoard");
+                        setIsLoaded(true);
+                        setError(error);
+                    }
+                )
           }
         })
         .catch(error => console.log('Form edit error', error))

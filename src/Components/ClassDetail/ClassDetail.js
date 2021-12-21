@@ -68,6 +68,7 @@ export default function ClassDetail() {
 
                                 setInviteLink(linkin);
                             }
+
                             setDescription(result.description);
                             console.log("day la description: ", result.description);
                         }
@@ -215,9 +216,9 @@ export default function ClassDetail() {
                     <div>
                         {isShowNews && < News data={mockDataNew} />}
                         {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
-                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} />}
+                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} students = {students}/>}
                         {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
-                            data_structure={(result) => setName_work(result)} />}
+                            data_structure={(result) => setName_work(result)} grade_structure = {(result3) => setGradeBoard(result3)}/>}
                         {/* data_structure={(value) => setName_work(value)} */}
                     </div>
                 </Box>

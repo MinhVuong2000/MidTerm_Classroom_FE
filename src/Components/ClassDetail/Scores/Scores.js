@@ -50,23 +50,54 @@ import { ExportReactCSV } from '../../ExportFile/GradeAssignmentExport/GradeAssi
   <GradeAssignmentImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass} id_assignment={4}/>*/
 
 function createData(board, isteacher) {
+    console.log('grade board sau khi change: ', board)
     if(isteacher){
-        let listStudent = board.listStudentGrade;
-        let listtemp = []
-        for (let i = 0; i < listStudent.length; i++){
-            let tempStu = {};
-            tempStu.name = listStudent[i].username;
-            tempStu.listGrade = [];
-            for(let j = 0; j<listStudent[i].assignmentGrade.length; j++){
-                tempStu.listGrade.push(listStudent[i].assignmentGrade[j].gradeAssignment)
+        if(board !=null){
+            let listStudent = board.listStudentGrade;
+            let listtemp = []
+            for (let i = 0; i < listStudent.length; i++){
+                let tempStu = {};
+                tempStu.name = listStudent[i].username;
+                tempStu.listGrade = [];
+                for(let j = 0; j<listStudent[i].assignmentGrade.length; j++){
+                    tempStu.listGrade.push(listStudent[i].assignmentGrade[j].gradeAssignment)
+                }
+                listtemp.push(tempStu);
             }
-            listtemp.push(tempStu);
+            console.log("List temp trong create data: ", listtemp);
+            return listtemp;
         }
-        console.log("List temp trong create data: ", listtemp);
-        return listtemp;
+        else{
+            console.log("Board bi null: ", board);
+            return null;
+        }
+        
     }
     else{
         return board;
+    }
+    
+}
+
+function createListButtonName(board, isteacher) {
+    console.log('grade board sau khi change: ', board)
+    if(isteacher){
+        if(board !=null){
+            let lassignment = board.listAssignment;
+            let listtemp = []
+            for (let i = 0; i < lassignment.length - 1; i++){
+                listtemp.push(lassignment[i]);
+            }
+            return listtemp;
+        }
+        else{
+            console.log("Board bi null: ", board);
+            return null;
+        }
+        
+    }
+    else{
+        return null;
     }
     
 }
@@ -246,7 +277,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function Scores({idclass, isTeacher, class_name, grade_board}) {
+export default function Scores({idclass, isTeacher, class_name, grade_board, students}) {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
@@ -254,7 +285,59 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [gradeboard, setGradeBoard] = React.useState(grade_board);
-    const rows = createData(grade_board, isTeacher);
+    const [listShowAssignment, setListShowAssignment] = React.useState([]);
+    const rows = createData(gradeboard, isTeacher);
+    const listAssignment = createListButtonName(grade_board, isTeacher);
+    let actoken = localStorage.access_token;
+    useEffect(() => {
+        fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
+            method: "POST",
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id_class: idclass,
+            })
+          })
+              .then(res => res.json())
+              .then(
+                  (result3) => {
+                      console.log("Thay doi vi tri assignment:", result3);
+                      setGradeBoard(result3);
+                      //setIsLoaded(true);
+                  },
+                  (error) => {
+                      console.log("Error getGradeBoard in import grade assignment");
+                     
+                  }
+              )
+        //Lay danh sach cac assignment in state showGrade
+        fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getlistshowgrade`, {
+            method: "POST",
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id_class: idclass,
+            })
+          })
+              .then(res => res.json())
+              .then(
+                  (result) => {
+                      console.log("Danh sach cac assignment show grade", result);
+                      setListShowAssignment(result);
+                      //setIsLoaded(true);
+                  },
+                  (error) => {
+                      console.log("Error Danh sach cac assignment show grade");
+                     
+                  }
+              )
+    }, [])
+
+
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -290,7 +373,62 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
         setSelected(newSelected);
     };
 
-
+    const handleChangeStateShow = (event, idAssign) => {
+        if(listShowAssignment.includes(idAssign)){
+            console.log("List co include: ", listShowAssignment)
+            
+            fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/updateshowstate`, {
+                method: "POST",
+                headers: new Headers({
+                    "x-access-token": actoken,
+                    'Content-Type': 'application/json'
+                }),
+                body: JSON.stringify({
+                    id_class: idclass,
+                    id_assignment: idAssign,
+                    statechange: false
+                })
+              })
+                  .then(res => res.json())
+                  .then(
+                      (result) => {
+                          console.log("Danh sach cac assignment updateshowstate", result);
+                          setListShowAssignment(result);
+                          //setIsLoaded(true);
+                      },
+                      (error) => {
+                          console.log("Error Danh sach cac assignment updateshowstate");
+                         
+                      }
+                  )
+        }
+        else{
+            fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/updateshowstate`, {
+                method: "POST",
+                headers: new Headers({
+                    "x-access-token": actoken,
+                    'Content-Type': 'application/json'
+                }),
+                body: JSON.stringify({
+                    id_class: idclass,
+                    id_assignment: idAssign,
+                    statechange: true
+                })
+              })
+                  .then(res => res.json())
+                  .then(
+                      (result) => {
+                          console.log("Danh sach cac assignment updateshowstate", result);
+                          setListShowAssignment(result);
+                          //setIsLoaded(true);
+                      },
+                      (error) => {
+                          console.log("Error Danh sach cac assignment updateshowstate");
+                         
+                      }
+                  )
+        }
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -312,11 +450,45 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     if(isTeacher){
+        
         return (
             <Box sx={{ width: '100%' }}>
+                {rows==null &&
+                <div className="col-md-4 center">
+                    Không có bài tập hoặc thành viên nào trong lớp học!
+                </div>}
+                {rows &&
+                <div className="col-md-4 center">
+                    <DownloadButton purpose='grade_assignment'/>
+                </div>}
+                
+                {rows && 
+                <div>
+                    {listAssignment.map(row =>
+                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={students.map(student=>student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name = {row.name}/>
+                    )}
+                    
+                </div>
+                }
+
+                {rows &&
                 <div className="col-md-4 center">
                     <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
+                </div>}
+
+                {rows && 
+                <div className="row">
+                    {listAssignment.map(row =>
+                        <Button onClick={(event) => handleChangeStateShow(event, row.idAssignment)} variant="contained" >
+                            {row.name}: 
+                            {`${listShowAssignment.includes(row.idAssignment) ? ' Đã public điểm' : ' Chưa public điểm'}`}
+                        </Button>
+                    )}
+                    
                 </div>
+                }
+
+                {rows && 
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <EnhancedTableToolbar numSelected={selected.length} selected={selected} classname = {class_name} />
                     <TableContainer>
@@ -404,7 +576,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board}) {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 
-                </Paper>
+                </Paper>}
                 {/* <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
