@@ -672,15 +672,30 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
         //Xử lý UI show điểm ở đây
         //Rows có dạng: [{nameAssignment: "name1", gradeAssignment: point1}, {nameAssignment: "name2", gradeAssignment: point2}]
         return (
-            <Grid container spacing={1}  >
+            <div className="container" >
+
+                <div className="card">
+                <table border="1"  >
+              <tr>
+                <th width="80%" style={{paddingLeft:"150px"}}>Thành phần</th>
+                <th width="20%" style={{textAlign :"center"}}>Điểm</th>
+              </tr>
                 {rows.map(row =>
-                    <Grid item xs={6}>
-                        <ListItem>
-                            <ListItemText>{row.nameAssignment}: {row.gradeAssignment}</ListItemText>
-                        </ListItem>
-                    </Grid>
+                <tr>
+                    <td  style={{paddingLeft:"150px"}}> 
+                    {row.nameAssignment}
+                    </td>
+                    <td style={{textAlign :"center"}}>
+                    {row.gradeAssignment}
+                    </td>
+                </tr>
+                   
                 )}
-            </Grid>
+
+           </table>
+           </div>
+           </div>
+        
         );
     }
 
