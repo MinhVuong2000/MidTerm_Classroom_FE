@@ -14,7 +14,7 @@ export default function DownloadButton({purpose}){
          // <Button style={{width:"120px"}} onClick={()=> {onClick(purpose)}} variant="contained">
         //     <DownloadIcon/>Download template
         // </Button>
-        <Button style={{width:"190px"}} variant='outlined' component="label" onClick={()=> {onClick(purpose)}} variant="contained">
+        <Button style={{width:"190px", marginBottom:"10px"}} variant='outlined' component="label" onClick={()=> {onClick(purpose)}} variant="contained">
         <div className="row">
             <div className=" d-flex justify-content-center">
         <DownloadIcon  />

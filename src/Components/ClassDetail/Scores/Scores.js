@@ -51,16 +51,16 @@ import Edit from './Edit';
 
 function createData(board, isteacher) {
     console.log('grade board sau khi change: ', board)
-    if(isteacher){
-        if(board !=null){
+    if (isteacher) {
+        if (board != null) {
             let listStudent = board.listStudentGrade;
             let listtemp = []
-            for (let i = 0; i < listStudent.length; i++){
+            for (let i = 0; i < listStudent.length; i++) {
                 let tempStu = {};
                 tempStu.name = listStudent[i].username;
                 tempStu.idUserStudent = listStudent[i].id_uni_user;
                 tempStu.listGrade = [];
-                for(let j = 0; j<listStudent[i].assignmentGrade.length; j++){
+                for (let j = 0; j < listStudent[i].assignmentGrade.length; j++) {
                     tempStu.listGrade.push(listStudent[i].assignmentGrade[j])
                 }
                 listtemp.push(tempStu);
@@ -68,41 +68,41 @@ function createData(board, isteacher) {
             console.log("List temp trong create data: ", listtemp);
             return listtemp;
         }
-        else{
+        else {
             console.log("Board bi null: ", board);
             return null;
         }
-        
+
     }
-    else{
+    else {
         return board;
     }
-    
+
 }
 
 function createListButtonName(board, isteacher) {
     console.log('grade board sau khi change: ', board)
-    if(isteacher){
-        if(board !=null){
+    if (isteacher) {
+        if (board != null) {
             let lassignment = board.listAssignment;
             let listtemp = []
-            for (let i = 0; i < lassignment.length - 1; i++){
+            for (let i = 0; i < lassignment.length - 1; i++) {
                 listtemp.push(lassignment[i]);
             }
             return listtemp;
         }
-        else{
+        else {
             console.log("Board bi null: ", board);
             return null;
         }
-        
+
     }
-    else{
+    else {
         return null;
     }
-    
+
 }
-function createStudentData(gradeboard){
+function createStudentData(gradeboard) {
     return gradeboard;
 }
 
@@ -173,7 +173,7 @@ function EnhancedTableHead(props) {
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-                    
+
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -188,7 +188,7 @@ function EnhancedTableHead(props) {
                             onClick={createSortHandler(headCell.id)}
                         >
                             {headCell.label}
-                            <br/>
+                            <br />
                             {headCell.pointStructure}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
@@ -216,12 +216,12 @@ EnhancedTableHead.propTypes = {
 
 
 const EnhancedTableToolbar = (props) => {
-    const [edit, setEdit]=React.useState(false);
+    const [edit, setEdit] = React.useState(false);
     const { numSelected, selected, classname, afterEdit, idclass } = props;
-    console.log("data select nè:",selected)
-   const [numSelec, setNumSelec]=React.useState(numSelected);
+    console.log("data select nè:", selected)
+    const [numSelec, setNumSelec] = React.useState(numSelected);
 
-    const handleAfterEditEnhanced=(value) =>{
+    const handleAfterEditEnhanced = (value) => {
         afterEdit(value);
     }
 
@@ -229,58 +229,58 @@ const EnhancedTableToolbar = (props) => {
         setEdit(true)
     };
     return (
-        <div>  {edit ? <Edit rowSelected={selected} idclass={idclass} Swi={(value,handleSelected) =>{setEdit(value); handleAfterEditEnhanced(handleSelected) }}/> :
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
-            }}
-        >
-            {numSelected > 0 ? (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} học viên được chọn
-                </Typography>
-            ) : (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    variant="h6"
-                    id="tableTitle"
-                    component="div"
-                >
-                    Lớp {classname}
-                </Typography>
-            )}
-            {numSelected > 0 ? (
-                <Tooltip title="Chỉnh sửa">
-                    <IconButton >
-                        <EditIcon onClick={(event) => handleClickEdit(event, selected)} />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <div style={{position: "absolute",right:"5px"}} >
-                    <Tooltip title="Download">
-                        <IconButton>
-                            <FileDownloadIcon />
+        <div>  {edit ? <Edit rowSelected={selected} idclass={idclass} Swi={(value, handleSelected) => { setEdit(value); handleAfterEditEnhanced(handleSelected) }} /> :
+            <Toolbar
+                sx={{
+                    pl: { sm: 2 },
+                    pr: { xs: 1, sm: 1 },
+                    ...(numSelected > 0 && {
+                        bgcolor: (theme) =>
+                            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+                    }),
+                }}
+            >
+                {numSelected > 0 ? (
+                    <Typography
+                        sx={{ flex: '1 1 100%' }}
+                        color="inherit"
+                        variant="subtitle1"
+                        component="div"
+                    >
+                        {numSelected} học viên được chọn
+                    </Typography>
+                ) : (
+                    <Typography
+                        sx={{ flex: '1 1 100%' }}
+                        variant="h6"
+                        id="tableTitle"
+                        component="div"
+                    >
+                        Lớp {classname}
+                    </Typography>
+                )}
+                {numSelected > 0 ? (
+                    <Tooltip title="Chỉnh sửa">
+                        <IconButton >
+                            <EditIcon onClick={(event) => handleClickEdit(event, selected)} />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Upload">
-                        <IconButton>
-                            <FileUploadIcon />
-                        </IconButton>
-                    </Tooltip>
-                </div>
-            )}
-        </Toolbar>
-}
+                ) : (
+                    <div style={{ position: "absolute", right: "5px" }} >
+                        <Tooltip title="Download">
+                            <IconButton>
+                                <FileDownloadIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Upload">
+                            <IconButton>
+                                <FileUploadIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                )}
+            </Toolbar>
+        }
         </div>
     );
 };
@@ -289,8 +289,8 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function Scores({idclass, isTeacher, class_name, grade_board, students}) {
-    const [rowSelected, setRowSelected]=React.useState([]);
+export default function Scores({ idclass, isTeacher, class_name, grade_board, students }) {
+    const [rowSelected, setRowSelected] = React.useState([]);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
@@ -313,20 +313,20 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
             body: JSON.stringify({
                 id_class: idclass,
             })
-          })
-              .then(res => res.json())
-              .then(
-                  (result3) => {
-                      console.log("Thay doi vi tri assignment:", result3);
-                      setGradeBoard(result3);
-                      setListStudent(result3.listStudentGrade);
-                      //setIsLoaded(true);
-                  },
-                  (error) => {
-                      console.log("Error getGradeBoard in import grade assignment");
-                     
-                  }
-              )
+        })
+            .then(res => res.json())
+            .then(
+                (result3) => {
+                    console.log("Thay doi vi tri assignment:", result3);
+                    setGradeBoard(result3);
+                    setListStudent(result3.listStudentGrade);
+                    //setIsLoaded(true);
+                },
+                (error) => {
+                    console.log("Error getGradeBoard in import grade assignment");
+
+                }
+            )
         //Lay danh sach cac assignment in state showGrade
         fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getlistshowgrade`, {
             method: "POST",
@@ -337,19 +337,19 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
             body: JSON.stringify({
                 id_class: idclass,
             })
-          })
-              .then(res => res.json())
-              .then(
-                  (result) => {
-                      console.log("Danh sach cac assignment show grade", result);
-                      setListShowAssignment(result);
-                      //setIsLoaded(true);
-                  },
-                  (error) => {
-                      console.log("Error Danh sach cac assignment show grade");
-                     
-                  }
-              )
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log("Danh sach cac assignment show grade", result);
+                    setListShowAssignment(result);
+                    //setIsLoaded(true);
+                },
+                (error) => {
+                    console.log("Error Danh sach cac assignment show grade");
+
+                }
+            )
     }, [rowSelected])
 
 
@@ -364,7 +364,7 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
         console.log("select trong handle click: ", selected);
         let newSelected = [];
         newSelected.push(name);
-        
+
         setSelected(newSelected);
         let newRowSelected = [];
         newRowSelected.push(row);
@@ -372,9 +372,9 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
     };
 
     const handleChangeStateShow = (event, idAssign) => {
-        if(listShowAssignment.includes(idAssign)){
+        if (listShowAssignment.includes(idAssign)) {
             console.log("List co include: ", listShowAssignment)
-            
+
             fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/updateshowstate`, {
                 method: "POST",
                 headers: new Headers({
@@ -386,21 +386,21 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                     id_assignment: idAssign,
                     statechange: false
                 })
-              })
-                  .then(res => res.json())
-                  .then(
-                      (result) => {
-                          console.log("Danh sach cac assignment updateshowstate", result);
-                          setListShowAssignment(result);
-                          //setIsLoaded(true);
-                      },
-                      (error) => {
-                          console.log("Error Danh sach cac assignment updateshowstate");
-                         
-                      }
-                  )
+            })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log("Danh sach cac assignment updateshowstate", result);
+                        setListShowAssignment(result);
+                        //setIsLoaded(true);
+                    },
+                    (error) => {
+                        console.log("Error Danh sach cac assignment updateshowstate");
+
+                    }
+                )
         }
-        else{
+        else {
             fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/updateshowstate`, {
                 method: "POST",
                 headers: new Headers({
@@ -412,19 +412,19 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
                     id_assignment: idAssign,
                     statechange: true
                 })
-              })
-                  .then(res => res.json())
-                  .then(
-                      (result) => {
-                          console.log("Danh sach cac assignment updateshowstate", result);
-                          setListShowAssignment(result);
-                          //setIsLoaded(true);
-                      },
-                      (error) => {
-                          console.log("Error Danh sach cac assignment updateshowstate");
-                         
-                      }
-                  )
+            })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log("Danh sach cac assignment updateshowstate", result);
+                        setListShowAssignment(result);
+                        //setIsLoaded(true);
+                    },
+                    (error) => {
+                        console.log("Error Danh sach cac assignment updateshowstate");
+
+                    }
+                )
         }
     };
 
@@ -441,9 +441,8 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
         setDense(event.target.checked);
     };
 
-    const handleAfterEdit=(value)=>{
-        if(value===0)
-        {
+    const handleAfterEdit = (value) => {
+        if (value === 0) {
             setSelected([]);
             setRowSelected([]);
         }
@@ -455,146 +454,224 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    if(isTeacher){
-        
+    if (isTeacher) {
+
         return (
             <Box sx={{ width: '100%' }}>
-                {rows==null &&
-                <div className="col-md-4 center">
-                    Không có bài tập hoặc thành viên nào trong lớp học!
-                </div>}
+                <div className="container" style={{marginTop:"10px"}}>
+                <div className="card" style={{padding: "15px"}}>
+                {rows == null &&
+                    <div className="col-md-4 center">
+                        Không có bài tập hoặc thành viên nào trong lớp học!
+                    </div>}
+
+                  
+
                 {rows &&
-                <div className="col-md-4 center">
-                    <DownloadButton purpose='grade_assignment'/>
-                </div>}
-                
-                {rows && 
-                <div>
-                    {listAssignment.map(row =>
-                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student=>student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name = {row.name}/>
-                    )}
-                    
-                </div>
+                    <div className="container">
+                        <div className="row" >
+
+                            <div style={{ marginTop: "10px" }}>
+                                <h3>Quản lý</h3>
+                                
+                            </div>
+
+                            <div>
+                            <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                            Export Grade Board
+                                </Typography>
+
+                                <div> 
+                        <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
+                    </div>
+                            </div>
+
+                          
+                            <div>
+
+                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                    Upload Template
+                                </Typography>
+                                <Grid container spacing={2}  >
+
+                                    {listAssignment.map(row =>
+                                        <Grid item xs={12} md={4} >
+                                            <div style={{ minWWidth: "200px" }}>
+                                                <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name={row.name} />
+                                            </div>
+                                        </Grid>
+                                    )}
+                                </Grid>
+                            </div>
+                        </div>
+                    </div>
                 }
 
                 {rows &&
-                <div className="col-md-4 center">
-                    <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
-                </div>}
+                    <div className="container">
+                        <div className="row" >
+                            <div>
 
-                {rows && 
-                <div className="row">
-                    {listAssignment.map(row =>
-                        <Button onClick={(event) => handleChangeStateShow(event, row.idAssignment)} variant="contained" >
-                            {row.name}: 
-                            {`${listShowAssignment.includes(row.idAssignment) ? ' Đã public điểm' : ' Chưa public điểm'}`}
-                        </Button>
-                    )}
-                    
-                </div>
+                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                    Download Template
+                                </Typography>
+                                <div className="col-md-4 center">
+                                    <DownloadButton purpose='grade_assignment' />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
 
-                {rows && 
-                <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} classname = {class_name} idclass = {idclass} afterEdit={(value)=>handleAfterEdit(value)}  />
-                    <TableContainer>
-                        <Table
-                            sx={{ minWidth: 750 }}
-                            aria-labelledby="tableTitle"
-                            size={dense ? 'small' : 'medium'}
-                           
-                        >
-                            
-                            <EnhancedTableHead
-                                numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
-                                onRequestSort={handleRequestSort}
-                                rowCount={rows.length}
-                                listHeader = {gradeboard.listAssignment}
-                            />
-                            <TableBody>
-                                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+               
+
+
+                {rows &&
+                    <div className="container">
+                        <div className="row" >
+
+                            <div>
+
+                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                    Mark A Grade Composition
+                                </Typography>
+                                <Grid container spacing={2}  >
+
+                                    {listAssignment.map(row =>
+                                        <Grid item xs={12} md={4} >
+                                            <div className="d-flex justify-content-start  align-items-start" style={{ minWWidth: "200px" }}>
+                                                <Button variant='outlined' component="label" style={{ width: "220px", height: "80px", justifyContent: "start" }}
+                                                    onClick={(event) => handleChangeStateShow(event, row.idAssignment)} variant="contained" >
+                                                    {row.name}:
+                                                    <br />
+                                                    {`${listShowAssignment.includes(row.idAssignment) ? ' Đã public điểm' : ' Chưa public điểm'}`}
+                                                </Button>
+                                            </div>
+                                        </Grid>
+                                    )}
+                                </Grid>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+</div>
+</div>
+<br/>
+
+{/* {rows &&
+                    <div className="col-md-4 center">
+                        <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
+                    </div>} */}
+
+
+<div className="container" style={{marginTop:"10px"}}>
+                <div className="card" style={{padding: "15px"}}>
+                {rows &&
+                    <Paper sx={{ width: '100%', mb: 2 }}>
+                        <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} classname={class_name} idclass={idclass} afterEdit={(value) => handleAfterEdit(value)} />
+                        <TableContainer>
+                            <Table
+                                sx={{ minWidth: 750 }}
+                                aria-labelledby="tableTitle"
+                                size={dense ? 'small' : 'medium'}
+
+                            >
+
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onRequestSort={handleRequestSort}
+                                    rowCount={rows.length}
+                                    listHeader={gradeboard.listAssignment}
+                                />
+                                <TableBody>
+                                    {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                      rows.slice().sort(getComparator(order, orderBy)) */}
-                                {stableSort(rows, getComparator(order, orderBy))
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row, index) => {
-                                        console.log("@@@@@@@@@@Row trong doan mapping: ", gradeboard)
-                                        const isItemSelected = isSelected(row.name);
-                                        const labelId = `enhanced-table-checkbox-${index}`;
-                                        let listTableCell = [];
-                                        listTableCell.push(<TableCell
-                                                                component="th"
-                                                                id={labelId}
-                                                                scope="row"
-                                                                padding="none"
-                                                            >
-                                                                {row.name}
-                                                            </TableCell>);
-                                        for (let i = 0; i < row.listGrade.length; i++){
-                                            //let point = row.listGrade[i];
-                                            let point = row.listGrade[i].gradeAssignment;
-                                            listTableCell.push(<TableCell align="left">{point}</TableCell>);
-                                        }
-                                        return (
-                                            <TableRow
-                                                hover
-                                                onClick={(event) => handleClick(event, row.name, row)}
-                                                role="checkbox"
-                                                aria-checked={isItemSelected}
-                                                tabIndex={-1}
-                                                key={row.name}
-                                                selected={isItemSelected}
+                                    {stableSort(rows, getComparator(order, orderBy))
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((row, index) => {
+                                            console.log("@@@@@@@@@@Row trong doan mapping: ", gradeboard)
+                                            const isItemSelected = isSelected(row.name);
+                                            const labelId = `enhanced-table-checkbox-${index}`;
+                                            let listTableCell = [];
+                                            listTableCell.push(<TableCell
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                                padding="none"
                                             >
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        color="primary"
-                                                        checked={isItemSelected}
-                                                        inputProps={{
-                                                            'aria-labelledby': labelId,
-                                                        }}
-                                                    />
-                                                </TableCell>
-                                                {listTableCell}
-                                            </TableRow>
-                                        );
-                                    })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: (dense ? 33 : 53) * emptyRows,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    
-                    <TablePagination
-                        
-                        rowsPerPageOptions={[10, 20,30]}
-                        component="div"
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                
-                </Paper>}
+                                                {row.name}
+                                            </TableCell>);
+                                            
+                                            for (let i = 0; i < row.listGrade.length; i++) {
+                                                //let point = row.listGrade[i];
+                                                let point = row.listGrade[i].gradeAssignment;
+                                                listTableCell.push(<TableCell align="left">{point}</TableCell>);
+                                            }
+                                            return (
+                                                <TableRow
+                                                    hover
+                                                    onClick={(event) => handleClick(event, row.name, row)}
+                                                    role="checkbox"
+                                                    aria-checked={isItemSelected}
+                                                    tabIndex={-1}
+                                                    key={row.name}
+                                                    selected={isItemSelected}
+                                                >
+                                                    <TableCell padding="checkbox">
+                                                        <Checkbox
+                                                            color="primary"
+                                                            checked={isItemSelected}
+                                                            inputProps={{
+                                                                'aria-labelledby': labelId,
+                                                            }}
+                                                        />
+                                                    </TableCell>
+                                                    {listTableCell}
+                                                </TableRow>
+                                            );
+                                        })}
+                                    {emptyRows > 0 && (
+                                        <TableRow
+                                            style={{
+                                                height: (dense ? 33 : 53) * emptyRows,
+                                            }}
+                                        >
+                                            <TableCell colSpan={6} />
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+
+                        <TablePagination
+
+                            rowsPerPageOptions={[10, 20, 30]}
+                            component="div"
+                            count={rows.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+
+                    </Paper>}
                 {/* <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
                 /> */}
+                </div>
+                </div>
             </Box>
         );
     }
-    else{
+    else {
         //Xử lý UI show điểm ở đây
         //Rows có dạng: [{nameAssignment: "name1", gradeAssignment: point1}, {nameAssignment: "name2", gradeAssignment: point2}]
-        return(
+        return (
             <Grid container spacing={1}  >
                 {rows.map(row =>
                     <Grid item xs={6}>
@@ -606,5 +683,5 @@ export default function Scores({idclass, isTeacher, class_name, grade_board, stu
             </Grid>
         );
     }
-    
+
 }

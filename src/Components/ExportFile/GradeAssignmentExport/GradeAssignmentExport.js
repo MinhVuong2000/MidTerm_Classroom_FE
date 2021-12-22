@@ -25,8 +25,8 @@ export const ExportReactCSV = ({csvData, fileName}) => {
     }
 
     return (
-        <Button variant="warning">
-            <CSVLink data={custs} filename={fileName}>Export</CSVLink>
+        <Button variant='outlined' component="label" >
+            <CSVLink style={{ textDecoration: "none"}} data={custs} filename={fileName}>Export Table</CSVLink>
         </Button>
     )
 }

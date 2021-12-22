@@ -83,11 +83,14 @@ export default function GradeAssignmentImport({setGradeBoard, students_ids, id_c
     }
 
     return (
-        <Button variant='outlined' component="label">
-            <UploadIcon/>Upload File {name}
+        <Button variant='outlined' component="label" style={{width:"220px",height:"80px",justifyContent:"start"}}>
+            <div className="d-flex justify-content-start  align-items-start"> <UploadIcon/></div>
+            <div>
+           Upload File {name}
             <input type="file" accept=".csv, .xlsx" hidden 
                 onChange={e => handleUpload(e)}
             />
+            </div>
         </Button>
     )
 }
