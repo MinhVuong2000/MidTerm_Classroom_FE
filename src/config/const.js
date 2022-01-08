@@ -1,7 +1,7 @@
 const DOMAIN_API = 'http://localhost:3000/';
 const DOMAIN_FE = 'http://localhost:3001/';
-// const DOMAIN_API = 'https://classroom-clon-api-midterm.herokuapp.com/';//backend
-// const DOMAIN_FE = 'https://classroom-assigment-fe.herokuapp.com/';//frontend
+// const DOMAIN_API = 'https://classroom-grade-manager-api.herokuapp.com/';//backend
+// const DOMAIN_FE = 'https://classroom-grade-manager-fe.herokuapp.com/';//frontend
 const EXISTED_CLASS_TITLE = "Name {} is existed";
 const EXISTED_CLASS_DESC = 'Please enter another name!';
 const NOT_NULL_CLASS_TITLE = 'Name can not empty';
@@ -26,6 +26,8 @@ const SUCCESS_PASSWORD_TITLE = "Thành công"
 const SUCCESS_PASSWORD_DESC = "Thay đổi password thành công!"
 const SUCCESS_PROFILE_TITLE = "Thành công"
 const SUCCESS_PROFILE_DESC = "Thay đổi profile thành công!"
+const NOT_NULL_CLASS_CODE = 'Bạn chưa nhập mã lớp học';
+const NOT_EXIST_CLASS_CODE = 'Mã lớp học không tồn tại';
 
 const googleClientID = '1091140274470-msvgch2pntvkv0pltbq5osuqpgk3to3e.apps.googleusercontent.com';
 const googleClientSecret = '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';
@@ -45,5 +47,7 @@ module.exports = {
     SUCCESS_PASSWORD_TITLE, SUCCESS_PASSWORD_DESC,
     SUCCESS_PROFILE_TITLE, SUCCESS_PROFILE_DESC,
     googleClientID,
-    googleClientSecret
+    googleClientSecret,
+    NOT_NULL_CLASS_CODE,
+    NOT_EXIST_CLASS_CODE
 }

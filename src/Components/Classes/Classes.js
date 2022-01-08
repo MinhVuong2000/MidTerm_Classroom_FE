@@ -5,6 +5,7 @@ import { Navigate} from 'react-router-dom';
 import Classroom from "../Classroom/Classroom";
 import { DOMAIN_API, ENTER_ID_UNI_TITLE, ENTER_ID_UNI_DESC }  from '../../config/const';
 import FormDialog from '../FormDialog/FormDialog';
+import JoinClass from '../JoinClass/JoinClass';
 import AlertDialog from '../AlertDialog/AlertDialog';
 
 
@@ -85,13 +86,15 @@ export default function Classes(){
             }
             if(items.length == 0){
                 return <div>Bạn chưa tham gia lớp nào!
-                    <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>    
+                    <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>
+                    <JoinClass sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>    
                 </div>;
             }
             else{
                 return (
                     <div>
                         <FormDialog sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>    
+                        <JoinClass sx={{display:"flex", justifyContent:"flex-end", marginTop:10}} setItems={setItems}/>
                         <Box sx={{ flexGrow: 1, 
                                     mx: 'auto',
                                     p: 1,
