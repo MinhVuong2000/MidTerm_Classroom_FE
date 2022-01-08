@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { useNavigate, Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -17,7 +17,7 @@ export default function ClassInvite({addUser}) {
     const [item, setItem] = useState([]);
     const {nameclass} = useParams();
     let actoken = localStorage.getItem('access_token');
-    
+    const navigate = useNavigate();
     useEffect(() => {
         fetch(DOMAIN_API+`classes/inviteclass/${nameclass}`,{
             method: "GET",
@@ -31,8 +31,9 @@ export default function ClassInvite({addUser}) {
                 if(result != null){
                     setItem(result);
                     setIDClass(result.id);
+                    let path = '/classes/' + result.id;
+                    navigate(path);
                 }
-                
             },
             (error) => {
                 setIsLoaded(true);

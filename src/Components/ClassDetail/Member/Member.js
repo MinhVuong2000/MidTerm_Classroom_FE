@@ -84,7 +84,32 @@ export default function Member({ idclass, isTeacher, class_name }) {
 
             fetch(url2, {
                 method: "POST",
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', "x-access-token": actoken },
+                body: JSON.stringify({ email })
+            })
+                .then(res => res.json())
+                .then((result) => {
+                    if (result == true) {
+                        window.alert("Da gui thanh cong");
+                    }
+                    else {
+                        window.alert("Gui that bai");
+                    }
+                })
+                .catch(error => console.log('Form submit error', error))
+        }
+        else {
+            window.alert("Email không được trống!");
+        }
+    }
+    function handleSubmitTeacher(event) {
+        event.preventDefault();
+        if (email !== '') {
+            const url2 = DOMAIN_API + `classes/sendinviteteacher/${class_name}`;
+
+            fetch(url2, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json', "x-access-token": actoken },
                 body: JSON.stringify({ email })
             })
                 .then(res => res.json())
@@ -191,8 +216,8 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                             <label>Nhập Email muốn mời</label>
                                             <input type="text" name="email" id="username" className="form-control" placeholder="Nhập Email" value={email} onChange={handleChangeEmail} />
                                         </div>
-                                        <button type="submit" onClick={handleSubmit} style={{ marginTop: "10px" }} className="btn btn-primary btn-block">Mời</button>
-
+                                        <button type="submit" onClick={handleSubmitTeacher} style={{ marginTop: "10px" }} className="btn btn-primary btn-block">Mời giáo viên</button>
+                                        <button type="submit" onClick={handleSubmit} style={{ marginTop: "10px" }} className="btn btn-primary btn-block">Mời học sinh</button>
                                     </form>
                                 </div>
                                 <div style={{ marginTop: "10px" }}>

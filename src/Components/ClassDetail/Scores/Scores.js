@@ -319,7 +319,12 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                 (result3) => {
                     console.log("Thay doi vi tri assignment:", result3);
                     setGradeBoard(result3);
-                    setListStudent(result3.listStudentGrade);
+                    if(result3 == null){
+                        setListStudent(null)
+                    }else{
+                        setListStudent(result3.listStudentGrade);
+                    }
+                    
                     //setIsLoaded(true);
                 },
                 (error) => {
