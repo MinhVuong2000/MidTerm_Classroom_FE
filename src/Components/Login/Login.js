@@ -55,14 +55,14 @@ export default function Login() {
         <div className="App">
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
-                    <Link className="navbar-brand" to={"/sign-in"}>Classroom</Link>
-                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <Link className="navbar-brand" to={"/sign-in"}><h1>Classroom</h1></Link>
+                    <div className="collapse navbar-collapse login-register-link" id="navbarTogglerDemo02">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <Link className="nav-link" to={"/login"}>Login</Link>
+                                <Link className="nav-link" to={"/login"}>Đăng nhập</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to={"/register"}>Sign up</Link>
+                                <Link className="nav-link" to={"/register"}>Đăng kí</Link>
                             </li>
                         </ul>
                     </div>
@@ -72,7 +72,7 @@ export default function Login() {
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <form>
-                        <h3>Đăng nhập</h3>
+                        <h2>Đăng nhập</h2>
 
                         <div className="form-group">
                             <label>Username</label>
@@ -93,7 +93,7 @@ export default function Login() {
                         <br />
                         <button type="submit" className="btn btn-primary btn-block" onClick={handleSubmit} name="signin" id="signin" class="form-submit" value="Đăng nhập">Đăng nhập</button>
                         <p className="forgot-password text-right">
-                            <a href="#">Quên mật khẩu?</a>
+                            <a href="/forget-password">Quên mật khẩu?</a>
                         </p>
                         <p className="forgot-password text-right">
                             <a href="/register">Bạn chưa có tài khoản?</a>
@@ -101,12 +101,6 @@ export default function Login() {
                     </form>
                     <div class="social-login">
                         <span class="social-label">Hoặc đăng nhập bằng </span>
-                        {/* <IconButton linkButton={true} onTouchTap={editLink} tooltip="Tài khoản Google">
-                            <GoogleIcon style={{ color: 'red' }} />
-                        </IconButton> */}
-                        {/* <IconButton onClick={LoginGoogle} target='_blank'>
-                            <GoogleIcon style={{ color: 'red' }} />
-                        </IconButton> */}
                         <LoginByGoogle reload={setPassword}/>
                     </div>
                 </div>

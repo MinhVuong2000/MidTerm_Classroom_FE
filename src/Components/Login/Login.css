@@ -83,7 +83,7 @@ html,
     box-shadow: none;
 }
 
-.auth-wrapper h3 {
+.auth-wrapper h2 {
     text-align: center;
     margin: 0;
     line-height: 1;
@@ -92,6 +92,11 @@ html,
 
 .custom-control-label {
     font-weight: 400;
+}
+
+.login-register-link {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .forgot-password,

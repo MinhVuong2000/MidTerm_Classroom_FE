@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import Classes from '../Classes/Classes';
 import Detail from '../Detail/Detail';
 import ClassInvite from '../ClassInvite/ClassInvite';
@@ -6,19 +5,17 @@ import ClassDetail from '../ClassDetail/ClassDetail';
 import NotFound from '../NotFound/NotFound';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
-//import App_Login from '../App_Login/App_Login';
+import ForgetPassword from '../Login/ForgetPassword';
+import ForgetPasswordSendOTP from '../Login/ForgetPasswordSendOTP';
+import RenewPassword from '../Login/RenewPassword';
 import LogOut from '../LogOut/LogOut';
 import Profile from '../Profile/Profile';
-import React, { Component } from 'react'
+import React from 'react'
 import {
   BrowserRouter,
-  Link,
   Routes,
   Route
 } from "react-router-dom";
-import Member from '../ClassDetail/Member/Member';
-import { Switch } from '@mui/material';
-
 
 
 export default function RouterURL() {
@@ -31,6 +28,9 @@ export default function RouterURL() {
         <Route path='/classes/:idclass' element={<ClassDetail/>} />
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/forget-password' element={<ForgetPassword />} />
+        <Route path='/forget-password/send-otp/' element={<ForgetPasswordSendOTP />} />
+        <Route path='/renew-password/' element={<RenewPassword />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/logout' element={<LogOut />} />
         <Route path='/classes/inviteclass/:nameclass' element={<ClassInvite/>} />
