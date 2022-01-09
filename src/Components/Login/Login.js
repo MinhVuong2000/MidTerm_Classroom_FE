@@ -1,6 +1,10 @@
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css"
 import { useState, useEffect } from "react";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import InputAdornment from "@mui/material/InputAdornment";
+import Input from "@mui/material/Input";
 import GoogleIcon from '@mui/icons-material/Google';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate, Redirect, Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
@@ -11,6 +15,7 @@ import LoginByGoogle from './GoogleLogin/GoogleLogin';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     function handleChangeUsername(event) {
         setUsername(event.target.value)
@@ -18,6 +23,15 @@ export default function Login() {
     function handleChangePassword(event) {
         setPassword(event.target.value)
     }
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    
+    const handleMouseDown = (event) => {
+    event.preventDefault();
+    };
+
     function handleSubmit(event) {
         event.preventDefault();
         if (username !== '' && password !== '') {
@@ -81,7 +95,26 @@ export default function Login() {
 
                         <div className="form-group">
                             <label>Password</label>
-                            <input type="password" name="password" id="password" className="form-control" placeholder="Nhập password" value={password} onChange={handleChangePassword}/>
+                            {/* <input type="password" name="password" id="password" className="form-control" placeholder="Nhập password" value={password} onChange={handleChangePassword}/> */}
+                            <Input
+                                type={showPassword ? "text" : "password"} 
+                                name="password" 
+                                id="password" 
+                                className="form-control" 
+                                placeholder="Nhập mật khẩu" 
+                                value={password} 
+                                onChange={handleChangePassword}
+                                endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDown}
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                                }
+                            />
                         </div>
 
                         <div className="form-group">
