@@ -22,12 +22,18 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import AlertDialog from '../AlertDialog/AlertDialog';
 
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import InputAdornment from "@mui/material/InputAdornment";
+
 export default function Profile() {
     const [profile, setProfile] = useState(null);
     const [error, setError] = useState(null);
     const [isEditting, setIsEditting] = useState(false);
     const [fullName, setFullName] = useState(null);
-    const [password, setPassword] = useState(null);
+    const [curPassword, setCurPassword] = useState('');
+    const [changePass, setChangePass] = useState('');
+    const [confirmPass, setConfirmPass] = useState('');
     const [openSuccessChangePassword, setOpenSuccessChangePassword] = useState(false);
     const [openSuccessChangeProfile, setOpenSuccessChangeProfile] = useState(false);
     const [MSSV, setMSSV] = useState(null);
@@ -38,28 +44,72 @@ export default function Profile() {
     const [openNullPassword, setOpenNullPassword] = useState(false);
     const [openNullMSSV, setOpenNullMSSV] = useState(false);
     const [openExistedMSSV, setOpenExistedMSSV] = useState(false);
+    const [showCurrentPass, setShowCurrentPass] = useState(false);
+    const [showChangePass, setShowChangePass] = useState(false);
+    const [showConfirmPass, setShowConfirmPass] = useState(false);
 
     let actoken = localStorage.getItem('access_token');
 
+    const handleClickShowCurPassword = () => {
+        setShowCurrentPass(!showCurrentPass);
+    };
+
+    const handleClickShowChangePass = () => {
+        setShowChangePass(!showChangePass);
+    };
+
+    const handleClickShowConfirmPass = () => {
+        setShowConfirmPass(!showConfirmPass);
+    };
+    
+    const handleMouseDown = (event) => {
+    event.preventDefault();
+    };
+
     function handleChangePassword(){
-        console.log("New password:", password);
-        if (password === '' || password===null){
+        console.log("New password:", changePass);
+        if (changePass === '' || confirmPass==='' || curPassword===''){
             setOpenNullPassword(true);
             return;
         }
-        const url = DOMAIN_API + `users/update-password`;
-        const requestOptions = {
-        method: 'PATCH',
-        headers: new Headers({
-            "x-access-token": actoken,
-            'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({new_password: password})
+        if (confirmPass !== changePass){
+            window.alert('Mật khẩu mới và mật khẩu xác nhận không khớp!');
+            return;
+        }
+        //check mật khẩu hiện tại
+        let url = DOMAIN_API + `users/check-password`;
+        let requestOptions = {
+            method: 'POST',
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({password: curPassword})
         };
         fetch(url, requestOptions).then(res =>res.json())
-        .then((result) => {
-            setPassword('');
-            setOpenSuccessChangePassword(true);
+            .then((result) => {
+                if (result===false){
+                    window.alert('Mật khẩu hiện tại không đúng!');
+                    return;
+                }
+                else{
+                    url = DOMAIN_API + `users/update-password`;
+                    requestOptions = {
+                    method: 'PATCH',
+                    headers: new Headers({
+                        "x-access-token": actoken,
+                        'Content-Type': 'application/json'
+                    }),
+                    body: JSON.stringify({new_password: changePass})
+                    };
+                    fetch(url, requestOptions).then(res =>res.json())
+                    .then((result) => {
+                        setCurPassword('');
+                        setChangePass('');
+                        setConfirmPass('');
+                        setOpenSuccessChangePassword(true);
+                    }).catch(error => console.log('Form submit error', error))
+                }
         }).catch(error => console.log('Form submit error', error))
     }
 
@@ -235,124 +285,184 @@ export default function Profile() {
                                 Cancel
                             </Button>
                         </CardActions>
-                    </Card> : <Card sx={{ maxWidth: 1000, marginTop: "50px" }}  className="d-flex justify-content-center">
-                        <div>
-                            {openNullPassword && <AlertDialog title={ENTER_PASSWORD_TITLE} msg={ENTER_PASSWORD_DESC} callback={() => {setOpenNullPassword(false)}}/>}
-                            {openSuccessChangePassword && <AlertDialog title={SUCCESS_PASSWORD_TITLE} msg={SUCCESS_PASSWORD_DESC} callback={() => {setOpenSuccessChangePassword(false)}}/>}
-                            {openSuccessChangeProfile && <AlertDialog title={SUCCESS_PROFILE_TITLE} msg={SUCCESS_PROFILE_DESC} callback={() => {setOpenSuccessChangeProfile(false)}}/>}
-                            <CardHeader
-                                avatar={
-                                    <AccountCircleIcon >
-                                    </AccountCircleIcon>
-                                }
-                                title="Họ và tên"
-                                subheader={fullName}
-                            />
-                            <CardHeader
-                                avatar={
-                                    <AccountCircleIcon >
-                                    </AccountCircleIcon>
-                                }
-                                title="Username"
-                                subheader={profile.username}
-                            />
+                    </Card> : 
+                    <div style={{display:'flex', justifyContent: 'space-between'}}>
+                        <Card sx={{ maxWidth: 1000, marginTop: "50px", padding:'40px' }}  className="d-flex justify-content-center">
+                            <div>
+                                {openNullPassword && <AlertDialog title={ENTER_PASSWORD_TITLE} msg={ENTER_PASSWORD_DESC} callback={() => {setOpenNullPassword(false)}}/>}
+                                {openSuccessChangePassword && <AlertDialog title={SUCCESS_PASSWORD_TITLE} msg={SUCCESS_PASSWORD_DESC} callback={() => {setOpenSuccessChangePassword(false)}}/>}
+                                {openSuccessChangeProfile && <AlertDialog title={SUCCESS_PROFILE_TITLE} msg={SUCCESS_PROFILE_DESC} callback={() => {setOpenSuccessChangeProfile(false)}}/>}
+                                
+                                <div style={{display:'flex', justifyContent: 'space-between'}}>
+                                    <h1>Thông tin cá nhân</h1>
+                                    <CardActions disableSpacing sx={{marginLeft:'30px'}}>
+                                        <IconButton aria-label="share" onClick={() => {setIsEditting(true);}}>
+                                            <ModeEditIcon/>
+                                        </IconButton>
+                                    </CardActions>
+                                </div>
+                                <CardHeader
+                                    avatar={
+                                        <AccountCircleIcon >
+                                        </AccountCircleIcon>
+                                    }
+                                    title="Họ và tên"
+                                    subheader={fullName}
+                                />
+                                <CardHeader
+                                    avatar={
+                                        <AccountCircleIcon >
+                                        </AccountCircleIcon>
+                                    }
+                                    title="Username"
+                                    subheader={profile.username}
+                                />
 
-                            {MSSV ? <CardHeader
-                                avatar={
-                                    <SubtitlesIcon >
-                                    </SubtitlesIcon>
-                                }
+                                {MSSV ? <CardHeader
+                                    avatar={
+                                        <SubtitlesIcon >
+                                        </SubtitlesIcon>
+                                    }
 
-                                title="Mã số do trường cung cấp"
-                                subheader={MSSV}
-                            />
-                            : <CardHeader
-                                avatar={
-                                    <SubtitlesIcon >
-                                    </SubtitlesIcon>
-                                }
-
-                                title="Mã số do trường cung cấp"
-                                subheader='Chưa có'
-                            />}
-
-                            {email ? <CardHeader
-                                avatar={
-                                    <AlternateEmailSharpIcon >
-                                    </AlternateEmailSharpIcon>
-                                }
-                                title="Email"
-                                subheader={email}
-                            />
+                                    title="Mã số do trường cung cấp"
+                                    subheader={MSSV}
+                                />
                                 : <CardHeader
+                                    avatar={
+                                        <SubtitlesIcon >
+                                        </SubtitlesIcon>
+                                    }
+
+                                    title="Mã số do trường cung cấp"
+                                    subheader='Chưa có'
+                                />}
+
+                                {email ? <CardHeader
                                     avatar={
                                         <AlternateEmailSharpIcon >
                                         </AlternateEmailSharpIcon>
                                     }
                                     title="Email"
-                                    subheader="Chưa có"
-                                />}
-
-                            {phone ?
-                                <CardHeader
-                                    avatar={
-                                        <CallIcon>
-                                        </CallIcon>
-                                    }
-                                    title="Số điện thoại"
-                                    subheader={phone}
+                                    subheader={email}
                                 />
-                                : <CardHeader
-                                    avatar={
-                                        <CallIcon>
-                                        </CallIcon>
-                                    }
-                                    title="Số điện thoại"
-                                    subheader="Chưa có"
-                                />}
-                            {address ?
-                                <CardHeader
-                                    avatar={
-                                        <LocationOnIcon >
-                                        </LocationOnIcon>
-                                    }
-                                    title="Địa chỉ"
-                                    subheader={address}
-                                /> : <CardHeader
-                                    avatar={
-                                        <LocationOnIcon >
-                                        </LocationOnIcon>
-                                    }
-                                    title="Địa chỉ"
-                                    subheader="Chưa có"
-                                />}
+                                    : <CardHeader
+                                        avatar={
+                                            <AlternateEmailSharpIcon >
+                                            </AlternateEmailSharpIcon>
+                                        }
+                                        title="Email"
+                                        subheader="Chưa có"
+                                    />}
 
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="share" onClick={() => {setIsEditting(true);}}>
-                                    Chỉnh sửa profile<ModeEditIcon/>
-                                </IconButton>
-                            </CardActions>
-                        </div>
-                        {!profile.is_social_login && <Card sx={{ maxWidth: 600, marginTop: "50px" }} >
-                            <Typography gutterBottom variant="h5" component="div">
+                                {phone ?
+                                    <CardHeader
+                                        avatar={
+                                            <CallIcon>
+                                            </CallIcon>
+                                        }
+                                        title="Số điện thoại"
+                                        subheader={phone}
+                                    />
+                                    : <CardHeader
+                                        avatar={
+                                            <CallIcon>
+                                            </CallIcon>
+                                        }
+                                        title="Số điện thoại"
+                                        subheader="Chưa có"
+                                    />}
+                                {address ?
+                                    <CardHeader
+                                        avatar={
+                                            <LocationOnIcon >
+                                            </LocationOnIcon>
+                                        }
+                                        title="Địa chỉ"
+                                        subheader={address}
+                                    /> : <CardHeader
+                                        avatar={
+                                            <LocationOnIcon >
+                                            </LocationOnIcon>
+                                        }
+                                        title="Địa chỉ"
+                                        subheader="Chưa có"
+                                    />}
+                            </div>
+                        </Card>
+                        {!profile.is_social_login && <Card sx={{ maxWidth: 400, marginTop: "50px", marginLeft:'50px', padding:'40px' }} >
+                            <Typography gutterBottom variant="h4" component="div">
                                 Thay đổi mật khẩu
                             </Typography>
                             <TextField
-                                id="new_password"
-                                label="Mật khẩu mới"
-                                type="text"
+                                id="cur_password"
+                                label="Mật khẩu hiện tại"
+                                type={showCurrentPass ? "text" : "password"}
                                 fullWidth
                                 variant="standard"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
+                                value={curPassword}
+                                onChange={e => setCurPassword(e.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={handleClickShowCurPassword}
+                                                onMouseDown={handleMouseDown}
+                                            >
+                                                {showCurrentPass ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <TextField
+                                id="new_password"
+                                label="Mật khẩu mới"
+                                type={showChangePass ? "text" : "password"}
+                                fullWidth
+                                variant="standard"
+                                value={changePass}
+                                onChange={e => setChangePass(e.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={handleClickShowChangePass}
+                                                onMouseDown={handleMouseDown}
+                                            >
+                                                {showChangePass ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <TextField
+                                id="confirm_password"
+                                label="Xác nhận Mật khẩu mới"
+                                type={showConfirmPass ? "text" : "password"}
+                                fullWidth
+                                variant="standard"
+                                value={confirmPass}
+                                onChange={e => setConfirmPass(e.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={handleClickShowConfirmPass}
+                                                onMouseDown={handleMouseDown}
+                                            >
+                                                {showConfirmPass ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
                             />
                             <CardActions disableSpacing>
                                 <IconButton onClick={handleChangePassword}>
-                                    Lưu mật khẩu mới<SaveIcon/>
+                                    Thay đổi<SaveIcon/>
                                 </IconButton>
                             </CardActions>
                         </Card>}
-                    </Card>
+                    </div>
                 }
             </div>
         )
