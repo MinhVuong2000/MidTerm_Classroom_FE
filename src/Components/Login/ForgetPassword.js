@@ -28,7 +28,7 @@ export default function ForgetPassword() {
                 .then((result) => {
                     if (result===false){window.alert("Không có tài khoản nào có email này!")}
                     else{
-                        navigate("/forget-password/send-otp", {email: email});
+                        navigate("/forget-password/send-otp", { state: {email: email }});
                     }
                 })
                 .catch(error => console.log('Lỗi submit', error))

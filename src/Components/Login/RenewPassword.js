@@ -1,15 +1,32 @@
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import InputAdornment from "@mui/material/InputAdornment";
+import Input from "@mui/material/Input";
+import IconButton from "@mui/material/IconButton";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useState } from 'react';
 import { DOMAIN_API } from '../../config/const';
 
 
-export default function RenewPassword({route, navigation}) {
+export default function RenewPassword(props) {
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const [confirm, setConfirm] = useState('');
     let navigate = useNavigate();
-    const { email } = route.params;
+    const { state } = useLocation();
+    
+    console.log("state RenewPassword:", state);
+    if (state==null)
+    {
+        return (
+            <Navigate to="/login"/>
+        )
+    }
+    const email = state.email;
+    console.log("email RenewPassword:", email);
 
     function handleChangePassword(event){
         setPassword(event.target.value);
@@ -18,6 +35,18 @@ export default function RenewPassword({route, navigation}) {
     function handleChangeConfirm(event){
         setConfirm(event.target.value);
     }
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleClickShowConfirm = () => {
+        setShowConfirm(!showConfirm);
+    };
+    
+    const handleMouseDown = (event) => {
+    event.preventDefault();
+    };
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -52,7 +81,7 @@ export default function RenewPassword({route, navigation}) {
 
     return (
         <div className="App">
-            <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{display: 'hidden'}}>
+            <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
                     <Link className="navbar-brand" to={"/sign-in"}><h1>Classroom</h1></Link>
                     <div className="collapse navbar-collapse login-register-link" id="navbarTogglerDemo02">
@@ -76,13 +105,47 @@ export default function RenewPassword({route, navigation}) {
                         <br/>
                         <div className="form-group">
                             <label>Mật khẩu mới</label>
-                            <input type="text" name="password" id="password" className="form-control" 
-                            placeholder="Nhập mật khẩu mới" value={password} onChange={handleChangePassword}/>
+                            <Input
+                                type={showPassword ? "text" : "password"} 
+                                name="password" 
+                                id="password" 
+                                className="form-control" 
+                                placeholder="Nhập mật khẩu mới" 
+                                value={password} 
+                                onChange={handleChangePassword}
+                                endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDown}
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                                }
+                            />
                         </div>
                         <div className="form-group">
                             <label>Nhập lại mật khẩu mới</label>
-                            <input type="text" name="confirm" id="confirm" className="form-control" 
-                            placeholder="Xác nhận mật khẩu mới" value={confirm} onChange={handleChangeConfirm}/>
+                            <Input
+                                type={showConfirm ? "text" : "password"} 
+                                name="confirm" 
+                                id="confirm" 
+                                className="form-control" 
+                                placeholder="Xác nhận mật khẩu mới" 
+                                value={confirm} 
+                                onChange={handleChangeConfirm}
+                                endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleClickShowConfirm}
+                                        onMouseDown={handleMouseDown}
+                                    >
+                                        {showConfirm ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                                }
+                            />
                         </div>
                         <br />
                         <button type="submit" className="btn btn-primary btn-block" 

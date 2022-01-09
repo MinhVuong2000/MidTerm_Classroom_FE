@@ -1,17 +1,47 @@
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useState } from 'react';
 import { DOMAIN_API } from '../../config/const';
 
 
-export default function ForgetPasswordSendOTP({route, navigation}) {
+export default function ForgetPasswordSendOTP() {
     const [otp, setOTP] = useState('');
+    
     let navigate = useNavigate();
-    const { email } = route.params;
+    const { state } = useLocation();
+    
+    console.log("state ForgetPasswordSendOTP:", state);
+    if (state==null)
+    {
+        return (
+            <Navigate to="/login"/>
+        )
+    }
+    const email = state.email;
+    console.log("email ForgetPasswordSendOTP:", email);
 
     function handleChangeOTP(event){
         setOTP(event.target.value);
+    }
+
+    function resendOTP(event){
+        event.preventDefault();
+        const url = DOMAIN_API + `get-otp`;
+        const requestOptions = {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        };
+        fetch(url, requestOptions)
+            .then(res => res.json())
+            .then((result) => {
+                if (result===false){window.alert("Không có tài khoản nào có email này!")}
+                else{
+                    window.alert('Đã gửi lại thanh công OTP!');
+                }
+            })
+            .catch(error => console.log('Lỗi submit', error))
     }
 
     function handleSubmit(event) {
@@ -26,9 +56,11 @@ export default function ForgetPasswordSendOTP({route, navigation}) {
             fetch(url, requestOptions)
                 .then(res => res.json())
                 .then((result) => {
-                    if (result===false){window.alert("OTP không khớp với OTP đã gửi!")}
+                    if (result===false){
+                        window.alert("OTP không khớp với OTP đã gửi!")
+                    }
                     else{
-                        navigate("/renew-password", {email: email});
+                        navigate("/renew-password", { state: {email: email }});
                     }
                 })
                 .catch(error => console.log('Lỗi submit', error))
@@ -46,7 +78,7 @@ export default function ForgetPasswordSendOTP({route, navigation}) {
 
     return (
         <div className="App">
-            <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{display: 'hidden'}}>
+            <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
                     <Link className="navbar-brand" to={"/sign-in"}><h1>Classroom</h1></Link>
                     <div className="collapse navbar-collapse login-register-link" id="navbarTogglerDemo02">
@@ -65,20 +97,20 @@ export default function ForgetPasswordSendOTP({route, navigation}) {
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <form>
-                        <h2>Điền OTP</h2>
+                        <h2>Nhập OTP</h2>
                         <br/>
-                        <p>Điền OTP trong thư vừa được gửi đến email:{email}</p>
+                        <p>Nhập OTP trong thư vừa được gửi đến {email}</p>
                         <div className="form-group">
                             <label>OTP</label>
-                            <input type="text" name="email" id="email" className="form-control" 
-                            placeholder="Nhập OTP" value={email} onChange={handleChangeOTP}/>
+                            <input type="text" name="otp" id="otp" className="form-control" 
+                            placeholder="Nhập OTP" value={otp} onChange={handleChangeOTP}/>
                         </div>
                         <br />
                         <button type="submit" className="btn btn-primary btn-block" 
                         onClick={handleSubmit} name="otp_renew_pass" id="otp_renew_pass" 
                         class="form-submit">Kiểm tra OTP</button>
                         <p className="forgot-password text-right">
-                            <a onClick={()=>navigate("/forget-password/send-otp", {email: email})}>Gửi lại OTP</a>
+                            <button onClick={resendOTP}> Gửi lại OTP </button>
                         </p>
                     </form>
                 </div>
