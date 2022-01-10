@@ -83,7 +83,7 @@ export default function GradeAssignmentImport({setGradeBoard, students_ids, id_c
     }
 
     return (
-        <Button variant='outlined' component="label" style={{width:"220px",height:"80px",justifyContent:"start"}}>
+        <Button  component="label" style={{width:"auto",height:"auto",justifyContent:"start"}}>
             <div className="d-flex justify-content-start  align-items-start"> <UploadIcon/></div>
             <div>
            Upload File {name}

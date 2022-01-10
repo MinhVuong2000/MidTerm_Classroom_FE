@@ -20,9 +20,21 @@ import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 import DownloadButton from '../../DownloadButton/DownloadButton';
 import StudentListImport from '../../ImportFile/StudentListImport/StudentListImport';
 import GradeAssignmentImport from '../../ImportFile/GradeAssignmentImport/GradeAssignmentImport';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import UploadIcon from '@mui/icons-material/Upload';
+
+import Divider from '@mui/material/Divider';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { styled, alpha } from '@mui/material/styles';
+import { useRef } from 'react';
+
+
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -46,6 +58,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { ExportReactCSV } from '../../ExportFile/GradeAssignmentExport/GradeAssignmentExport';
 import Edit from './Edit';
+import { ButtonUnstyled } from '@mui/material';
 /*<DownloadButton purpose='grade_assignment'/>
   <GradeAssignmentImport setStudents={setStudents} students_ids={students.map(student=>student.id_uni)} id_class={idclass} id_assignment={4}/>*/
 
@@ -228,6 +241,8 @@ const EnhancedTableToolbar = (props) => {
     const handleClickEdit = (event, a) => {
         setEdit(true)
     };
+
+
     return (
         <div>  {edit ? <Edit rowSelected={selected} idclass={idclass} Swi={(value, handleSelected) => { setEdit(value); handleAfterEditEnhanced(handleSelected) }} /> :
             <Toolbar
@@ -267,16 +282,17 @@ const EnhancedTableToolbar = (props) => {
                     </Tooltip>
                 ) : (
                     <div style={{ position: "absolute", right: "5px" }} >
-                        <Tooltip title="Download">
+                        {/* <Tooltip title="Download">
                             <IconButton>
                                 <FileDownloadIcon />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Upload">
-                            <IconButton>
+                            <IconButton
+                             onClick={handleClickUploadFile}>
                                 <FileUploadIcon />
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip> */}
                     </div>
                 )}
             </Toolbar>
@@ -303,6 +319,36 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
     const rows = createData(gradeboard, isTeacher);
     const listAssignment = createListButtonName(grade_board, isTeacher);
     let actoken = localStorage.access_token;
+
+    // uploadFile
+    const [uploadFile, setUploadFile] = React.useState(null);
+    const openUploadFile = Boolean(uploadFile);
+    const handleClickUploadFile = (event) => {
+        setUploadFile(event.currentTarget);
+    };
+    const handleCloseUploadFile = () => {
+        setUploadFile(null);
+    };
+    const inputButtonUploadFile = useRef(null)
+
+    // Mark grade
+    const [markGrade, setMarkGrade] = React.useState(null);
+    const openMarkGrade = Boolean(markGrade);
+    const handleClickMarkGrade = (event) => {
+        setMarkGrade(event.currentTarget);
+    };
+    const handleCloseMarkGrade = () => {
+        setMarkGrade(null);
+    };
+    const handleListenClickMarkGrade = (e) => {
+        //setMarkGrade(null);
+        console.log("Địa chỉ nè: ____", e.target.value)
+        console.log("Checked: _______", e.target.checked)
+    };
+    const inputButtonMarkGrade = useRef(null)
+    const label = { inputProps: { 'aria-label': 'Switch demo' } };
+    //const [switchChecked, setSwitchChecked] = useState(false);
+
     useEffect(() => {
         fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
             method: "POST",
@@ -319,12 +365,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                 (result3) => {
                     console.log("Thay doi vi tri assignment:", result3);
                     setGradeBoard(result3);
-                    if(result3 == null){
-                        setListStudent(null)
-                    }else{
-                        setListStudent(result3.listStudentGrade);
-                    }
-                    
+                    setListStudent(result3.listStudentGrade);
                     //setIsLoaded(true);
                 },
                 (error) => {
@@ -463,244 +504,353 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
 
         return (
             <Box sx={{ width: '100%' }}>
-                <div className="container" style={{marginTop:"10px"}}>
-                <div className="card" style={{padding: "15px"}}>
-                {rows == null &&
-                    <div className="col-md-4 center">
-                        Không có bài tập hoặc thành viên nào trong lớp học!
-                    </div>}
+                <div className="container" style={{ marginTop: "10px" }}>
+                    <div className="card" style={{ padding: "15px" }}>
+                        {rows == null &&
+                            <div className="col-md-4 center">
+                                Không có bài tập hoặc thành viên nào trong lớp học!
+                            </div>}
 
-                  
 
-                {rows &&
-                    <div className="container">
-                        <div className="row" >
 
-                            <div style={{ marginTop: "10px" }}>
-                                <h3>Quản lý</h3>
-                                
-                            </div>
+                        {rows &&
+                            <div className="container">
+                                <div className="row" >
 
-                            <div>
-                            <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-                            Export Grade Board
-                                </Typography>
+                                    <div style={{ marginTop: "10px" }}>
+                                        <h3>Quản lý</h3>
 
-                                <div> 
-                        <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
-                    </div>
-                            </div>
+                                    </div>
 
-                          
-                            <div>
+                                    <div className="row">
+                                        {/* <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
+                                            Export Grade Board
+                                        </Typography> */}
 
-                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-                                    Upload Template
-                                </Typography>
-                                <Grid container spacing={2}  >
+                                        <div className="col-6 col-sm-2 ">
+                                            <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
+                                        </div>
+                                        <div className="col-6 col-sm-3 d-flex justify-content-center">
+                                            <Tooltip title="Upload">
+                                                <Button
+                                                    variant="outlined" endIcon={<FileUploadIcon />}
+                                                    aria-controls={openUploadFile ? 'menu-upload-file' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={openUploadFile ? 'true' : undefined}
+                                                    onClick={handleClickUploadFile}
+                                                    ref={inputButtonUploadFile}>
+                                                    Upload Template
+                                                </Button>
+                                            </Tooltip>
+                                        </div>
+                                        <div className="col-6 col-sm-3 d-flex justify-content-center">
+                                            <DownloadButton purpose='grade_assignment' />
+                                        </div>
+                                        <div className="col-6 col-sm-4 d-flex justify-content-center">
+                                            <Tooltip title="Download">
+                                                <Button variant="outlined" endIcon={<BookmarkAddedIcon />}
+                                                    aria-controls={openMarkGrade ? 'menu-mark-grade' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={openMarkGrade ? 'true' : undefined}
+                                                    onClick={handleClickMarkGrade}
+                                                    ref={inputButtonMarkGrade}>
+                                                    Mark A Grade Composition
 
-                                    {listAssignment.map(row =>
-                                        <Grid item xs={12} md={4} >
-                                            <div style={{ minWWidth: "200px" }}>
-                                                <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name={row.name} />
+                                                </Button>
+                                            </Tooltip>
+                                        </div>
+
+
+                                        <Menu
+                                            id="menu-upload-file"
+                                            uploadFile={uploadFile}
+                                            open={openUploadFile}
+                                            onClose={handleCloseUploadFile}
+                                            onClick={handleCloseUploadFile}
+
+                                            anchorEl={inputButtonUploadFile.current}
+                                            PaperProps={{
+                                                elevation: 0,
+                                                sx: {
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                    mt: 1.5,
+                                                    '& .MuiAvatar-root': {
+                                                        width: 32,
+                                                        height: 32,
+                                                        ml: -0.5,
+                                                        mr: 1,
+                                                    },
+                                                    '&:before': {
+                                                        content: '""',
+                                                        display: 'block',
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        left: 16,
+                                                        width: 10,
+                                                        height: 10,
+                                                        bgcolor: 'background.paper',
+                                                        transform: 'translateY(-50%) rotate(45deg)',
+                                                        zIndex: 0,
+                                                    },
+                                                },
+                                            }}
+                                            transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                                            anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+                                        >
+                                            <div className="d-flex justify-content-center" style={{ fontWeight: "bold" }}>
+                                                Upload Template
                                             </div>
-                                        </Grid>
-                                    )}
-                                </Grid>
-                            </div>
-                        </div>
-                    </div>
-                }
+                                            {/* <MenuItem>
+                                        <UploadIcon>
+                                            <Settings fontSize="small" />
+                                        </UploadIcon>
+                                        Up load file bài tập 1
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <UploadIcon>
+                                            <Settings fontSize="small" />
+                                        </UploadIcon>
+                                        Up load file bài tập 2
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <UploadIcon>
+                                            <Settings fontSize="small" />
+                                        </UploadIcon>
+                                        Up load file bài tập 3
+                                    </MenuItem> */}
+                                            {listAssignment.map(row =>
+                                                <MenuItem>
+                                                    <div style={{ minWWidth: "200px" }}>
+                                                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name={row.name} />
+                                                    </div>
+                                                </MenuItem>
 
-                {rows &&
-                    <div className="container">
-                        <div className="row" >
-                            <div>
+                                            )}
 
-                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-                                    Download Template
-                                </Typography>
-                                <div className="col-md-4 center">
-                                    <DownloadButton purpose='grade_assignment' />
+
+
+                                        </Menu>
+
+                                        <Menu
+                                            id="menu-mark-grade"
+                                            uploadFile={markGrade}
+                                            open={openMarkGrade}
+                                            onClose={handleCloseMarkGrade}
+                                            onClick={(e) => handleListenClickMarkGrade(e)}
+
+                                            anchorEl={inputButtonMarkGrade.current}
+                                            PaperProps={{
+                                                elevation: 0,
+                                                sx: {
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                    mt: 1.5,
+                                                    '& .MuiAvatar-root': {
+                                                        width: 32,
+                                                        height: 32,
+                                                        ml: -0.5,
+                                                        mr: 1,
+                                                    },
+                                                    '&:before': {
+                                                        content: '""',
+                                                        display: 'block',
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        left: 16,
+                                                        width: 10,
+                                                        height: 10,
+                                                        bgcolor: 'background.paper',
+                                                        transform: 'translateY(-50%) rotate(45deg)',
+                                                        zIndex: 0,
+                                                    },
+                                                },
+                                            }}
+                                            transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                                            anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+                                        >
+                                            <div className="d-flex justify-content-center" style={{ fontWeight: "bold" }}>
+                                                Mark A Grade Composition
+                                            </div>
+                                            {/* <MenuItem>
+                                        Bài tập 1:
+                                        <Switch value="checkedBT1" checked="true"
+                                        />
+                                    </MenuItem>
+
+                                    <MenuItem>
+                                        Bài tập 2:
+                                        <Switch value="checkedBT2"
+                                        />
+                                    </MenuItem> */}
+
+                                            {listAssignment.map(row =>
+                                                <MenuItem>
+                                                    <div >
+                                                        <Button component="label" style={{ maxWidth: "400px", height: "auto", justifyContent: "start" }}
+                                                            onClick={(event) => handleChangeStateShow(event, row.idAssignment)}
+                                                        >
+                                                            <Grid container spacing={2} wrap="nowrap" >
+                                                                <Grid item xs>
+                                                                    <Typography>
+                                                                        {row.name}:
+                                                                    </Typography>
+                                                                </Grid>
+                                                                <Grid item >
+                                                                    {`${listShowAssignment.includes(row.idAssignment) ? ' Đã public điểm' : ' Chưa public điểm'}`}
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Button>
+                                                    </div>
+                                                </MenuItem>
+                                            )}
+                                        </Menu>
+                                    </div>
+
                                 </div>
                             </div>
-                        </div>
+                        }
+
+
                     </div>
-                }
+                </div>
+                <br />
 
-               
-
-
-                {rows &&
-                    <div className="container">
-                        <div className="row" >
-
-                            <div>
-
-                                <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-                                    Mark A Grade Composition
-                                </Typography>
-                                <Grid container spacing={2}  >
-
-                                    {listAssignment.map(row =>
-                                        <Grid item xs={12} md={4} >
-                                            <div className="d-flex justify-content-start  align-items-start" style={{ minWWidth: "200px" }}>
-                                                <Button variant='outlined' component="label" style={{ width: "220px", height: "80px", justifyContent: "start" }}
-                                                    onClick={(event) => handleChangeStateShow(event, row.idAssignment)} variant="contained" >
-                                                    {row.name}:
-                                                    <br />
-                                                    {`${listShowAssignment.includes(row.idAssignment) ? ' Đã public điểm' : ' Chưa public điểm'}`}
-                                                </Button>
-                                            </div>
-                                        </Grid>
-                                    )}
-                                </Grid>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-
-</div>
-</div>
-<br/>
-
-{/* {rows &&
+                {/* {rows &&
                     <div className="col-md-4 center">
                         <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
                     </div>} */}
 
 
-<div className="container" style={{marginTop:"10px"}}>
-                <div className="card" style={{padding: "15px"}}>
-                {rows &&
-                    <Paper sx={{ width: '100%', mb: 2 }}>
-                        <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} classname={class_name} idclass={idclass} afterEdit={(value) => handleAfterEdit(value)} />
-                        <TableContainer>
-                            <Table
-                                sx={{ minWidth: 750 }}
-                                aria-labelledby="tableTitle"
-                                size={dense ? 'small' : 'medium'}
+                <div className="container" style={{ marginTop: "10px" }}>
+                    <div className="card" style={{ padding: "15px" }}>
 
-                            >
-
-                                <EnhancedTableHead
-                                    numSelected={selected.length}
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onRequestSort={handleRequestSort}
-                                    rowCount={rows.length}
-                                    listHeader={gradeboard.listAssignment}
-                                />
-                                <TableBody>
-                                    {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                        {rows &&
+                            <Paper sx={{ width: '100%', mb: 2 }}>
+                                <EnhancedTableToolbar numSelected={selected.length} selected={rowSelected} classname={class_name} idclass={idclass} afterEdit={(value) => handleAfterEdit(value)} />
+                                <TableContainer>
+                                    <Table
+                                        sx={{ minWidth: 750 }}
+                                        aria-labelledby="tableTitle"
+                                        size={dense ? 'small' : 'medium'}
+                                    >
+                                        <EnhancedTableHead
+                                            numSelected={selected.length}
+                                            order={order}
+                                            orderBy={orderBy}
+                                            onRequestSort={handleRequestSort}
+                                            rowCount={rows.length}
+                                            listHeader={gradeboard.listAssignment}
+                                        />
+                                        <TableBody>
+                                            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                      rows.slice().sort(getComparator(order, orderBy)) */}
-                                    {stableSort(rows, getComparator(order, orderBy))
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((row, index) => {
-                                            console.log("@@@@@@@@@@Row trong doan mapping: ", gradeboard)
-                                            const isItemSelected = isSelected(row.name);
-                                            const labelId = `enhanced-table-checkbox-${index}`;
-                                            let listTableCell = [];
-                                            listTableCell.push(<TableCell
-                                                component="th"
-                                                id={labelId}
-                                                scope="row"
-                                                padding="none"
-                                            >
-                                                {row.name}
-                                            </TableCell>);
-                                            
-                                            for (let i = 0; i < row.listGrade.length; i++) {
-                                                //let point = row.listGrade[i];
-                                                let point = row.listGrade[i].gradeAssignment;
-                                                listTableCell.push(<TableCell align="left">{point}</TableCell>);
-                                            }
-                                            return (
+                                            {stableSort(rows, getComparator(order, orderBy))
+                                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                .map((row, index) => {
+                                                    console.log("@@@@@@@@@@Row trong doan mapping: ", gradeboard)
+                                                    const isItemSelected = isSelected(row.name);
+                                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                                    let listTableCell = [];
+                                                    listTableCell.push(<TableCell
+                                                        component="th"
+                                                        id={labelId}
+                                                        scope="row"
+                                                        padding="none"
+                                                    >
+                                                        {row.name}
+                                                    </TableCell>);
+
+                                                    for (let i = 0; i < row.listGrade.length; i++) {
+                                                        //let point = row.listGrade[i];
+                                                        let point = row.listGrade[i].gradeAssignment;
+                                                        listTableCell.push(<TableCell align="left">{point}</TableCell>);
+                                                    }
+                                                    return (
+                                                        <TableRow
+                                                            hover
+                                                            onClick={(event) => handleClick(event, row.name, row)}
+                                                            role="checkbox"
+                                                            aria-checked={isItemSelected}
+                                                            tabIndex={-1}
+                                                            key={row.name}
+                                                            selected={isItemSelected}
+                                                        >
+                                                            <TableCell padding="checkbox">
+                                                                <Checkbox
+                                                                    color="primary"
+                                                                    checked={isItemSelected}
+                                                                    inputProps={{
+                                                                        'aria-labelledby': labelId,
+                                                                    }}
+                                                                />
+                                                            </TableCell>
+                                                            {listTableCell}
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                            {emptyRows > 0 && (
                                                 <TableRow
-                                                    hover
-                                                    onClick={(event) => handleClick(event, row.name, row)}
-                                                    role="checkbox"
-                                                    aria-checked={isItemSelected}
-                                                    tabIndex={-1}
-                                                    key={row.name}
-                                                    selected={isItemSelected}
+                                                    style={{
+                                                        height: (dense ? 33 : 53) * emptyRows,
+                                                    }}
                                                 >
-                                                    <TableCell padding="checkbox">
-                                                        <Checkbox
-                                                            color="primary"
-                                                            checked={isItemSelected}
-                                                            inputProps={{
-                                                                'aria-labelledby': labelId,
-                                                            }}
-                                                        />
-                                                    </TableCell>
-                                                    {listTableCell}
+                                                    <TableCell colSpan={6} />
                                                 </TableRow>
-                                            );
-                                        })}
-                                    {emptyRows > 0 && (
-                                        <TableRow
-                                            style={{
-                                                height: (dense ? 33 : 53) * emptyRows,
-                                            }}
-                                        >
-                                            <TableCell colSpan={6} />
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
 
-                        <TablePagination
+                                <TablePagination
 
-                            rowsPerPageOptions={[10, 20, 30]}
-                            component="div"
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
+                                    rowsPerPageOptions={[10, 20, 30]}
+                                    component="div"
+                                    count={rows.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
 
-                    </Paper>}
-                {/* <FormControlLabel
+                            </Paper>}
+                        {/* <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense} />}
                     label="Dense padding"
                 /> */}
+                    </div>
                 </div>
-                </div>
-            </Box>
+            </Box >
         );
     }
     else {
         //Xử lý UI show điểm ở đây
         //Rows có dạng: [{nameAssignment: "name1", gradeAssignment: point1}, {nameAssignment: "name2", gradeAssignment: point2}]
         return (
-            <div className="container" >
+            <div className="container" style={{ marginTop: "15px" }}>
 
                 <div className="card">
-                <table border="1"  >
-              <tr>
-                <th width="80%" style={{paddingLeft:"150px"}}>Thành phần</th>
-                <th width="20%" style={{textAlign :"center"}}>Điểm</th>
-              </tr>
-                {rows.map(row =>
-                <tr>
-                    <td  style={{paddingLeft:"150px"}}> 
-                    {row.nameAssignment}
-                    </td>
-                    <td style={{textAlign :"center"}}>
-                    {row.gradeAssignment}
-                    </td>
-                </tr>
-                   
-                )}
+                    <table border="1"  >
+                        <tr>
+                            <th width="80%" style={{ paddingLeft: "150px" }}>Thành phần</th>
+                            <th width="20%" style={{ textAlign: "center" }}>Điểm</th>
+                        </tr>
+                        {rows.map(row =>
+                            <tr>
+                                <td style={{ paddingLeft: "150px" }}>
+                                    {row.nameAssignment}
+                                </td>
+                                <td style={{ textAlign: "center" }}>
+                                    {row.gradeAssignment}
+                                </td>
+                            </tr>
 
-           </table>
-           </div>
-           </div>
-        
+                        )}
+
+                    </table>
+                </div>
+            </div>
+
         );
     }
 
