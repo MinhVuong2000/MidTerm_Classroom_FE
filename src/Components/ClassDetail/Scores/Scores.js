@@ -53,6 +53,10 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 
+//phúc khảo
+import ReviewScore from './Review';
+import FeedBackFromTeacher from './FeedBackFromTeacher'
+
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -319,6 +323,12 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
     const rows = createData(gradeboard, isTeacher);
     const listAssignment = createListButtonName(grade_board, isTeacher);
     let actoken = localStorage.access_token;
+    // Phúc khảo hay không
+    const [reviewScore, setReviewScore] = React.useState(false);
+    const [stateReviewScore, setStateReviewScore] = React.useState(false);
+    // stateReviewScore =
+    // false: Chưa phúc khảo
+    // true: Đã phúc khảo
 
     // uploadFile
     const [uploadFile, setUploadFile] = React.useState(null);
@@ -348,6 +358,17 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
     const inputButtonMarkGrade = useRef(null)
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
     //const [switchChecked, setSwitchChecked] = useState(false);
+
+    // phúc khảo
+    const onclickOpenReview = () => {
+        setReviewScore(!reviewScore);
+    }
+    const afterReview = (a) => {
+        console.log("aaa", a)
+        if (a === true)
+            setReviewScore(false);
+        setStateReviewScore(true);
+    }
 
     useEffect(() => {
         fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
@@ -848,6 +869,24 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                         )}
 
                     </table>
+                </div>
+                <br />
+                <div>
+                    {stateReviewScore ?
+                        <div>
+                            <FeedBackFromTeacher/>
+                        </div>
+                        :
+                        <Button variant="contained" color="success"
+                            onClick={() => onclickOpenReview()}>
+                            Phúc khảo
+                        </Button>
+                    }
+
+                </div>
+                <br />
+                <div>
+                    {reviewScore && !stateReviewScore && <ReviewScore after_sent={(result) => afterReview(result)} />}
                 </div>
             </div>
 
