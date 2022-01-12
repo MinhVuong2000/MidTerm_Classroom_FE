@@ -15,8 +15,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { BrowserRouter as Router, Routes, Route,Navigate, Link } from 'react-router-dom';
-
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import './header.css'
 
 import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -25,7 +25,12 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
-function HandleLogout(){
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+
+function HandleLogout() {
   localStorage.removeItem("access_token");
   window.location.reload();
 }
@@ -72,28 +77,40 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const [notification, setNotification] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const open = Boolean(anchorEl);
+  const openNoti = Boolean(notification);
+
   const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-      setAnchorEl(null);
+    setAnchorEl(null);
   };
+
+  //Notification
+  const handleClickNoti = (event) => {
+    setNotification(event.currentTarget);
+  };
+  const handleCloseNoti = () => {
+    setNotification(null);
+  };
+
 
 
   const menuId = 'primary-search-account-menu';
+  const menuNotiId = 'notification-menu';
   const renderMenu = (
     <Menu
-       id={menuId}
+      id={menuId}
       keepMounted
       anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                onClick={handleClose}
+      open={open}
+      onClose={handleClose}
+      onClick={handleClose}
       PaperProps={{
         elevation: 0,
         sx: {
@@ -123,7 +140,7 @@ export default function PrimarySearchAppBar() {
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
-      <MenuItem ><a href='/profile' style={{color: 'black', textDecoration: 'none'}}>Profile</a></MenuItem>
+      <MenuItem ><a href='/profile' style={{ color: 'black', textDecoration: 'none' }}>Profile</a></MenuItem>
       <MenuItem >Create class</MenuItem>
       <Divider />
       <MenuItem >
@@ -138,6 +155,75 @@ export default function PrimarySearchAppBar() {
         </ListItemIcon>
         Logout
       </MenuItem>
+    </Menu>
+  );
+
+  const renderNotification = (
+    <Menu
+      id={menuNotiId}
+      keepMounted
+      anchorEl={notification}
+      open={openNoti}
+      onClose={handleCloseNoti}
+      onClick={handleCloseNoti}
+      PaperProps={{
+        elevation: 0,
+        sx: {
+          overflow: 'visible',
+          filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+          mt: 1.5,
+          '& .MuiAvatar-root': {
+            width: 32,
+            height: 32,
+            ml: -0.5,
+            mr: 1,
+          },
+          '&:before': {
+            content: '""',
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+            right: 14,
+            width: 10,
+            height: 10,
+            bgcolor: 'background.paper',
+            //transform: 'translateY(-50%) rotate(45deg)',
+            zIndex: 0,
+          },
+        },
+      }}
+      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+    >
+      <MenuItem className="d-flex justify-content-center" >   
+      <div  style={{fontSize:"20px",fontWeight:"bold", color:"blue"}}>
+        Thông báo
+      </div>
+      </MenuItem>
+      <MenuItem >      
+        <div >
+            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}>
+              Lớp học: Web nâng cao
+            </Typography>
+            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
+              Đăng Khoa đã phản hồi đơn phúc khảo
+              <br />
+            </Typography>
+        </div>
+      </MenuItem>
+
+      <MenuItem >
+        <div >
+            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
+              Lớp học: Phát triển ứng dụng di động AA A AAA AAAAAA
+            </Typography>
+            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
+              Trần Minh Triết đã cập nhật bảng điểm. Trần Minh Triết đã cập nhật bảng điểm.
+              <br />
+            </Typography>
+        </div>
+      </MenuItem>
+      
     </Menu>
   );
 
@@ -161,7 +247,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            <a href="/" style={{ color: 'white',textDecoration: 'none' }}>Classroom TVT</a>
+            <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Classroom TVT</a>
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -185,6 +271,7 @@ export default function PrimarySearchAppBar() {
               size="large"
               aria-label="show 10 new notifications"
               color="inherit"
+              onClick={handleClickNoti}
             >
               <Badge badgeContent={10} color="error">
                 <NotificationsIcon />
@@ -218,7 +305,8 @@ export default function PrimarySearchAppBar() {
           </Box> */}
         </Toolbar>
       </AppBar>
-     {/* {renderMobileMenu} */}
+      {/* {renderMobileMenu} */}
+      {renderNotification}
       {renderMenu}
     </Box>
   );
