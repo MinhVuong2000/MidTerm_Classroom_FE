@@ -314,6 +314,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
+    const [rowReviewSelected, setRowReviewSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -360,7 +361,11 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
     //const [switchChecked, setSwitchChecked] = useState(false);
 
     // phúc khảo
-    const onclickOpenReview = () => {
+    const onclickOpenReview = (rowassign) => {
+        if(rowassign.contentReview == "Phúc khảo"){
+            rowassign.contentReview = "Đang xử lý";
+        }
+        setRowReviewSelected(rowassign);
         setReviewScore(!reviewScore);
     }
     const afterReview = (a) => {
@@ -853,17 +858,25 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                 <div className="card">
                     <table border="1"  >
                         <tr>
-                            <th width="80%" style={{ paddingLeft: "150px" }}>Thành phần</th>
-                            <th width="20%" style={{ textAlign: "center" }}>Điểm</th>
+                            <th width="50%" style={{ paddingLeft: "150px" }}>Thành phần</th>
+                            <th width="25%" style={{ textAlign: "center" }}>Điểm</th>
+                            <th width="25%" style={{ textAlign: "center" }}>Phúc khảo</th>
                         </tr>
                         {rows.map(row =>
                             <tr>
-                                <td style={{ paddingLeft: "150px" }}>
+                                <td style={{ paddingLeft: "50px" }}>
                                     {row.nameAssignment}
                                 </td>
                                 <td style={{ textAlign: "center" }}>
                                     {row.gradeAssignment}
                                 </td>
+                                <td style={{ textAlign: "center" }}>
+                                    {row.enableReview == true && <Button variant="text"  onClick={() => onclickOpenReview(row)}>{row.contentReview}</Button>}
+                                    {row.enableReview == false && <Button variant="text" disabled>
+                                                                    {row.contentReview}
+                                                                    </Button>}
+                                </td>
+                                
                             </tr>
 
                         )}
@@ -871,22 +884,16 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                     </table>
                 </div>
                 <br />
-                <div>
-                    {stateReviewScore ?
+                {/*<div>
+                    {stateReviewScore &&
                         <div>
                             <FeedBackFromTeacher/>
                         </div>
-                        :
-                        <Button variant="contained" color="success"
-                            onClick={() => onclickOpenReview()}>
-                            Phúc khảo
-                        </Button>
                     }
-
-                </div>
+                </div>*/}
                 <br />
                 <div>
-                    {reviewScore && !stateReviewScore && <ReviewScore after_sent={(result) => afterReview(result)} />}
+                    {reviewScore && <ReviewScore idclass={idclass} rowAssign = {rowReviewSelected} after_sent={(result) => afterReview(result)} />}
                 </div>
             </div>
 
