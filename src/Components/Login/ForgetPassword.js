@@ -4,11 +4,16 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { DOMAIN_API } from '../../config/const';
 
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function ForgetPassword() {
     const [email, setEmail] = useState('');
     let navigate = useNavigate();
 
+    const notify = (message) => { toast(message)};
+    
     function handleChangeEmail(event){
         setEmail(event.target.value);
     }
@@ -26,7 +31,18 @@ export default function ForgetPassword() {
             fetch(url, requestOptions)
                 .then(res => res.json())
                 .then((result) => {
-                    if (result===false){window.alert("Không có tài khoản nào có email này!")}
+                    if (result===false){
+                        window.alert("Không có tài khoản nào có email này!");
+                        toast.error('Không có tài khoản nào có email này!', {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            });
+                    }
                     else{
                         navigate("/forget-password/send-otp", { state: {email: email }});
                     }
@@ -35,6 +51,15 @@ export default function ForgetPassword() {
         }
         else{
             window.alert("Email không được trống!");
+            toast.error('Email không được trống!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
     }
 
@@ -77,7 +102,7 @@ export default function ForgetPassword() {
                         <button type="submit" className="btn btn-primary btn-block" 
                         onClick={handleSubmit} name="otp_renew_pass" id="otp_renew_pass" 
                         class="form-submit">Nhận OTP</button>
-                        
+                        <button onClick={() => notify('Test notify success')}>Test notify</button>
                     </form>
                 </div>
             </div>

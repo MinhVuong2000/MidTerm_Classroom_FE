@@ -127,7 +127,8 @@ export default function ReviewScore({ after_sent }) {
                                         focused
                                         InputProps={{
                                             readOnly: true,
-                                          }} />
+                                        }} 
+                                    />
                                     <br/>
                                     <br/>
                                     <div style={{fontWeight:"bold", color:"green"}}>
