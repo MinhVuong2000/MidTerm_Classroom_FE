@@ -10,6 +10,7 @@ import ForgetPasswordSendOTP from '../Login/ForgetPasswordSendOTP';
 import RenewPassword from '../Login/RenewPassword';
 import LogOut from '../LogOut/LogOut';
 import Profile from '../Profile/Profile';
+import Admin from '../Admin/Admin';
 import React from 'react'
 import {
   BrowserRouter,
@@ -34,6 +35,7 @@ export default function RouterURL() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/logout' element={<LogOut />} />
         <Route path='/classes/inviteclass/:nameclass' element={<ClassInvite/>} />
+        <Route path='/admin' element={<Admin/>} />
       </Routes>
     </BrowserRouter>
   )
