@@ -100,7 +100,7 @@ export default function ReviewScore({after_sent, rowAssign, idclass}) {
 
                     }
                 )
-            //Get user's infor in this class
+            //Get grade after review
             fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeafter`, {
                 method: "POST",
                 headers: new Headers({

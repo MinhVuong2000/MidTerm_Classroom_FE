@@ -30,6 +30,7 @@ export default function ClassDetail() {
     const [isShowAssignments, setIsShowAssignments] = React.useState(false)
     const [assignmentList, setAssignmentList] = useState([]);
     const [gradeBoard, setGradeBoard] = useState([])
+    const [listNews, setListNews] = useState([])
 
     //Tạm thui
     const [name_work, setName_work] = useState([]);
@@ -41,6 +42,31 @@ export default function ClassDetail() {
     const url = DOMAIN_API + `classes/detail/${idclass}`;
     let linkin = '';
     useEffect(() => {
+        fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/teachernews`, {
+            method: "POST",
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id_class: idclass,
+            })
+        })
+            .then(res => res.json())
+            .then(
+                (result2) => {
+                    console.log("Teacher News's detail", result2);
+                    if(result2){
+                        setListNews(result2);
+                    }
+                    
+                    //setIsLoaded(true);
+                },
+                (error) => {
+                    console.log("ErrorTeacher News's detail");
+
+                }
+            )
         fetch(url, {
             method: "GET",
             headers: new Headers({
@@ -134,18 +160,7 @@ export default function ClassDetail() {
         info: description,
         invite: linkin,
         grade_structure: name_work,
-        news: [
-            {
-                user: "Khanh Nguyen Huy",
-                content: "For the next meeting with Fossil to be effective, please send your feedback for the last session and your wishes for the next session in the form below.",
-                time: "Nov 21"
-            },
-            {
-                user: "Vuong Nguyen",
-                content: "For the next meeting with Fossil to be effective, please send your feedback for the last session and your wishes for the next session in the form below.",
-                time: "Nov 20"
-            }
-        ]
+        news: listNews,
     }
     const handleChange = (event, newValue) => {
 
@@ -214,7 +229,7 @@ export default function ClassDetail() {
                         {isTeacher && <Tab label="Bài tập" />}
                     </Tabs>
                     <div>
-                        {isShowNews && < News data={mockDataNew} />}
+                        {isShowNews && < News data={mockDataNew} isTeacher = {isTeacher} idclass={idclass}/>}
                         {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
                         {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} students = {students}/>}
                         {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
