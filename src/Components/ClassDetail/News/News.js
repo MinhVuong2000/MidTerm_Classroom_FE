@@ -23,6 +23,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import { DOMAIN_API } from '../../../config/const';
 import { deepOrange, deepPurple } from '@mui/material/colors';
+import { Navigate } from 'react-router-dom';
 
 
 
@@ -72,12 +73,22 @@ export default function News(props) {
       )
   }, [])
 
-  const structure = data.grade_structure.map((data)=>
-  <tr>
-                <td>{data.name} ({Math.round(100*data.point/sum)}%)</td>
-                <td style={{textAlign :"center"}}>{data.point}</td>
-              </tr>
+  let structure = [];
+  console.log("Structure: ", data.grade_structure.length)
+  if(data.grade_structure === '403'){
+    return (
+      <Navigate to="/"/>
   )
+  }
+  if(data.grade_structure !== '403'){
+    structure = data.grade_structure.map((data)=>
+    <tr>
+                  <td>{data.name} ({Math.round(100*data.point/sum)}%)</td>
+                  <td style={{textAlign :"center"}}>{data.point}</td>
+                </tr>
+    )
+  }
+  
   
   const seeComment=(datainp) =>{
       setIsOpenComment(!isOpenComment);

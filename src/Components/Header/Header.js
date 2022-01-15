@@ -32,6 +32,7 @@ import Button from '@mui/material/Button';
 
 function HandleLogout() {
   localStorage.removeItem("access_token");
+  localStorage.removeItem("check_admin");
   window.location.reload();
 }
 const Search = styled('div')(({ theme }) => ({

@@ -42,6 +42,7 @@ export default function ClassDetail() {
     const url = DOMAIN_API + `classes/detail/${idclass}`;
     let linkin = '';
     useEffect(() => {
+        handleChange();
         fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/teachernews`, {
             method: "POST",
             headers: new Headers({
@@ -196,11 +197,6 @@ export default function ClassDetail() {
 
     };
 
-
-
-    useEffect(() => {
-        handleChange()
-    }, []);
 
     if (localStorage.access_token == null) {
         return (

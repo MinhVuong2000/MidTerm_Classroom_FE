@@ -49,7 +49,7 @@ export default function Login() {
                     else if (result.access_token==='error_password'){window.alert("Password không đúng!")}
                     else{
                         localStorage.setItem('access_token', result.access_token);
-                        console.log(localStorage.getItem('access_token'));
+                        localStorage.setItem('check_admin', result.isAdmin);
                         setPassword('');
                     }
                 })
@@ -59,7 +59,11 @@ export default function Login() {
             window.alert("Username và Password không được trống!");
         }
     }
-
+    if(localStorage.getItem('check_admin')=='true' && localStorage.getItem('access_token')){
+        return (
+            <Navigate to="/admin"/>
+        )
+    }
     if (localStorage.getItem('access_token')){
         return (
             <Navigate to="/"/>
