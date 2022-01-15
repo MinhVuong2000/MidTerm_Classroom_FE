@@ -13,14 +13,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
+import Divider from '@mui/material/Divider';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import './header.css'
 
+import Check from '@mui/icons-material/Check';
 import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
@@ -30,7 +30,6 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { DOMAIN_API } from '../../config/const';
-import { useNavigate } from 'react-router-dom';
 
 function HandleLogout() {
   localStorage.removeItem("access_token");
@@ -135,7 +134,60 @@ export default function PrimarySearchAppBar({ socket, isLogined }) {
     setNotification(null);
   };
 
+  const handleMarkAllasRead = () => {
+    if (unreadNotiCount!==0){
+      setUnreadNotiCount(0);
+      setListNotifications(prev => {
+        const new_notis = prev.slice();
+        for (let i =0; i<new_notis.length; i++)
+          new_notis[i].status=1;
+        return new_notis;
+      })
+      console.log('List notis after mark all as read', listNotifications)
+      fetch(DOMAIN_API + `users/notifications-mark-all-as-read`, {
+        method: "PATCH",
+        headers: new Headers({
+            "x-access-token": localStorage.getItem('access_token'),
+        }),
+      })
+    }
+  }
+  const handleMarkOneasRead = (status, id, id_class) => {
+    if (status===0){
+      setUnreadNotiCount(prev => prev-1);
+      console.log('List notis after mark one as read', id, ":",listNotifications)
+      fetch(DOMAIN_API + `users/notifications-mark-one-as-read`, {
+        method: "PATCH",
+        headers: new Headers({
+            "x-access-token": localStorage.getItem('access_token'),
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
+            id: id,
+        })
+      })
+        .then(res => res.json())
+        .then(
+            (result) => {
+              console.log("Success mark one as read", id, ":",  result);
+              setListNotifications(prev => {
+                const new_notis = prev.slice()
+                for (let i =0; i<new_notis.length; i++){
+                  if (new_notis[i].id === id){
+                    new_notis[i].status=1;
+                  }
+                }
+                return new_notis;
+              });
+              window.location.href = `/classes/${id_class}`;
+            },
+            (error) => {
+                console.log("Error mark one as read", id, ":", error);
 
+            }
+        )
+    }
+  }
 
   const menuId = 'primary-search-account-menu';
   const menuNotiId = 'notification-menu';
@@ -231,34 +283,12 @@ export default function PrimarySearchAppBar({ socket, isLogined }) {
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
-      <MenuItem className="d-flex justify-content-center" >   
-      <div  style={{fontSize:"20px",fontWeight:"bold", color:"blue"}}>
+      <div className="d-flex justify-content-center"
+        style={{fontSize:"20px",fontWeight:"bold", color:"blue"}}>
         Thông báo
       </div>
-      </MenuItem>
-      {/* <MenuItem >      
-        <div >
-            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}>
-              Lớp học: Web nâng cao
-            </Typography>
-            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
-              Đăng Khoa đã phản hồi đơn phúc khảo
-              <br />
-            </Typography>
-        </div>
-      </MenuItem> */}
-
-      {/* <MenuItem >
-        <div >
-            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
-              Lớp học: Phát triển ứng dụng di động AA A AAA AAAAAA
-            </Typography>
-            <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
-              Trần Minh Triết đã cập nhật bảng điểm. Trần Minh Triết đã cập nhật bảng điểm.
-              <br />
-            </Typography>
-        </div>
-      </MenuItem> */}
+      <Divider />
+      <Divider />
       {listNotifications.length===0 ? 
         <MenuItem >
             <div >
@@ -270,18 +300,24 @@ export default function PrimarySearchAppBar({ socket, isLogined }) {
         :
         <div>
           {listNotifications.map( noti =>
-            <MenuItem >
-              <div >
-                  <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
-                    {`${noti.class_name}`}
-                  </Typography>
-                  <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
-                    {`${noti.message}`}
-                    <br />
-                  </Typography>
+            <MenuItem onClick={() => handleMarkOneasRead(noti.status, noti.id, noti.id_class)} style={{ color: noti.status===1?'gray':'black'}}> 
+              <div>
+                <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
+                  {`${noti.class_name}`}
+                </Typography>
+                <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
+                  {`${noti.message}`}
+                <br />
+                </Typography>
               </div>
             </MenuItem>
           )}
+          <Divider />
+          <MenuItem onClick={handleMarkAllasRead}>
+            <ListItemIcon style={{color:unreadNotiCount!==0?"blue":'gray'}}>
+              <Check />Đánh dấu đã đọc
+            </ListItemIcon>
+          </MenuItem>
         </div>
       }
     </Menu>

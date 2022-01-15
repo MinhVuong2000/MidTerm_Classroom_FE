@@ -80,7 +80,6 @@ export default function ClassDetail({socket}) {
                 },
                 (error) => {
                     console.log("ErrorTeacher News's detail");
-
                 }
             )
         fetch(url, {

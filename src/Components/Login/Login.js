@@ -70,7 +70,8 @@ export default function Login({socket, setIsLogined}) {
         socket.emit('newUser', access_token);
         console.log('ReDirect to main');
         setIsLogined(true);
-        return <Navigate to='/' />
+        // return <Navigate to='/' />
+        window.location.href = '/';
     }
     return (
         <div className="App">
