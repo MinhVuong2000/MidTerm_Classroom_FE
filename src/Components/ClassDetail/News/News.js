@@ -38,6 +38,7 @@ export default function News(props) {
   const [contentComment, setContentComment] = React.useState('');
   const [gradeReview, setGradeReview] = React.useState();
   const [username, setUsername] = React.useState('');
+  const [teacherGrade, setTeacherGrade] = React.useState();
   console.log("props ne:   ", props.data);
   let actoken = localStorage.getItem('access_token');
   const data = props.data;
@@ -137,38 +138,91 @@ export default function News(props) {
       setIdRevewOpen(0);
       setDetailReview([]);
     }
-    function submitComment() {
+
+    const submitGrade=() =>{
       let flag = true;
-      if(contentComment == ''){
-          window.alert('Bạn chưa nhập bình luận');
+      const gradeInp = gradeReview;
+      if(gradeInp == ''){
+          window.alert('Điểm không được rỗng');
           flag=false;
       }
-      //Submit comment và thay đổi commentList
-      fetch(DOMAIN_API + `classes/detail/${props.idclass}/assignments/submitcomment`, {
+      let realGrade = parseFloat(gradeInp);
+      if(isNaN(gradeInp)){
+          window.alert("Điểm bạn nhập không phải là số");
+          flag=false;
+      }
+      if(realGrade > 10 || realGrade < 0){
+          window.alert("Điểm bạn nhập phải thuộc khoảng [0,10]");
+          flag=false;
+      }
+      if(flag == true){
+          //Lay review's detail
+          console.log("Grade trong submit test nè: ", detailReview.id_assignment, realGrade, detailReview.student_id);
+      fetch(DOMAIN_API + `classes/detail/${props.idclass}/assignments/teachersubmitgrade`, {
           method: "POST",
           headers: new Headers({
               "x-access-token": actoken,
               'Content-Type': 'application/json'
           }),
           body: JSON.stringify({
-              contentComment: contentComment,
-              id_review: detailReview.id_review
+              id_class: props.idclass,
+              id_assignment: detailReview.id_assignment,
+              teacher_grade: realGrade,
+              student_id: detailReview.student_id,
+              id_review: detailReview.id_review,
           })
       })
           .then(res => res.json())
           .then(
               (result) => {
-                  console.log("Submit comment: ", result);
-                  setContentComment('')
-                  setGetComment(result);
+                  console.log("Grade after review: ", result);
+                  setGradeReview(result);
+                  detailReview.status = 1;
                   //setIsLoaded(true);
               },
               (error) => {
-                  console.log("Error get review's detail");
+                  console.log("Error get grade after teacher review");
 
               }
           )
-      
+      }
+    }
+    function handleChangeGrade(event) {
+      setGradeReview(event.target.value);
+    }
+    function submitComment() {
+      let flag = true;
+      if(contentComment == ''){
+          window.alert('Bạn chưa nhập bình luận');
+          flag=false;
+      }
+      if(flag == true){
+        //Submit comment và thay đổi commentList
+      fetch(DOMAIN_API + `classes/detail/${props.idclass}/assignments/submitcomment`, {
+        method: "POST",
+        headers: new Headers({
+            "x-access-token": actoken,
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
+            contentComment: contentComment,
+            id_review: detailReview.id_review
+        })
+    })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log("Submit comment: ", result);
+                setContentComment('')
+                setGetComment(result);
+                //setIsLoaded(true);
+            },
+            (error) => {
+                console.log("Error get review's detail");
+
+            }
+        )
+      }
   }
   function handleChangeComment(event) {
     setContentComment(event.target.value);
@@ -217,7 +271,7 @@ export default function News(props) {
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
                       Phúc khảo: {detailReview.name_assignment} <br/>
-                      Điểm hiện tại: {detailReview.current_grade} - Điểm kỳ vọng: {detailReview.expect_grade} <br/>
+                      Điểm lúc đầu: {detailReview.current_grade} - Điểm kỳ vọng: {detailReview.expect_grade} <br/>
                       Giải thích: {detailReview.explain}
                     </Typography>
                   </CardContent>
@@ -281,6 +335,7 @@ export default function News(props) {
                                     </div>
                                     <div width='50%'style={{ marginLeft: "40px" }}>
                                         <TextField
+                                            onChange={handleChangeGrade}
                                             id="expectation_grade"
                                             label="Điểm sau phúc khảo "
                                             sx={{ width: 'auto', marginTop: "10px" }}
@@ -288,12 +343,13 @@ export default function News(props) {
                                             value={gradeReview}
                                             focused
                                             color="success"
-                                            InputProps={{
-                                                readOnly: true,
-                                              }}
+                                            
                                         />
-                                        <br />
-                                        
+                                        <br /><br />
+                                        <Button variant="contained" endIcon={<SendIcon />}
+                                        onClick={()=>submitGrade()}>
+                                            Gửi
+                                        </Button>
 
                                         <div style={{ marginLeft: "40px" }}>
 
@@ -360,6 +416,36 @@ export default function News(props) {
           {!isOpenComment&&
           <div className="col-md-8" >
             <Card style={{ paddingLeft: "10px", marginLeft: "25px", marginRight: "25px", backgroundColor: "	#DDDDDD" }}>
+              <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
+                <CardHeader
+                  avatar={
+                    <Avatar sx={{ bgcolor: red[600] }} aria-label="recipe">
+                      Ava
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton aria-label="settings">
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={username}
+                />
+
+                <CardContent>
+                  <TextField
+                      id="inpcomment"
+                      sx={{ width: '600px', marginTop: "10px" }}
+                      variant="standard"
+                      value=''
+                      focused
+                      color="info"
+                  />
+                </CardContent>
+                <CardActions disableSpacing>
+                <Button variant="text">Đăng bài viết</Button>
+                </CardActions>
+
+              </Card>
               { data.news.map((data) =>
                 <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
                   <CardHeader
@@ -380,7 +466,7 @@ export default function News(props) {
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
                       Phúc khảo: {data.name_assignment} <br/>
-                      Điểm hiện tại: {data.current_grade} - Điểm kỳ vọng: {data.expect_grade} <br/>
+                      Điểm lúc đầu: {data.current_grade} - Điểm kỳ vọng: {data.expect_grade} <br/>
                       Giải thích: {data.explain}
                     </Typography>
                   </CardContent>
@@ -425,7 +511,37 @@ export default function News(props) {
   
           <div className="col-md-8" >
             <Card style={{ paddingLeft: "10px", marginLeft: "25px", marginRight: "25px", backgroundColor: "	#DDDDDD" }}>
-              { data.news.map((data) =>
+              <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
+                  <CardHeader
+                    avatar={
+                      <Avatar sx={{ bgcolor: red[600] }} aria-label="recipe">
+                        Ava
+                      </Avatar>
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={username}
+                  />
+
+                  <CardContent>
+                    <TextField
+                        id="inpcomment"
+                        sx={{ width: '600px', marginTop: "10px" }}
+                        variant="standard"
+                        value=''
+                        focused
+                        color="info"
+                    />
+                  </CardContent>
+                  <CardActions disableSpacing>
+                  <Button variant="text">Đăng bài viết</Button>
+                  </CardActions>
+
+                </Card>
+
                 <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
                   <CardHeader
                     avatar={
@@ -458,7 +574,40 @@ export default function News(props) {
                     
                   </CardActions>
   
-                </Card>)}
+                </Card>
+                <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
+                  <CardHeader
+                    avatar={
+                      <Avatar sx={{ bgcolor: red[600] }} aria-label="recipe">
+                        HK
+                      </Avatar>
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title= 'Nguyễn Huy Khánh'
+                    subheader='14 - 1 - 2022 18:15'
+                  />
+  
+                  <CardContent>
+                    <Typography variant="body2" color="text.secondary">
+                      Lớp được nghỉ tết từ ngày 21/1/2022
+                    </Typography>
+                  </CardContent>
+                  <CardActions disableSpacing>
+                  <IconButton>
+                      <FavoriteIcon/>
+                    </IconButton>
+
+                    <IconButton>
+                      <ShareIcon/>
+                    </IconButton>
+                    
+                  </CardActions>
+  
+                </Card>
             </Card>
           </div>
         </div>

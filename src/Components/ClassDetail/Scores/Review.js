@@ -191,7 +191,8 @@ export default function ReviewScore({after_sent, rowAssign, idclass}) {
             window.alert('Bạn chưa nhập bình luận');
             flag=false;
         }
-        //Submit comment và thay đổi commentList
+        if(flag == true){
+            //Submit comment và thay đổi commentList
         fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/submitcomment`, {
             method: "POST",
             headers: new Headers({
@@ -218,7 +219,7 @@ export default function ReviewScore({after_sent, rowAssign, idclass}) {
 
                 }
             )
-        
+        }
     }
     if(detailReview.length == 0){
         return(
