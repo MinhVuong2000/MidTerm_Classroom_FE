@@ -41,10 +41,10 @@ export default function DetailAdmin(props) {
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
-                                name="firstName"
-                                label="First Name"
+                                name="username"
+                                label="Username"
                                 type="text"
-                                defaultValue={data.firstName}
+                                defaultValue={data.username}
                                 InputProps={{
                                     readOnly: true,
                                   }}
@@ -57,10 +57,10 @@ export default function DetailAdmin(props) {
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
-                                name="lastName"
-                                label="Last Name"
+                                name="fullName"
+                                label="Fullname"
                                 type="text"
-                                defaultValue={data.lastName}
+                                defaultValue={data.full_name}
                                 InputProps={{
                                     readOnly: true,
                                   }}
@@ -83,13 +83,25 @@ export default function DetailAdmin(props) {
                             />
                         </Grid>
                         <br />
+                        <Grid item xs={12}>
 
+                            <TextField
+                                variant="standard"
+                                sx={{ width: 550 }}
+                                id="outlined-helperText"
+                                name="createTime"
+                                label="Create time"
+                                type="text"
+                                defaultValue={data.create_time}
+                                InputProps={{
+                                    readOnly: true,
+                                  }}
+                            />
+                        </Grid>
 
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => isClose(false)} variant="contained" color="secondary">Close</Button>
-                       
-
                     </DialogActions>
                 </form>
             </Dialog>

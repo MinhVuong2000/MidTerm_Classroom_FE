@@ -11,12 +11,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import { FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 import TextField from '@mui/material/TextField';
-
-
+import { DOMAIN_API } from '../../../config/const';
+import { useState, useEffect } from "react";
 export default function AddNewAdmin(props) {
     const { isOpen, isClose } = props;
     const [open, setOpen] = React.useState(isOpen);
-
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [fullname, setFullname] = useState('');
+    const [email, setEmail] = useState('');
+    let actoken = localStorage.getItem('access_token');
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -24,7 +28,68 @@ export default function AddNewAdmin(props) {
         setOpen(false);
         isClose(false);
     };
-
+    function handleChangeUsername(event) {
+        setUsername(event.target.value)
+    }
+    function handleChangePassword(event) {
+        setPassword(event.target.value)
+    }
+    function handleChangeFullname(event) {
+        setFullname(event.target.value)
+    }
+    function handleChangeEmail(event) {
+        setEmail(event.target.value)
+    }
+    
+    function handleSubmit(event) {
+        event.preventDefault();
+        fetch(DOMAIN_API+`is-available-admin`,{
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email })
+        })
+        .then(res => res.json())
+        .then(
+            (result)=>{
+                console.log(result);
+                if(result == true){
+                    if (username !== '' && password !== '' && email!=='' && fullname!=='') {
+                        const url = DOMAIN_API + "registeradmin";
+                        const requestOptions = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ username, password, fullname, email })
+                        };
+                        fetch(url, requestOptions)
+                        .then(res => res.json())
+                        .then((result) => {
+                            console.log(result);
+                            if(result == true){
+                                setOpen(false);
+                                isClose(false);
+                            }
+                        })
+                        .catch(error => console.log('Form submit error', error))
+                    }
+                    else{
+                        if(username == '') window.alert("Username không được trống!");
+                        else{
+                            if(password == '') window.alert("Password không được trống!");
+                            else{
+                                if(email == '') window.alert("Email không được trống!");
+                                else{
+                                    if(fullname == '') window.alert("Họ tên không được trống!");
+                                }
+                            }
+                        }
+                    }
+                }
+                else{
+                   window.alert(result.message);
+                }
+            }
+        )
+    };
     return (
         <div>
             <Dialog fullWidth open={isOpen} onClose={handleClose}>
@@ -37,6 +102,7 @@ export default function AddNewAdmin(props) {
                         <Grid item xs={12}>
 
                             <TextField
+                                value={username} onChange={handleChangeUsername}
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
@@ -49,6 +115,7 @@ export default function AddNewAdmin(props) {
                         <Grid item xs={12}>
 
                             <TextField
+                                value={password} onChange={handleChangePassword}
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
@@ -61,11 +128,12 @@ export default function AddNewAdmin(props) {
                         <Grid item xs={12}>
 
                             <TextField
+                                value={fullname} onChange={handleChangeFullname}
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
                                 name="name"
-                                label="Name"
+                                label="Fullname"
                                 type="text"
                             />
                         </Grid>
@@ -73,6 +141,7 @@ export default function AddNewAdmin(props) {
                         <Grid item xs={12}>
 
                             <TextField
+                                value={email} onChange={handleChangeEmail}
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
@@ -86,7 +155,7 @@ export default function AddNewAdmin(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => isClose(false)} variant="contained" color="secondary">Cancel</Button>
-                        <Button onClick={() => isClose(false)} variant="contained" color="success">Add</Button>
+                        <Button onClick={handleSubmit} variant="contained" color="success">Add</Button>
 
                     </DialogActions>
                 </form>

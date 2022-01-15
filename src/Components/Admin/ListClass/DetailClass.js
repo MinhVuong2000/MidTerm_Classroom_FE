@@ -41,10 +41,10 @@ export default function DetailClass(props) {
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
-                                name="firstName"
-                                label="First Name"
+                                name="classname"
+                                label="Classname"
                                 type="text"
-                                defaultValue={data.firstName}
+                                defaultValue={data.class_name}
                                 InputProps={{
                                     readOnly: true,
                                   }}
@@ -57,10 +57,10 @@ export default function DetailClass(props) {
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
-                                name="lastName"
-                                label="Last Name"
+                                name="description"
+                                label="Description"
                                 type="text"
-                                defaultValue={data.lastName}
+                                defaultValue={data.description}
                                 InputProps={{
                                     readOnly: true,
                                   }}
@@ -73,10 +73,26 @@ export default function DetailClass(props) {
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
-                                name="email"
-                                label="Email"
+                                name="code"
+                                label="Code"
                                 type="text"
-                                defaultValue={data.email}
+                                defaultValue={data.code}
+                                InputProps={{
+                                    readOnly: true,
+                                  }}
+                            />
+                        </Grid>
+                        <br/>
+                        <Grid item xs={12}>
+
+                            <TextField
+                                variant="standard"
+                                sx={{ width: 550 }}
+                                id="outlined-helperText"
+                                name="createTime"
+                                label="Create time"
+                                type="text"
+                                defaultValue={data.create_time}
                                 InputProps={{
                                     readOnly: true,
                                   }}

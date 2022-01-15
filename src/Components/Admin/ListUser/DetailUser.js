@@ -29,7 +29,7 @@ export default function DetailUser(props) {
     return (
         <div>
             <Dialog fullWidth open={isOpen} onClose={handleClose}>
-                <DialogTitle style={{ fontSize: "20px" }}>Detail User</DialogTitle>
+                <DialogTitle style={{ fontSize: "20px" }}>Detail User </DialogTitle>
                 <form >
                     <DialogContent>
 
@@ -41,10 +41,10 @@ export default function DetailUser(props) {
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
-                                name="firstName"
-                                label="First Name"
+                                name="full_name"
+                                label="Full Name"
                                 type="text"
-                                defaultValue={data.firstName}
+                                defaultValue={data.full_name}
                                 InputProps={{
                                     readOnly: true,
                                   }}
@@ -57,10 +57,10 @@ export default function DetailUser(props) {
                                 variant="standard"
                                 sx={{ width: 550 }}
                                 id="outlined-helperText"
-                                name="lastName"
-                                label="Last Name"
+                                name="studentID"
+                                label="Student ID"
                                 type="text"
-                                defaultValue={data.lastName}
+                                defaultValue={data.id_uni}
                                 InputProps={{
                                     readOnly: true,
                                   }}
@@ -82,8 +82,54 @@ export default function DetailUser(props) {
                                   }}
                             />
                         </Grid>
-                        <br />
+                        <br /><Grid item xs={12}>
 
+                        <TextField
+                            variant="standard"
+                            sx={{ width: 550 }}
+                            id="outlined-helperText"
+                            name="createTime"
+                            label="Create time"
+                            type="text"
+                            defaultValue={data.create_time}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                        </Grid>
+                        <br />
+                        <Grid item xs={12}>
+
+                            <TextField
+                                variant="standard"
+                                sx={{ width: 550 }}
+                                id="outlined-helperText"
+                                name="address"
+                                label="Address"
+                                type="text"
+                                defaultValue={data.address}
+                                InputProps={{
+                                    readOnly: true,
+                                  }}
+                            />
+                        </Grid>
+                        <br />
+                        <Grid item xs={12}>
+
+                            <TextField
+                                variant="standard"
+                                sx={{ width: 550 }}
+                                id="outlined-helperText"
+                                name="phone"
+                                label="Phone"
+                                type="text"
+                                defaultValue={data.phone}
+                                InputProps={{
+                                    readOnly: true,
+                                  }}
+                            />
+                        </Grid>
+                        <br />
 
                     </DialogContent>
                     <DialogActions>

@@ -12,6 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import InfoIcon from '@mui/icons-material/Info';
 import AddIcon from '@mui/icons-material/Add';
 
+import { useState, useEffect } from "react";
+import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 
 
 // project imports
@@ -32,40 +34,34 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from "react-router-dom";
 
 
-
-
-const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon' , email: "example@gmail.com" },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei' ,email: "example@gmail.com"},
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime',email: "example@gmail.com" },
-    { id: 4, lastName: 'Stark', firstName: 'Arya',email: "example@gmail.com" },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys',email: "example@gmail.com" },
-    { id: 6, lastName: 'Lannister', firstName: 'Jaime' ,email: "example@gmail.com"},
-    { id: 7, lastName: 'Stark', firstName: 'Arya',email: "example@gmail.com" },
-    { id: 8, lastName: 'Targaryen', firstName: 'Daenerys',email: "example@gmail.com" },
-];
-
 export default function ListAdmin() {
     const [openAddNewAdmin, setOpenAddNewAdmin] = React.useState(false);
     const [openDetailAdmin, setOpenDetailAdmin] = React.useState(false);
     const [dataDetail, setDataDetail] = React.useState([]);
-
-
+    const [listAdminInfo, setListAdminInfo] = React.useState([]);
+    let actoken = localStorage.getItem('access_token');
+    
+    const [isSuperAdmin, setIsSuperAdmin] = React.useState(null)
     const columns = [
         {
-            field: 'firstName',
-            headerName: 'First name',
+            field: 'username',
+            headerName: 'Username',
             flex: 2,
         },
 
         {
-            field: 'lastName',
-            headerName: 'Last name',
+            field: 'full_name',
+            headerName: 'Full name',
             flex: 2,
         },
         {
             field: 'email',
             headerName: 'Email',
+            flex: 2,
+        },
+        {
+            field: 'create_time',
+            headerName: 'Create time',
             flex: 2,
         },
 
@@ -92,19 +88,45 @@ export default function ListAdmin() {
                 </>
         },
     ];
-
+    useEffect(() => {
+        fetch(DOMAIN_API + `admins/manage-admins`, {
+            method: "POST",
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+        })
+            .then(res => res.json())
+            .then(
+                (result2) => {
+                    console.log("List admin information", result2);
+                    if(result2){
+                        setListAdminInfo(result2.list_admin);
+                        setIsSuperAdmin(result2.is_super);
+                    }
+                    
+                    //setIsLoaded(true);
+                },
+                (error) => {
+                    console.log("Error List admin information");
+    
+                }
+            )
+    }, []);
+    
     return (
         <div style={{ paddingTop: "20px" }}>
 
             <div className='container' style={{ height: 500, width: '100%' }}>
+                {isSuperAdmin &&
                 <div style={{ paddingBottom: "10px" }}>
                     <Button variant="contained" startIcon={<AddIcon />}
                         onClick={() => {
                             setOpenAddNewAdmin(true)
                         }} >Tạo tài khoản</Button>
-                </div>
+                </div>}
 
-                <DataGrid rows={rows} columns={columns} />
+                <DataGrid rows={listAdminInfo} columns={columns} />
 
 
             </div>
