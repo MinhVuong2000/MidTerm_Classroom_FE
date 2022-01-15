@@ -11,9 +11,12 @@ import News from './News/News';
 import Member from './Member/Member';
 import Scores from './Scores/Scores';
 import Assignments from './Assignments/Assignments';
-import { DOMAIN_API } from '../../config/const';
+import { DOMAIN_API, DOMAIN_SOCKET } from '../../config/const';
 import { SentimentNeutralOutlined } from '@mui/icons-material';
-export default function ClassDetail() {
+import { io } from "socket.io-client";
+
+
+export default function ClassDetail({socket}) {
     const [value, setValue] = React.useState(0);
     const [error, setError] = useState(null);
     const [enroll, setEnroll] = useState(true);
@@ -38,6 +41,18 @@ export default function ClassDetail() {
 
     const { idclass } = useParams();
     let actoken = localStorage.getItem('access_token');
+
+    // useEffect(() => {
+    //   const socket = io(DOMAIN_SOCKET[4]=='s' ? DOMAIN_API : DOMAIN_SOCKET,
+    //     {
+    //       withCredentials: true,
+    //       extraHeaders: {
+    //         "x-access-token": localStorage.getItem('access_token'),
+    //       }
+    //     }
+    //   )
+    //   setSocket(socket);
+    // }, []);
 
     const url = DOMAIN_API + `classes/detail/${idclass}`;
     let linkin = '';
@@ -227,7 +242,7 @@ export default function ClassDetail() {
                     <div>
                         {isShowNews && < News data={mockDataNew} isTeacher = {isTeacher} idclass={idclass}/>}
                         {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
-                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} students = {students}/>}
+                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} students = {students} socket={socket}/>}
                         {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
                             data_structure={(result) => setName_work(result)} grade_structure = {(result3) => setGradeBoard(result3)}/>}
                         {/* data_structure={(value) => setName_work(value)} */}

@@ -29,6 +29,8 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
+import { DOMAIN_API } from '../../config/const';
+import { useNavigate } from 'react-router-dom';
 
 function HandleLogout() {
   localStorage.removeItem("access_token");
@@ -75,15 +77,48 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({ socket, isLogined }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
+  const [listNotifications, setListNotifications] = React.useState([]);
+  const [unreadNotiCount, setUnreadNotiCount] = React.useState(0);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const open = Boolean(anchorEl);
   const openNoti = Boolean(notification);
+
+  React.useEffect(() => {
+    console.log('Get noti from db');
+    fetch(DOMAIN_API + `users/notifications`, {
+      method: "GET",
+      headers: new Headers({
+          "x-access-token": localStorage.getItem('access_token'),
+      }),
+    })
+      .then(res => res.json())
+      .then(
+          (result) => {
+              if (!(result==='400' || result === '401' || result==='403')){
+                console.log("Get noti: ", result);
+                setListNotifications(result);
+                setUnreadNotiCount(result.filter((noti) => noti.status === 0).length)
+              }
+          },
+          (error) => {
+              console.log("Error get notifications", error);
+          }
+    )
+  }, [socket])
+  
+  React.useEffect(() => {
+    console.log('socket in header', socket);
+    socket?.on("getStudentReview", (data) => {
+      setListNotifications((prev) => [...prev, data]);
+      setUnreadNotiCount((prev) => prev+1);
+    });
+  }, [socket]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -201,7 +236,7 @@ export default function PrimarySearchAppBar() {
         Thông báo
       </div>
       </MenuItem>
-      <MenuItem >      
+      {/* <MenuItem >      
         <div >
             <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}>
               Lớp học: Web nâng cao
@@ -211,9 +246,9 @@ export default function PrimarySearchAppBar() {
               <br />
             </Typography>
         </div>
-      </MenuItem>
+      </MenuItem> */}
 
-      <MenuItem >
+      {/* <MenuItem >
         <div >
             <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
               Lớp học: Phát triển ứng dụng di động AA A AAA AAAAAA
@@ -223,8 +258,32 @@ export default function PrimarySearchAppBar() {
               <br />
             </Typography>
         </div>
-      </MenuItem>
-      
+      </MenuItem> */}
+      {listNotifications.length===0 ? 
+        <MenuItem >
+            <div >
+                <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
+                  Không có thông báo
+                </Typography>
+            </div>
+        </MenuItem>
+        :
+        <div>
+          {listNotifications.map( noti =>
+            <MenuItem >
+              <div >
+                  <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
+                    {`${noti.class_name}`}
+                  </Typography>
+                  <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
+                    {`${noti.message}`}
+                    <br />
+                  </Typography>
+              </div>
+            </MenuItem>
+          )}
+        </div>
+      }
     </Menu>
   );
 
@@ -262,19 +321,13 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
-
-            {/* <IconButton size="large" aria-label="show 2 new mails" color="inherit">
-              <Badge badgeContent={2} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton> */}
             <IconButton
               size="large"
-              aria-label="show 10 new notifications"
+              aria-label={`show ${unreadNotiCount} new notifications`}
               color="inherit"
               onClick={handleClickNoti}
             >
-              <Badge badgeContent={10} color="error">
+              <Badge badgeContent={unreadNotiCount} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

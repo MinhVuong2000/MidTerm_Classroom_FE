@@ -1,7 +1,7 @@
-import  { Navigate, useHistory } from 'react-router-dom';
+import  { Navigate } from 'react-router-dom';
 
-export default function LogOut(){
-
+export default function LogOut({socket}){
+    socket?.disconnect();
     localStorage.removeItem("access_token");
     localStorage.removeItem("check_admin");
     console.log(" Check logout: ", localStorage.ckeck_admin);
