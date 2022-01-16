@@ -20,7 +20,6 @@ import {
 
 export default function RouterURL({socket, setIsLogined}) {
   return (
-    <BrowserRouter>
       <Routes>
         <Route exact path='/' element={<Classes />} />
         <Route path='/notfound' element={<NotFound />} />
@@ -35,6 +34,5 @@ export default function RouterURL({socket, setIsLogined}) {
         <Route path='/classes/inviteclass/:nameclass' element={<ClassInvite/>} />
         <Route path='/admin' element={<Admin/>} />
       </Routes>
-    </BrowserRouter>
   )
 }

@@ -24,18 +24,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
+import LogOutComponent from '../LogOut/LogOut';
 import { DOMAIN_API } from '../../config/const';
 
-function HandleLogout() {
-  localStorage.removeItem("access_token");
-  localStorage.removeItem("check_admin");
-  window.location.reload();
-}
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -76,7 +67,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar({ socket, isLogined }) {
+export default function PrimarySearchAppBar({ socket, isLogined, navigate }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
@@ -87,6 +78,14 @@ export default function PrimarySearchAppBar({ socket, isLogined }) {
 
   const open = Boolean(anchorEl);
   const openNoti = Boolean(notification);
+
+  function HandleLogout() {
+    // localStorage.removeItem("access_token");
+    // localStorage.removeItem("check_admin");
+    // window.location.reload();
+    navigate('/logout');
+    // return <LogOutComponent socket={socket} />
+  }
 
   React.useEffect(() => {
     console.log('Get noti from db');
@@ -238,7 +237,7 @@ export default function PrimarySearchAppBar({ socket, isLogined }) {
         </ListItemIcon>
         Settings
       </MenuItem>
-      <MenuItem onClick={e => HandleLogout()}>
+      <MenuItem onClick={e => HandleLogout(socket)}>
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>
