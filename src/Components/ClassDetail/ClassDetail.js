@@ -1,19 +1,16 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import { Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-//import { New } from './News/New';
 
 import News from './News/News';
 import Member from './Member/Member';
 import Scores from './Scores/Scores';
 import Assignments from './Assignments/Assignments';
-import { DOMAIN_API, DOMAIN_SOCKET } from '../../config/const';
-import { SentimentNeutralOutlined } from '@mui/icons-material';
-import { io } from "socket.io-client";
+import { DOMAIN_API } from '../../config/const';
 
 
 export default function ClassDetail({socket}) {
@@ -41,18 +38,6 @@ export default function ClassDetail({socket}) {
 
     const { idclass } = useParams();
     let actoken = localStorage.getItem('access_token');
-
-    // useEffect(() => {
-    //   const socket = io(DOMAIN_SOCKET[4]=='s' ? DOMAIN_API : DOMAIN_SOCKET,
-    //     {
-    //       withCredentials: true,
-    //       extraHeaders: {
-    //         "x-access-token": localStorage.getItem('access_token'),
-    //       }
-    //     }
-    //   )
-    //   setSocket(socket);
-    // }, []);
 
     const url = DOMAIN_API + `classes/detail/${idclass}`;
     let linkin = '';
@@ -246,10 +231,10 @@ export default function ClassDetail({socket}) {
                         {isTeacher && <Tab label="Bài tập" />}
                     </Tabs>
                     <div>
-                        {isShowNews && < News data={mockDataNew} isTeacher = {isTeacher} idclass={idclass}/>}
-                        {isShowMember && < Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
-                        {isShowScores && < Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} students = {students} socket={socket}/>}
-                        {isShowAssignments && isTeacher && < Assignments idclass={idclass} assignments={assignmentList}
+                        {isShowNews && <News socket={socket} data={mockDataNew} isTeacher = {isTeacher} idclass={idclass}/>}
+                        {isShowMember && <Member idclass={idclass} isTeacher={isTeacher} class_name={class_name} />}
+                        {isShowScores && <Scores idclass={idclass} isTeacher={isTeacher} class_name={class_name} grade_board ={gradeBoard} students = {students} socket={socket}/>}
+                        {isShowAssignments && isTeacher && <Assignments idclass={idclass} assignments={assignmentList}
                             data_structure={(result) => setName_work(result)} grade_structure = {(result3) => setGradeBoard(result3)}/>}
                         {/* data_structure={(value) => setName_work(value)} */}
                     </div>

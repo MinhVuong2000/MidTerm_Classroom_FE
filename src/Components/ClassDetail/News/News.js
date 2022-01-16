@@ -167,22 +167,29 @@ export default function News(props) {
           flag=false;
       }
       if(flag == true){
-          //Lay review's detail
-          console.log("Grade trong submit test nè: ", detailReview.id_assignment, realGrade, detailReview.student_id);
-      fetch(DOMAIN_API + `classes/detail/${props.idclass}/assignments/teachersubmitgrade`, {
-          method: "POST",
-          headers: new Headers({
-              "x-access-token": actoken,
-              'Content-Type': 'application/json'
-          }),
-          body: JSON.stringify({
-              id_class: props.idclass,
-              id_assignment: detailReview.id_assignment,
-              teacher_grade: realGrade,
-              student_id: detailReview.student_id,
-              id_review: detailReview.id_review,
-          })
-      })
+        //send notification
+        props.socket.emit('sendFinalGradefromTeacher', {
+          access_token: actoken,
+          id_class: props.idclass,
+          id_assignment: detailReview.id_assignment,
+          id_student: detailReview.student_id,
+        })
+         //Lay review's detail
+        console.log("Grade trong submit test nè: ", detailReview.id_assignment, realGrade, detailReview.student_id);
+        fetch(DOMAIN_API + `classes/detail/${props.idclass}/assignments/teachersubmitgrade`, {
+            method: "POST",
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                id_class: props.idclass,
+                id_assignment: detailReview.id_assignment,
+                teacher_grade: realGrade,
+                student_id: detailReview.student_id,
+                id_review: detailReview.id_review,
+            })
+        })
           .then(res => res.json())
           .then(
               (result) => {
@@ -357,10 +364,11 @@ export default function News(props) {
                                             
                                         />
                                         <br /><br />
-                                        <Button variant="contained" endIcon={<SendIcon />}
+                                        {detailReview.status!==1 && <Button variant="contained" endIcon={<SendIcon />}
                                         onClick={()=>submitGrade()}>
                                             Gửi
                                         </Button>
+                                        }
 
                                         <div style={{ marginLeft: "40px" }}>
 
@@ -394,30 +402,32 @@ export default function News(props) {
                         )}
                         </tr>
                         
-                        <tr>
-                            <th>
-                            <div>
-                                <div width='75%' style={{ marginLeft: "40px" }}>
-                                    <TextField
-                                        id="inpcomment"
-                                        label={username}
-                                        sx={{ width: '600px', marginTop: "10px" }}
-                                        variant="standard"
-                                        value={contentComment}
-                                        focused
-                                        color="info"
-                                        onChange={handleChangeComment}
-                                    />
-                                </div>
-                            </div>
-                            </th>
-                            <th>
-                            <Button variant="contained" endIcon={<SendIcon />}
-                                onClick={()=>submitComment(detailReview.id_review)}>
-                                    Gửi
-                                </Button>
-                            </th>
-                        </tr>
+                        {detailReview.status!==1 && 
+                          <tr>
+                              <th>
+                              <div>
+                                  <div width='75%' style={{ marginLeft: "40px" }}>
+                                      <TextField
+                                          id="inpcomment"
+                                          label={username}
+                                          sx={{ width: '600px', marginTop: "10px" }}
+                                          variant="standard"
+                                          value={contentComment}
+                                          focused
+                                          color="info"
+                                          onChange={handleChangeComment}
+                                      />
+                                  </div>
+                              </div>
+                              </th>
+                              <th>
+                              <Button variant="contained" endIcon={<SendIcon />}
+                                  onClick={()=>submitComment(detailReview.id_review)}>
+                                      Gửi
+                                  </Button>
+                              </th>
+                          </tr>
+                        }
                     </div>
                 </div>
             </table>
