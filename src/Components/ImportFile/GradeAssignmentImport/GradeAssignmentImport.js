@@ -4,7 +4,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 import { DOMAIN_API } from '../../../config/const';
 
 
-export default function GradeAssignmentImport({setUploadFile, setGradeBoard, students_ids, id_class, id_assignment, name}){
+export default function GradeAssignmentImport({setUploadFile, setGradeBoard, students_ids, id_class, id_assignment, name}){ 
     const handleUpload = (e) => {
         e.preventDefault();
         const f = e.target.files[0];

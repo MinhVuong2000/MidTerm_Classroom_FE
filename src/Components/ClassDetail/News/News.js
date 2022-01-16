@@ -215,6 +215,12 @@ export default function News(props) {
           flag=false;
       }
       if(flag == true){
+        //send notification
+        props.socket.emit('sendComment', {
+          access_token: actoken, 
+          id_review: detailReview.id_review
+        })
+
         //Submit comment và thay đổi commentList
       fetch(DOMAIN_API + `classes/detail/${props.idclass}/assignments/submitcomment`, {
         method: "POST",
