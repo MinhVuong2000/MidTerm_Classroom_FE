@@ -544,6 +544,11 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                 )
         }
         else {
+            socket.emit('sendPublicMark', {
+                access_token: actoken,
+                id_class: idclass,
+                id_assignment: idAssign
+            });
             fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/updateshowstate`, {
                 method: "POST",
                 headers: new Headers({

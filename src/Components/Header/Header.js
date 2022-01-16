@@ -113,10 +113,11 @@ export default function PrimarySearchAppBar({ socket, isLogined }) {
   
   React.useEffect(() => {
     console.log('socket in header', socket);
-    socket?.on("getStudentReview", (data) => {
+    socket?.on("getNotifications", (data) => {
       setListNotifications((prev) => [...prev, data]);
       setUnreadNotiCount((prev) => prev+1);
     });
+
   }, [socket]);
 
   const handleClick = (event) => {

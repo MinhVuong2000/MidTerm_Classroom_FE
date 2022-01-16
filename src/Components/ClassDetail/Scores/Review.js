@@ -148,20 +148,20 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
         }
         if(flag == true){
             //Lay review's detail
-        fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/addreview`, {
-            method: "POST",
-            headers: new Headers({
-                "x-access-token": actoken,
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({
-                id_class: idclass,
-                id_assignment: rowAssign.idAssignment,
-                current: rowAssign.gradeAssignment,
-                expect: realGrade,
-                explain: explain
+            fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/addreview`, {
+                method: "POST",
+                headers: new Headers({
+                    "x-access-token": actoken,
+                    'Content-Type': 'application/json'
+                }),
+                body: JSON.stringify({
+                    id_class: idclass,
+                    id_assignment: rowAssign.idAssignment,
+                    current: rowAssign.gradeAssignment,
+                    expect: realGrade,
+                    explain: explain
+                })
             })
-        })
             .then(res => res.json())
             .then(
                 (result) => {
@@ -199,22 +199,26 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
         }
         if(flag == true){
             //Submit comment và thay đổi commentList
-        fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/submitcomment`, {
-            method: "POST",
-            headers: new Headers({
-                "x-access-token": actoken,
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({
-                id_class: idclass,
-                id_assignment: rowAssign.idAssignment,
-                contentComment: contentComment,
-                id_review: detailReview.id
+            fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/submitcomment`, {
+                method: "POST",
+                headers: new Headers({
+                    "x-access-token": actoken,
+                    'Content-Type': 'application/json'
+                }),
+                body: JSON.stringify({
+                    id_class: idclass,
+                    id_assignment: rowAssign.idAssignment,
+                    contentComment: contentComment,
+                    id_review: detailReview.id
+                })
             })
-        })
             .then(res => res.json())
             .then(
                 (result) => {
+                    socket.emit('sendComment', {
+                        access_token: actoken,
+                        id_review: detailReview.id,
+                    })
                     console.log("Submit comment: ", result);
                     setContentComment('')
                     setListComment(result);
@@ -295,7 +299,7 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
                                         focused
                                         InputProps={{
                                             readOnly: true,
-                                          }}
+                                        }}
                                     />
                                     <br />
                                     <TextField
@@ -308,7 +312,7 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
                                         focused
                                         InputProps={{
                                             readOnly: true,
-                                          }} />
+                                        }} />
                                     <br/>
                                     <br/>
 

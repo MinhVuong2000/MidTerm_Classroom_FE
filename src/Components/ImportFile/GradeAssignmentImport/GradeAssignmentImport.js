@@ -1,13 +1,10 @@
-import { useState} from 'react';
-import {Navigate} from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import Button from '@mui/material/Button';
 import UploadIcon from '@mui/icons-material/Upload';
-import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
+import { DOMAIN_API } from '../../../config/const';
 
 
 export default function GradeAssignmentImport({setUploadFile, setGradeBoard, students_ids, id_class, id_assignment, name}){
-   
     const handleUpload = (e) => {
         e.preventDefault();
         const f = e.target.files[0];
@@ -59,19 +56,19 @@ export default function GradeAssignmentImport({setUploadFile, setGradeBoard, stu
                     body: JSON.stringify({
                         id_class: id_class,
                     })
-                  })
-                      .then(res => res.json())
-                      .then(
-                          (result3) => {
-                              console.log("Thay doi vi tri assignment:", result3);
-                              setGradeBoard(result3);
-                              setUploadFile(null)
+                })
+                    .then(res => res.json())
+                    .then(
+                        (result3) => {
+                            console.log("Thay doi vi tri assignment:", result3);
+                            setGradeBoard(result3);
+                            setUploadFile(null)
                               //setIsLoaded(true);
-                          },
-                          (error) => {
-                              console.log("Error getGradeBoard in import grade assignment");
-                          }
-                      )
+                        },
+                        (error) => {
+                            console.log("Error getGradeBoard in import grade assignment");
+                        }
+                    )
             })
             .catch(error => console.log('Form submit error', error))
             //setStudents(add_user_grade);
