@@ -658,6 +658,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                         <Menu
                                             id="menu-upload-file"
                                             uploadFile={uploadFile}
+                                            onClose={handleCloseUploadFile}
                                             open={openUploadFile}
                                             anchorEl={inputButtonUploadFile.current}
                                             PaperProps={{
