@@ -1,14 +1,13 @@
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css"
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import Input from "@mui/material/Input";
-import GoogleIcon from '@mui/icons-material/Google';
 import IconButton from '@mui/material/IconButton';
-import { Navigate, useNavigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { DOMAIN_API, DOMAIN_SOCKET } from '../../config/const';
+import { Navigate, Link } from 'react-router-dom';
+import { DOMAIN_API } from '../../config/const';
 import LoginByGoogle from './GoogleLogin/GoogleLogin';
 
 

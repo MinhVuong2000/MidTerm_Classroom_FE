@@ -11,7 +11,6 @@ export default function ForgetPasswordSendOTP() {
     let navigate = useNavigate();
     const { state } = useLocation();
     
-    console.log("state ForgetPasswordSendOTP:", state);
     if (state==null)
     {
         return (
@@ -19,7 +18,6 @@ export default function ForgetPasswordSendOTP() {
         )
     }
     const email = state.email;
-    console.log("email ForgetPasswordSendOTP:", email);
 
     function handleChangeOTP(event){
         setOTP(event.target.value);

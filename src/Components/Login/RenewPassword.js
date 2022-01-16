@@ -18,7 +18,6 @@ export default function RenewPassword(props) {
     let navigate = useNavigate();
     const { state } = useLocation();
     
-    console.log("state RenewPassword:", state);
     if (state==null)
     {
         return (
@@ -26,7 +25,6 @@ export default function RenewPassword(props) {
         )
     }
     const email = state.email;
-    console.log("email RenewPassword:", email);
 
     function handleChangePassword(event){
         setPassword(event.target.value);
@@ -67,7 +65,6 @@ export default function RenewPassword(props) {
         fetch(url, requestOptions)
             .then(res => res.json())
             .then((result) => {
-                console.log(result);
                 navigate('/login');
             })
             .catch(error => console.log('Lỗi submit', error))

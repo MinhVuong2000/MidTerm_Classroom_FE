@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from "react";
-import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
@@ -26,11 +24,6 @@ import { deepOrange, deepPurple } from '@mui/material/colors';
 import { Navigate } from 'react-router-dom';
 
 
-
-const message = `Truncation should be conditionally applicable on this long line of text
- as this is a much longer line than what the container can support. `;
-
-
 export default function News(props) {
   const [isOpenComment, setIsOpenComment] = React.useState(false);
   const [idRevewOpen, setIdRevewOpen] = React.useState(0);
@@ -39,7 +32,7 @@ export default function News(props) {
   const [contentComment, setContentComment] = React.useState('');
   const [gradeReview, setGradeReview] = React.useState();
   const [username, setUsername] = React.useState('');
-  const [teacherGrade, setTeacherGrade] = React.useState();
+
   console.log("props ne:   ", props.data);
   let actoken = localStorage.getItem('access_token');
   const data = props.data;
@@ -82,10 +75,10 @@ export default function News(props) {
   }
   if(data.grade_structure !== '403'){
     structure = data.grade_structure.map((data)=>
-    <tr>
-                  <td>{data.name} ({Math.round(100*data.point/sum)}%)</td>
-                  <td style={{textAlign :"center"}}>{data.point}</td>
-                </tr>
+      <tr>
+        <td>{data.name} ({Math.round(100*data.point/sum)}%)</td>
+        <td style={{textAlign :"center"}}>{data.point}</td>
+      </tr>
     )
   }
   

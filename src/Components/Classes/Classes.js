@@ -14,11 +14,8 @@ export default function Classes(){
     const [items, setItems] = useState([]);
     const [hasIdUni, setHasIdUni] = useState(true);
     const [openNotiIdUni, setOpenNotiIdUni] = useState(true);
-
-    console.log("===================================")
     
     let actoken = localStorage.getItem('access_token');
-    console.log(actoken);
     
     useEffect(() => {
         fetch(DOMAIN_API+"classes",{
@@ -30,8 +27,6 @@ export default function Classes(){
         .then(res =>res.json())
         .then(
             (result) => {
-                console.log('items:', items);
-                console.log("result:",result);
                 if (result===null){
                     setHasIdUni(false);
                     setIsLoaded(true);
@@ -74,7 +69,6 @@ export default function Classes(){
             )
         }
         else {
-            console.log("kiem tra item []",items)
             if (!hasIdUni){
                 return (
                     <div>

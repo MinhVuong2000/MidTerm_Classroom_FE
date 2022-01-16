@@ -180,7 +180,7 @@ export default function PrimarySearchAppBar({ socket, isLogined }) {
                 }
                 return new_notis;
               });
-              window.location.href = `/classes/${id_class}`;
+              // window.location.href = `/classes/${id_class}`;
             },
             (error) => {
                 console.log("Error mark one as read", id, ":", error);

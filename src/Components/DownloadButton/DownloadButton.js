@@ -16,7 +16,7 @@ export default function DownloadButton({ purpose }) {
         // </Button>
         <Button  variant='outlined' component="label" onClick={() => { onClick(purpose) }}
         endIcon={<DownloadIcon />}>
-                    Download template
+                    Tải bản mẫu
         </Button>
     )
 }

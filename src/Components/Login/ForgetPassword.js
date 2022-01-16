@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { DOMAIN_API } from '../../config/const';
 
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 
 export default function ForgetPassword() {

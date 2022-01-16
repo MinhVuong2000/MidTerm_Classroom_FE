@@ -4,13 +4,12 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AlertDialog from '../AlertDialog/AlertDialog';
 import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from "react-router-dom";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { DOMAIN_API, DOMAIN_FE, NOT_NULL_CLASS_CODE,NOT_EXIST_CLASS_CODE
+import { DOMAIN_API, NOT_NULL_CLASS_CODE,NOT_EXIST_CLASS_CODE
 } from '../../config/const'
 
 const $ = require("jquery");

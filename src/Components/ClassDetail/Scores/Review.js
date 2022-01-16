@@ -376,30 +376,32 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
                         </tr>)}
                         </tr>
                         
-                        <tr>
-                            <th>
-                            <div>
-                                <div width='75%' style={{ marginLeft: "40px" }}>
-                                    <TextField
-                                        id="inpcomment"
-                                        label={username}
-                                        sx={{ width: '800px', marginTop: "10px" }}
-                                        variant="standard"
-                                        value={contentComment}
-                                        focused
-                                        color="info"
-                                        onChange={handleChangeComment}
-                                    />
+                        {gradeAfterReview==null && 
+                            <tr>
+                                <th>
+                                <div>
+                                    <div width='75%' style={{ marginLeft: "40px" }}>
+                                        <TextField
+                                            id="inpcomment"
+                                            label={username}
+                                            sx={{ width: '800px', marginTop: "10px" }}
+                                            variant="standard"
+                                            value={contentComment}
+                                            focused
+                                            color="info"
+                                            onChange={handleChangeComment}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            </th>
-                            <th>
-                            <Button variant="contained" endIcon={<SendIcon />}
-                                onClick={()=>submitComment()}>
-                                    Gửi
-                                </Button>
-                            </th>
-                        </tr>
+                                </th>
+                                <th>
+                                <Button variant="contained" endIcon={<SendIcon />}
+                                    onClick={()=>submitComment()}>
+                                        Gửi
+                                    </Button>
+                                </th>
+                            </tr>
+                        }
                     </div>
                 </div>
             </table>

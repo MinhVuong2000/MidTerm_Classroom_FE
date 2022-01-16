@@ -67,7 +67,6 @@ export default function Profile() {
     };
 
     function handleChangePassword(){
-        console.log("New password:", changePass);
         if (changePass === '' || confirmPass==='' || curPassword===''){
             setOpenNullPassword(true);
             return;
@@ -194,7 +193,6 @@ export default function Profile() {
                 (result) => {
                     console.log("Result profile: ", result);
                     if (result == '400' || result == '401') {
-                        console.log("result", result);
                         setProfile(result);
                     }
                     else {

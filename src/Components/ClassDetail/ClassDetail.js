@@ -212,7 +212,13 @@ export default function ClassDetail({socket}) {
         )
     }
     if (!enroll) {
-        return <div>You not enroll this class</div>;
+        return (
+            <div>
+                Bạn chưa tham gia lớp nào cả. 
+                <br/>
+                Hãy tạo hoặc tham gia lớp nào đó nhé
+            </div>
+        );
     }
     if (error) {
         return <div>Error: {error.message}</div>;

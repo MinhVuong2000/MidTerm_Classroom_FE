@@ -1,5 +1,4 @@
 import Classes from '../Classes/Classes';
-import Detail from '../Detail/Detail';
 import ClassInvite from '../ClassInvite/ClassInvite';
 import ClassDetail from '../ClassDetail/ClassDetail';
 import NotFound from '../NotFound/NotFound';
@@ -24,7 +23,6 @@ export default function RouterURL({socket, setIsLogined}) {
     <BrowserRouter>
       <Routes>
         <Route exact path='/' element={<Classes />} />
-        <Route path='/detail' element={<Detail />} />
         <Route path='/notfound' element={<NotFound />} />
         <Route path='/classes/:idclass' element={<ClassDetail socket={socket}/>} />
         <Route path='/register' element={<Register />} />

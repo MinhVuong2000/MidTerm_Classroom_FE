@@ -1,37 +1,19 @@
 import * as React from 'react';
 
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useState, useEffect } from "react";
-import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
+import { useEffect } from "react";
+import { DOMAIN_API } from '../../../config/const';
 import DownloadButton from '../../DownloadButton/DownloadButton';
-import StudentListImport from '../../ImportFile/StudentListImport/StudentListImport';
 import GradeAssignmentImport from '../../ImportFile/GradeAssignmentImport/GradeAssignmentImport';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import UploadIcon from '@mui/icons-material/Upload';
-import * as XLSX from 'xlsx';
-import Divider from '@mui/material/Divider';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
 
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import { styled, alpha } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import { useRef } from 'react';
 
 
@@ -48,14 +30,11 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
-import Switch from '@mui/material/Switch';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
 
 //phúc khảo
 import ReviewScore from './Review';
-import FeedBackFromTeacher from './FeedBackFromTeacher'
 
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -352,9 +331,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
         console.log("Địa chỉ nè: ____", e.target.value)
         console.log("Checked: _______", e.target.checked)
     };
-    const inputButtonMarkGrade = useRef(null)
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
-    //const [switchChecked, setSwitchChecked] = useState(false);
+    const inputButtonMarkGrade = useRef(null);
 
     // phúc khảo
     const onclickOpenReview = (rowassign) => {
@@ -424,78 +401,6 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
             )
     }, [rowSelected])
 
-    const handleUpload = (e, row) => {
-        e.preventDefault();
-        const f = e.target.files[0];
-        var reader = new FileReader();
-        let students_ids = listStudent.map(student => student.id_uni_user);
-        console.log("list id assignment trong import file grade: ",row.idAssignment);
-        reader.onload = function (e) {
-            /* Parse data */
-            var data = e.target.result;
-            let readedData = XLSX.read(data, {type: 'binary'});
-            /* Get first worksheet */
-            const wsname = readedData.SheetNames[0];
-            const ws = readedData.Sheets[wsname];
-            /* Convert array to json */
-            let dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
-            let add_user_grade = []
-            for (let i=1; i<dataParse.length; i++) {
-                if (students_ids==null || students_ids.length===0 || (students_ids.includes(dataParse[i][0].toString()))){
-                    add_user_grade.push({
-                        grade: dataParse[i][1],
-                        id_user_uni: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
-                    })
-                }
-            }
-            const actoken = localStorage.getItem('access_token');
-            const url = DOMAIN_API + `classes/detail/${idclass}/assignments/addgradeassignment`;
-            const requestOptions = {
-            method: 'POST',
-            headers: new Headers({
-                "x-access-token": actoken,
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({
-                new_user_grade: add_user_grade,
-                id_class: idclass,
-                id_assignment: row.idAssignment
-            })
-            };
-            fetch(url, requestOptions)
-            .then(res => res.json())
-            .then((result) => {
-                console.log(result)
-                fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
-                    method: "POST",
-                    headers: new Headers({
-                        "x-access-token": actoken,
-                        'Content-Type': 'application/json'
-                    }),
-                    body: JSON.stringify({
-                        id_class: idclass,
-                    })
-                  })
-                      .then(res => res.json())
-                      .then(
-                          (result3) => {
-                              console.log("Thay doi vi tri assignment:", result3);
-                              setGradeBoard(result3);
-                              //setIsLoaded(true);
-                          },
-                          (error) => {
-                              console.log("Error getGradeBoard in import grade assignment");
-                             
-                          }
-                      )
-            })
-            .catch(error => console.log('Form submit error', error))
-            //setStudents(add_user_grade);
-        }
-        reader.onerror = function(ex) {
-            console.log(ex);
-        };
-    }
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -627,10 +532,6 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                     </div>
 
                                     <div className="row">
-                                        {/* <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
-                                            Export Grade Board
-                                        </Typography> */}
-
                                         <div className="col-6 col-sm-2 ">
                                             <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
                                         </div>
@@ -655,7 +556,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                                 aria-expanded={openMarkGrade ? 'true' : undefined}
                                                 onClick={handleClickMarkGrade}
                                                 ref={inputButtonMarkGrade}>
-                                                Mark A Grade Composition
+                                                Đăng tải điểm cho sinh viên
                                             </Button>
                                         </div>
                                         <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={'3'} name={'row.name'} />
