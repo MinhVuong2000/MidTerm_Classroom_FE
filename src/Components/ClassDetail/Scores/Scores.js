@@ -24,7 +24,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import UploadIcon from '@mui/icons-material/Upload';
-
+import * as XLSX from 'xlsx';
 import Divider from '@mui/material/Divider';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
@@ -286,17 +286,7 @@ const EnhancedTableToolbar = (props) => {
                     </Tooltip>
                 ) : (
                     <div style={{ position: "absolute", right: "5px" }} >
-                        {/* <Tooltip title="Download">
-                            <IconButton>
-                                <FileDownloadIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Upload">
-                            <IconButton
-                             onClick={handleClickUploadFile}>
-                                <FileUploadIcon />
-                            </IconButton>
-                        </Tooltip> */}
+                    
                     </div>
                 )}
             </Toolbar>
@@ -335,7 +325,13 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
     const [uploadFile, setUploadFile] = React.useState(null);
     const openUploadFile = Boolean(uploadFile);
     const handleClickUploadFile = (event) => {
-        setUploadFile(event.currentTarget);
+        console.log("Event: ", event)
+        if(uploadFile == null){
+            setUploadFile(event.currentTarget);
+        }
+        else{
+            setUploadFile(null);
+        }
     };
     const handleCloseUploadFile = () => {
         setUploadFile(null);
@@ -428,7 +424,78 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
             )
     }, [rowSelected])
 
-
+    const handleUpload = (e, row) => {
+        e.preventDefault();
+        const f = e.target.files[0];
+        var reader = new FileReader();
+        let students_ids = listStudent.map(student => student.id_uni_user);
+        console.log("list id assignment trong import file grade: ",row.idAssignment);
+        reader.onload = function (e) {
+            /* Parse data */
+            var data = e.target.result;
+            let readedData = XLSX.read(data, {type: 'binary'});
+            /* Get first worksheet */
+            const wsname = readedData.SheetNames[0];
+            const ws = readedData.Sheets[wsname];
+            /* Convert array to json */
+            let dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
+            let add_user_grade = []
+            for (let i=1; i<dataParse.length; i++) {
+                if (students_ids==null || students_ids.length===0 || (students_ids.includes(dataParse[i][0].toString()))){
+                    add_user_grade.push({
+                        grade: dataParse[i][1],
+                        id_user_uni: typeof(dataParse[i][0])==="string"?dataParse[i][0]:dataParse[i][0].toString()
+                    })
+                }
+            }
+            const actoken = localStorage.getItem('access_token');
+            const url = DOMAIN_API + `classes/detail/${idclass}/assignments/addgradeassignment`;
+            const requestOptions = {
+            method: 'POST',
+            headers: new Headers({
+                "x-access-token": actoken,
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                new_user_grade: add_user_grade,
+                id_class: idclass,
+                id_assignment: row.idAssignment
+            })
+            };
+            fetch(url, requestOptions)
+            .then(res => res.json())
+            .then((result) => {
+                console.log(result)
+                fetch(DOMAIN_API + `classes/detail/${idclass}/assignments/getgradeboard`, {
+                    method: "POST",
+                    headers: new Headers({
+                        "x-access-token": actoken,
+                        'Content-Type': 'application/json'
+                    }),
+                    body: JSON.stringify({
+                        id_class: idclass,
+                    })
+                  })
+                      .then(res => res.json())
+                      .then(
+                          (result3) => {
+                              console.log("Thay doi vi tri assignment:", result3);
+                              setGradeBoard(result3);
+                              //setIsLoaded(true);
+                          },
+                          (error) => {
+                              console.log("Error getGradeBoard in import grade assignment");
+                             
+                          }
+                      )
+            })
+            .catch(error => console.log('Form submit error', error))
+            //setStudents(add_user_grade);
+        }
+        reader.onerror = function(ex) {
+            console.log(ex);
+        };
+    }
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -507,7 +574,9 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
+    const handleChangeFile = (event) => {
+        console.log(event.target)
+    };
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
@@ -537,7 +606,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                 <div className="container" style={{ marginTop: "10px" }}>
                     <div className="card" style={{ padding: "15px" }}>
                         {rows == null &&
-                            <div className="col-md-4 center">
+                            <div className="col-md-12 center">
                                 Không có bài tập hoặc thành viên nào trong lớp học!
                             </div>}
 
@@ -561,43 +630,35 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                             <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
                                         </div>
                                         <div className="col-6 col-sm-3 d-flex justify-content-center">
-                                            <Tooltip title="Upload">
-                                                <Button
-                                                    variant="outlined" endIcon={<FileUploadIcon />}
-                                                    aria-controls={openUploadFile ? 'menu-upload-file' : undefined}
-                                                    aria-haspopup="true"
-                                                    aria-expanded={openUploadFile ? 'true' : undefined}
-                                                    onClick={handleClickUploadFile}
-                                                    ref={inputButtonUploadFile}>
-                                                    Upload Template
-                                                </Button>
-                                            </Tooltip>
+                                            <Button
+                                                variant="outlined" endIcon={<FileUploadIcon />}
+                                                aria-controls={openUploadFile ? 'menu-upload-file' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={openUploadFile ? 'true' : undefined}
+                                                onClick={handleClickUploadFile}
+                                                ref={inputButtonUploadFile}>
+                                                Upload Template
+                                            </Button>
                                         </div>
                                         <div className="col-6 col-sm-3 d-flex justify-content-center">
                                             <DownloadButton purpose='grade_assignment' />
                                         </div>
                                         <div className="col-6 col-sm-4 d-flex justify-content-center">
-                                            <Tooltip title="Download">
-                                                <Button variant="outlined" endIcon={<BookmarkAddedIcon />}
-                                                    aria-controls={openMarkGrade ? 'menu-mark-grade' : undefined}
-                                                    aria-haspopup="true"
-                                                    aria-expanded={openMarkGrade ? 'true' : undefined}
-                                                    onClick={handleClickMarkGrade}
-                                                    ref={inputButtonMarkGrade}>
-                                                    Mark A Grade Composition
-
-                                                </Button>
-                                            </Tooltip>
+                                            <Button variant="outlined" endIcon={<BookmarkAddedIcon />}
+                                                aria-controls={openMarkGrade ? 'menu-mark-grade' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={openMarkGrade ? 'true' : undefined}
+                                                onClick={handleClickMarkGrade}
+                                                ref={inputButtonMarkGrade}>
+                                                Mark A Grade Composition
+                                            </Button>
                                         </div>
-
+                                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={'3'} name={'row.name'} />
 
                                         <Menu
                                             id="menu-upload-file"
                                             uploadFile={uploadFile}
                                             open={openUploadFile}
-                                            onClose={handleCloseUploadFile}
-                                            onClick={handleCloseUploadFile}
-
                                             anchorEl={inputButtonUploadFile.current}
                                             PaperProps={{
                                                 elevation: 0,
@@ -628,37 +689,17 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                             transformOrigin={{ horizontal: 'left', vertical: 'top' }}
                                             anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
                                         >
-                                            <div className="d-flex justify-content-center" style={{ fontWeight: "bold" }}>
+                                            <div className="d-flex justify-content-center" style={{ fontWeight: "bold" }} onClick={handleCloseUploadFile}>
                                                 Upload Template
                                             </div>
-                                            {/* <MenuItem>
-                                        <UploadIcon>
-                                            <Settings fontSize="small" />
-                                        </UploadIcon>
-                                        Up load file bài tập 1
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <UploadIcon>
-                                            <Settings fontSize="small" />
-                                        </UploadIcon>
-                                        Up load file bài tập 2
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <UploadIcon>
-                                            <Settings fontSize="small" />
-                                        </UploadIcon>
-                                        Up load file bài tập 3
-                                    </MenuItem> */}
+                                            
                                             {listAssignment.map(row =>
                                                 <MenuItem>
-                                                    <div style={{ minWWidth: "200px" }}>
-                                                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name={row.name} />
-                                                    </div>
+                                                <GradeAssignmentImport setUploadFile={setUploadFile} setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={row.idAssignment} name={row.name} />
+
                                                 </MenuItem>
 
                                             )}
-
-
 
                                         </Menu>
 
@@ -668,7 +709,6 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                             open={openMarkGrade}
                                             onClose={handleCloseMarkGrade}
                                             onClick={(e) => handleListenClickMarkGrade(e)}
-
                                             anchorEl={inputButtonMarkGrade.current}
                                             PaperProps={{
                                                 elevation: 0,
@@ -702,17 +742,6 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                             <div className="d-flex justify-content-center" style={{ fontWeight: "bold" }}>
                                                 Mark A Grade Composition
                                             </div>
-                                            {/* <MenuItem>
-                                        Bài tập 1:
-                                        <Switch value="checkedBT1" checked="true"
-                                        />
-                                    </MenuItem>
-
-                                    <MenuItem>
-                                        Bài tập 2:
-                                        <Switch value="checkedBT2"
-                                        />
-                                    </MenuItem> */}
 
                                             {listAssignment.map(row =>
                                                 <MenuItem>

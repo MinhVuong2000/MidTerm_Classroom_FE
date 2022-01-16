@@ -164,8 +164,6 @@ export default function Member({ idclass, isTeacher, class_name }) {
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
-        console.log('is teacher true ne', checkTeacher);
-        console.log('List student', students);
         if (checkTeacher) {
             return (
                 <div  style={{padding: "20px"}}>
@@ -175,32 +173,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                     <DownloadButton purpose='student_list' />
                    
                     <StudentListImport setStudents={setStudents} students_ids={students.map(student => student.id_uni_user)} id_class={idclass} />
-                        {/* <SpeedDial
-
-                            ariaLabel="SpeedDial basic example"
-                            sx={{ position: 'fixed', left: 16 }}
-                            icon={<SpeedDialIcon />}
-                            direction="down"
-
-                        >
-
-                            {actions.map((action) => (
-                                <SpeedDialAction
-                                    tooltipOpen
-                                    key={action.name}
-                                    icon={action.icon}
-                                    title={action.name}
-                                    tooltipTitle={action.name}
-                                    type={action.type}
-                                    accept={action.accept}
-
-                                    onClick={(e) => {
-                                        handleClickDownUp(e, action.operation)
-                                    }}
-                                />
-                            ))}
-                             <UploadSpeedDialAction setStudents={setStudents} students_ids={students.map(student => student.id_uni)} id_class={idclass} />
-                        </SpeedDial> */}
+                        
                     </Box>
                 </div>
                     
@@ -216,7 +189,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                                             <label>Nhập Email muốn mời</label>
                                             <input type="text" name="email" id="username" className="form-control" placeholder="Nhập Email" value={email} onChange={handleChangeEmail} />
                                         </div>
-                                        <button type="submit" onClick={handleSubmitTeacher} style={{ marginTop: "10px" }} className="btn btn-primary btn-block">Mời giáo viên</button>
+                                        <button type="submit" onClick={handleSubmitTeacher} style={{ marginTop: "10px",marginRight: "20px"}} className="btn btn-primary btn-block">Mời giáo viên</button>
                                         <button type="submit" onClick={handleSubmit} style={{ marginTop: "10px" }} className="btn btn-primary btn-block">Mời học sinh</button>
                                     </form>
                                 </div>

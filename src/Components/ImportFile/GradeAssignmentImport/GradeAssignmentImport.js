@@ -6,13 +6,14 @@ import UploadIcon from '@mui/icons-material/Upload';
 import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 
 
-export default function GradeAssignmentImport({setGradeBoard, students_ids, id_class, id_assignment, name}){
-    const [respond, setResponse] = useState(null);
-    console.log("list student trong import file grade: ",students_ids);
+export default function GradeAssignmentImport({setUploadFile, setGradeBoard, students_ids, id_class, id_assignment, name}){
+   
     const handleUpload = (e) => {
         e.preventDefault();
         const f = e.target.files[0];
         var reader = new FileReader();
+        
+        console.log("list id assignment trong import file grade: ",id_assignment);
         reader.onload = function (e) {
             /* Parse data */
             var data = e.target.result;
@@ -64,11 +65,11 @@ export default function GradeAssignmentImport({setGradeBoard, students_ids, id_c
                           (result3) => {
                               console.log("Thay doi vi tri assignment:", result3);
                               setGradeBoard(result3);
+                              setUploadFile(null)
                               //setIsLoaded(true);
                           },
                           (error) => {
                               console.log("Error getGradeBoard in import grade assignment");
-                             
                           }
                       )
             })
@@ -77,6 +78,7 @@ export default function GradeAssignmentImport({setGradeBoard, students_ids, id_c
         }
         reader.onerror = function(ex) {
             console.log(ex);
+            setUploadFile(null)
         };
         reader.readAsBinaryString(f)
         return null;
@@ -88,7 +90,7 @@ export default function GradeAssignmentImport({setGradeBoard, students_ids, id_c
             <div>
            Upload File {name}
             <input type="file" accept=".csv, .xlsx" hidden 
-                onChange={e => handleUpload(e)}
+                onChange={(e) => handleUpload(e)}
             />
             </div>
         </Button>

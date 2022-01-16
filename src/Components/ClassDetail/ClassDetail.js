@@ -205,6 +205,13 @@ export default function ClassDetail() {
             </div>
         )
     }
+    if(gradeBoard=="400"){
+        return (
+            <div>
+                <Navigate to="/login" />
+            </div>
+        )
+    }
     if (!enroll) {
         return <div>You not enroll this class</div>;
     }
