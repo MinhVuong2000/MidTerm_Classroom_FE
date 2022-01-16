@@ -132,6 +132,7 @@ export default function ListAdmin() {
             </div>
 
             <AddNewAdmin
+                setListAdminInfo = {setListAdminInfo}
                 isOpen={openAddNewAdmin}
                 isClose={(value) => setOpenAddNewAdmin(value)}
             />

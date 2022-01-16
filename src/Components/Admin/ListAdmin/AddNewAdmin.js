@@ -14,7 +14,7 @@ import TextField from '@mui/material/TextField';
 import { DOMAIN_API } from '../../../config/const';
 import { useState, useEffect } from "react";
 export default function AddNewAdmin(props) {
-    const { isOpen, isClose } = props;
+    const { isOpen, isClose, setListAdminInfo } = props;
     const [open, setOpen] = React.useState(isOpen);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -64,7 +64,8 @@ export default function AddNewAdmin(props) {
                         .then(res => res.json())
                         .then((result) => {
                             console.log(result);
-                            if(result == true){
+                            if(result != false){
+                                setListAdminInfo(result)
                                 setOpen(false);
                                 isClose(false);
                             }
