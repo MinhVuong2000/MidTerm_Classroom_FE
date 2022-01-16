@@ -14,7 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import BlockIcon from '@mui/icons-material/Block';
 import { red } from '@mui/material/colors';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useState, useEffect } from "react";
 import { DOMAIN_API, DOMAIN_FE } from '../../../config/const';
 
@@ -28,9 +28,7 @@ import { styled } from '@mui/system';
 //component
 
 import DetailUser from './DetailUser'
-
-
-
+import EditUser from './EditUser'
 import DeleteIcon from '@mui/icons-material/Delete';
 //route 
 import { useNavigate } from "react-router-dom";
@@ -42,7 +40,8 @@ export default function ListUser() {
     const [dataDetail, setDataDetail] = React.useState([]);
     const [listUserInfo, setListUserInfo] = React.useState([]);
     let actoken = localStorage.getItem('access_token');
-
+    const [openEditUser, setOpenEditUser] = React.useState(false);
+    const [dataEdit, setDataEdit] = React.useState([]);
     const [state, setState] = React.useState({
         openState: false,
         vertical: 'top',
@@ -192,6 +191,15 @@ export default function ListUser() {
                                 }} />
                         </IconButton>
                     </Tooltip>
+                    <Tooltip title="Chỉnh sửa MSSV">
+                        <IconButton aria-label="edit">
+                            <ModeEditIcon
+                                onClick={() => {
+                                    setOpenEditUser(true)
+                                    setDataEdit(params.row)
+                                }} />
+                        </IconButton>
+                    </Tooltip>
                     {params.row.otp == -2 ?
                         <Tooltip title="Mở tài khoản">
                             <IconButton aria-label="edit">
@@ -250,7 +258,11 @@ export default function ListUser() {
                 isOpen={openDetailUser}
                 isClose={(value) => setOpenDetailUser(value)}
             />
-
+            <EditUser
+                data={dataEdit}
+                isOpen={openEditUser}
+                isClose={(value) => setOpenEditUser(value)}
+            />
             {/* Lock User */}
 
             <Snackbar
