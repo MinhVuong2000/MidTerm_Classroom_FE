@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Navigate} from 'react-router-dom';
+import { Navigate, useLocation} from 'react-router-dom';
 import Classroom from "../Classroom/Classroom";
 import { DOMAIN_API, ENTER_ID_UNI_TITLE, ENTER_ID_UNI_DESC }  from '../../config/const';
 import FormDialog from '../FormDialog/FormDialog';
 import JoinClass from '../JoinClass/JoinClass';
 import AlertDialog from '../AlertDialog/AlertDialog';
-
 
 export default function Classes(){
     const [error, setError] = useState(null);
@@ -15,6 +14,7 @@ export default function Classes(){
     const [items, setItems] = useState([]);
     const [hasIdUni, setHasIdUni] = useState(true);
     const [openNotiIdUni, setOpenNotiIdUni] = useState(true);
+
     console.log("===================================")
     
     let actoken = localStorage.getItem('access_token');
@@ -55,7 +55,8 @@ export default function Classes(){
     
     if (error) {
         return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    } 
+    else if (!isLoaded) {
         return <div>Loading...</div>;
     } else {
         if (items=='401'){

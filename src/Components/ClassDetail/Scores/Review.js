@@ -10,7 +10,7 @@ import { DOMAIN_API } from '../../../config/const';
 import Avatar from '@mui/material/Avatar';
 import { deepOrange, deepPurple } from '@mui/material/colors';
 
-export default function ReviewScore({after_sent, rowAssign, idclass}) {
+export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
     const [listComment, setListComment] = React.useState([]);
     const [detailReview, setDetailReview] = React.useState([]);
     const [gradeExpect, setGradeExpect] = React.useState();
@@ -165,6 +165,12 @@ export default function ReviewScore({after_sent, rowAssign, idclass}) {
             .then(res => res.json())
             .then(
                 (result) => {
+                    socket.emit('sendfromStudentReview', {
+                        access_token: actoken,
+                        id_class: idclass,
+                        id_assignment: rowAssign.idAssignment
+                    });
+
                     console.log("Post Review: ", result);
                     setDetailReview(result);
                     //setIsLoaded(true);

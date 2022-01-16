@@ -299,7 +299,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function Scores({ idclass, isTeacher, class_name, grade_board, students }) {
+export default function Scores({ idclass, isTeacher, class_name, grade_board, students, socket }) {
     const [rowSelected, setRowSelected] = React.useState([]);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
@@ -926,7 +926,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                 </div>*/}
                 <br />
                 <div>
-                    {reviewScore && <ReviewScore idclass={idclass} rowAssign = {rowReviewSelected} after_sent={(result) => afterReview(result)} />}
+                    {reviewScore && <ReviewScore socket={socket} idclass={idclass} rowAssign = {rowReviewSelected} after_sent={(result) => afterReview(result)} />}
                 </div>
             </div>
 

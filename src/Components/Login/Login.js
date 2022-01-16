@@ -7,12 +7,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Input from "@mui/material/Input";
 import GoogleIcon from '@mui/icons-material/Google';
 import IconButton from '@mui/material/IconButton';
-import { useNavigate, Redirect, Navigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { DOMAIN_API } from '../../config/const';
+import { Navigate, useNavigate, BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { DOMAIN_API, DOMAIN_SOCKET } from '../../config/const';
 import LoginByGoogle from './GoogleLogin/GoogleLogin';
 
 
-export default function Login() {
+export default function Login({socket, setIsLogined}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -65,9 +65,13 @@ export default function Login() {
         )
     }
     if (localStorage.getItem('access_token')){
-        return (
-            <Navigate to="/"/>
-        )
+        const access_token = localStorage.getItem('access_token');
+        console.log("Login success, access token", access_token);
+        socket.emit('newUser', access_token);
+        console.log('ReDirect to main');
+        setIsLogined(true);
+        // return <Navigate to='/' />
+        window.location.href = '/';
     }
     return (
         <div className="App">

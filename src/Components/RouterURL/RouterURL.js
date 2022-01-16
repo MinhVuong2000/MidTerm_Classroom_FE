@@ -19,21 +19,21 @@ import {
 } from "react-router-dom";
 
 
-export default function RouterURL() {
+export default function RouterURL({socket, setIsLogined}) {
   return (
     <BrowserRouter>
       <Routes>
         <Route exact path='/' element={<Classes />} />
         <Route path='/detail' element={<Detail />} />
         <Route path='/notfound' element={<NotFound />} />
-        <Route path='/classes/:idclass' element={<ClassDetail/>} />
+        <Route path='/classes/:idclass' element={<ClassDetail socket={socket}/>} />
         <Route path='/register' element={<Register />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login socket={socket} setIsLogined={setIsLogined}/>} />
         <Route path='/forget-password' element={<ForgetPassword />} />
         <Route path='/forget-password/send-otp/' element={<ForgetPasswordSendOTP />} />
         <Route path='/renew-password/' element={<RenewPassword />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path='/logout' element={<LogOut />} />
+        <Route path='/logout' element={<LogOut socket={socket}/>} />
         <Route path='/classes/inviteclass/:nameclass' element={<ClassInvite/>} />
         <Route path='/admin' element={<Admin/>} />
       </Routes>
