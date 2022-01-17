@@ -559,8 +559,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                                 Đăng tải điểm cho sinh viên
                                             </Button>
                                         </div>
-                                        <GradeAssignmentImport setGradeBoard={setGradeBoard} students_ids={listStudent.map(student => student.id_uni_user)} id_class={idclass} id_assignment={'3'} name={'row.name'} />
-
+                                        
                                         <Menu
                                             id="menu-upload-file"
                                             uploadFile={uploadFile}
