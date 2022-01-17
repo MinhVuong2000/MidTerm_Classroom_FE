@@ -44,7 +44,7 @@ export default function ClassInvite({addUser}) {
     let urlclass = '/classes/' + idclass;
     //console.log(urlclass);
     console.log(item);
-    if(idclass == 0){
+    if(localStorage.getItem('access_token') == null){
         return(
             <Navigate to="/login" />
         )
