@@ -510,6 +510,39 @@ export default function News(props) {
                     </CardActions>
 
                   </Card>)}
+                  <Card sx={{ maxWidth: 750, margin: 'auto', marginBottom: '20px', marginTop: "20px" }}>
+                <CardHeader
+                  avatar={
+                    <Avatar sx={{ bgcolor: red[600] }} aria-label="recipe">
+                      HK
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton aria-label="settings">
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title='Nguyễn Huy Khánh'
+                  subheader='14 - 1 - 2022 18:15'
+                />
+
+                <CardContent>
+                  <Typography variant="body2" color="text.secondary">
+                    Lớp được nghỉ tết từ ngày 21/1/2022
+                  </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
+                  <IconButton>
+                    <FavoriteIcon />
+                  </IconButton>
+
+                  <IconButton>
+                    <ShareIcon />
+                  </IconButton>
+
+                </CardActions>
+
+              </Card>
               </Card>
             </div>}
         </div>
