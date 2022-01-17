@@ -6,7 +6,7 @@ import { DOMAIN_API } from '../../config/const';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
-
+import Button from '@mui/material/Button';
 
 export default function ForgetPassword() {
     const [email, setEmail] = useState('');
@@ -99,10 +99,10 @@ export default function ForgetPassword() {
                             placeholder="Nhập Email" value={email} onChange={handleChangeEmail}/>
                         </div>
                         <br />
-                        <button type="submit" className="btn btn-primary btn-block" 
+                        <Button type="submit"  variant="contained" style={{marginRight: "10px"}}
                         onClick={handleSubmit} name="otp_renew_pass" id="otp_renew_pass" 
-                        class="form-submit">Nhận OTP</button>
-                        <button onClick={() => notify('Test notify success')}>Test notify</button>
+                        >Nhận OTP</Button>
+                        <Button  variant="contained" onClick={() => notify('Test notify success')}>Test notify</Button>
                     </form>
                 </div>
             </div>
