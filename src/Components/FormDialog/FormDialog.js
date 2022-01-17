@@ -74,7 +74,7 @@ export default function FormDialog({sx, setItems}) {
     <div style={sx}>
       <Tooltip title="Create Class">
         <Button variant="outlined" onClick={handleClickOpen}>
-        <AddCircleOutlineIcon color="primary" /> Create Class
+        <AddCircleOutlineIcon color="primary" /> Tạo lớp học
         </Button>
       </Tooltip>
       {openExistedClass && <AlertDialog title={EXISTED_CLASS_TITLE.replace("{}",classAdded)} msg={EXISTED_CLASS_DESC} callback={() => {setOpenExistedClass((openExistedClass) => {return false})}}/>}
@@ -90,7 +90,7 @@ export default function FormDialog({sx, setItems}) {
             autoFocus
             margin="dense"
             id="className"
-            label="Class's Name"
+            label="Tên lớp học"
             type="text"
             fullWidth
             variant="standard"
@@ -101,7 +101,7 @@ export default function FormDialog({sx, setItems}) {
             autoFocus
             margin="dense"
             id="description"
-            label="description"
+            label="Mô tả"
             type="text"
             fullWidth
             variant="standard"
@@ -110,8 +110,8 @@ export default function FormDialog({sx, setItems}) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAdd}>Add</Button>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={handleAdd}>Tạo</Button>
         </DialogActions>
       </Dialog>
     </div>

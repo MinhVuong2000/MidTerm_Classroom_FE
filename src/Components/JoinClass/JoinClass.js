@@ -7,8 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import AlertDialog from '../AlertDialog/AlertDialog';
 import Tooltip from '@mui/material/Tooltip';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { useNavigate } from "react-router-dom";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { DOMAIN_API, NOT_NULL_CLASS_CODE,NOT_EXIST_CLASS_CODE
 } from '../../config/const'
 
@@ -60,7 +62,7 @@ export default function JoinClass({sx, setItems}) {
     <div style={sx}>
       <Tooltip title="Join Class">
         <Button variant="outlined" onClick={handleClickOpen}>
-        <AddCircleOutlineIcon color="primary" /> Join Class
+        <ArrowBackIcon color="primary" /> Tham gia lớp học
         </Button>
       </Tooltip>
       {openNotExistedClass && <AlertDialog title={NOT_EXIST_CLASS_CODE.replace("{}",classCode)} msg={NOT_EXIST_CLASS_CODE} callback={() => {setOpenNotExistedClass((openNotExistedClass) => {return false})}}/>}
@@ -72,7 +74,7 @@ export default function JoinClass({sx, setItems}) {
             autoFocus
             margin="dense"
             id="className"
-            label="Class's code"
+            label="Mã của lớp học"
             type="text"
             fullWidth
             variant="standard"
@@ -82,7 +84,7 @@ export default function JoinClass({sx, setItems}) {
           
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Hủy</Button>
           <Button onClick={handleAdd}>Tham gia</Button>
         </DialogActions>
       </Dialog>
