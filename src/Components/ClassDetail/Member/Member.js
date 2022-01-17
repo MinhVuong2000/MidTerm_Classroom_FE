@@ -254,6 +254,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
         }
         else {
             return (
+                <div className="container">
                 <div className="row" >
                    <div style={{ marginTop: "10px" }}>
                                     <h3>Danh sách thành viên</h3>
@@ -300,6 +301,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
 
                                     </Grid>
                                 </div>
+                </div>
                 </div>
             )
         }

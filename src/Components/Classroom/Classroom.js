@@ -68,7 +68,6 @@ export default function Classroom({idclass, title, description, setItems}) {
         </CardContent>
         <CardActions>
           <Button size="small"><Link to={`/classes/${idclass}`} style={{textDecoration: 'none' }}>Chi tiết</Link></Button>
-          <Button size="small">Chỉnh sửa</Button>
           <Tooltip title="Xóa">
             <Button onClick={handleDeleteClass}><DeleteIcon /></Button>
           </Tooltip>
