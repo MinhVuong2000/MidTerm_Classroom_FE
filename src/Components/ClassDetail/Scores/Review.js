@@ -367,6 +367,7 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
                                 sx={{ width: '800px', marginTop: "10px" }}
                                 value={onecomment.content}
                                 color="info"
+                                variant="standard"
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -378,9 +379,9 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
                         
                         {gradeAfterReview==null && 
                             <tr>
-                                <th>
-                                <div>
-                                    <div width='75%' style={{ marginLeft: "40px" }}>
+                                
+                             
+                                    <div className="col-8" width='75%' style={{ marginLeft: "55px" }}>
                                         <TextField
                                             id="inpcomment"
                                             label={username}
@@ -392,14 +393,15 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
                                             onChange={handleChangeComment}
                                         />
                                     </div>
-                                </div>
-                                </th>
-                                <th>
-                                <Button variant="contained" endIcon={<SendIcon />}
+                                    <div  className="col-4" style={{marginTop:"20px", marginLeft: "55px" }} >
+                                    <Button variant="contained" endIcon={<SendIcon />}
                                     onClick={()=>submitComment()}>
                                         Gửi
                                     </Button>
-                                </th>
+                                    </div>
+                                
+                            
+                                
                             </tr>
                         }
                     </div>
