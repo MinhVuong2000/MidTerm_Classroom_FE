@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import { Navigate, Link } from 'react-router-dom';
 import { DOMAIN_API } from '../../config/const';
 import LoginByGoogle from './GoogleLogin/GoogleLogin';
+import Button from '@mui/material/Button';
 
 
 export default function Login({socket, setIsLogined}) {
@@ -97,7 +98,7 @@ export default function Login({socket, setIsLogined}) {
 
                         <div className="form-group">
                             <label>Username</label>
-                            <input type="text" name="username" id="username" className="form-control" placeholder="Nhập Username" value={username} onChange={handleChangeUsername}/>
+                            <Input type="text" name="username" id="username" className="form-control" placeholder="Nhập Username" value={username} onChange={handleChangeUsername}/>
                         </div>
 
                         <div className="form-group">
@@ -117,7 +118,7 @@ export default function Login({socket, setIsLogined}) {
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDown}
                                     >
-                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        {showPassword ? <Visibility  fontSize="small" /> : <VisibilityOff  fontSize="small" />}
                                     </IconButton>
                                 </InputAdornment>
                                 }
@@ -126,12 +127,13 @@ export default function Login({socket, setIsLogined}) {
 
                         <div className="form-group">
                             <div className="custom-control custom-checkbox">
-                                <input type="checkbox" className="custom-control-input" id="customCheck1" />
+                                <input type="checkbox" className="custom-control-input" id="customCheck1" style={{marginRight: "5px"}}/>
                                 <label className="custom-control-label" htmlFor="customCheck1">Nhớ đăng nhập</label>
                             </div>
                         </div>
                         <br />
-                        <button type="submit" className="btn btn-primary btn-block" onClick={handleSubmit} name="signin" id="signin" class="form-submit" value="Đăng nhập">Đăng nhập</button>
+                        <Button type="submit" onClick={handleSubmit} 
+                        name="signin" id="signin"  value="Đăng nhập" variant="contained">Đăng nhập</Button>
                         <p className="forgot-password text-right">
                             <a href="/forget-password">Quên mật khẩu?</a>
                         </p>
@@ -139,8 +141,8 @@ export default function Login({socket, setIsLogined}) {
                             <a href="/register">Bạn chưa có tài khoản?</a>
                         </p>
                     </form>
-                    <div class="social-login">
-                        <span class="social-label">Hoặc đăng nhập bằng </span>
+                    <div className="forgot-password text-right">
+                        <span className="social-label" style={{fontSize:"16px", color:"#1976D2"}} >Hoặc đăng nhập bằng </span>
                         <LoginByGoogle reload={setPassword}/>
                     </div>
                 </div>
