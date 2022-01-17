@@ -170,10 +170,12 @@ export default function Member({ idclass, isTeacher, class_name }) {
                 <div className="row"> 
                 <div className="col-md-2">
                 <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1,  left: 16 }}>
+                    <div style={{paddingBottom:"10px"}}>
                     <DownloadButton purpose='student_list' />
-                   
+                    </div>
+                    <div>                   
                     <StudentListImport setStudents={setStudents} students_ids={students.map(student => student.id_uni_user)} id_class={idclass} />
-                        
+                    </div>
                     </Box>
                 </div>
                     
@@ -183,7 +185,7 @@ export default function Member({ idclass, isTeacher, class_name }) {
                             <div className="row" >
                                 <div className='card-header'>
                                     <form>
-                                        <h3>Mời bạn bè</h3>
+                                        <h3>Mời thành viên mới</h3>
 
                                         <div className="form-group">
                                             <label>Nhập Email muốn mời</label>

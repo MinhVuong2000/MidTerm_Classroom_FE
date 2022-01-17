@@ -85,7 +85,7 @@ export default function GradeAssignmentImport({setUploadFile, setGradeBoard, stu
         <Button  component="label" style={{width:"auto",height:"auto",justifyContent:"start"}}>
             <div className="d-flex justify-content-start  align-items-start"> <UploadIcon/></div>
             <div>
-           Upload File {name}
+           Tải lên File {name}
             <input type="file" accept=".csv, .xlsx" hidden 
                 onChange={(e) => handleUpload(e)}
             />

@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from '@mui/material/Button';
 import { CSVLink } from 'react-csv'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 export const ExportReactCSV = ({csvData, fileName}) => {
     const listStudent = csvData.listStudentGrade;
@@ -25,8 +26,8 @@ export const ExportReactCSV = ({csvData, fileName}) => {
     }
 
     return (
-        <Button variant='outlined' component="label" >
-            <CSVLink style={{ textDecoration: "none"}} data={custs} filename={fileName}>Export Table</CSVLink>
+        <Button  style={{width:"200px"}}  variant='outlined' component="label" endIcon={<ExitToAppIcon />}>
+            <CSVLink style={{ textDecoration: "none"}} data={custs} filename={fileName}>Xuất bảng điểm</CSVLink>
         </Button>
     )
 }

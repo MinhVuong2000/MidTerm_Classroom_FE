@@ -108,13 +108,11 @@ export default function StudentListImport({setStudents, students_ids, id_class})
     }
 
     return (
-        <Button style={{width:"190px"}} variant='outlined' component="label">
+        <Button style={{width:"200px"}} variant='outlined' component="label" endIcon={<UploadIcon />}>
         <div className="row">
-            <div className=" d-flex justify-content-center">
-        <UploadIcon  />
-        </div>
-        <div className=" d-flex justify-content-center">
-        Upload File
+            
+        <div   >
+        Tải lên File
         </div>
         <input type="file" accept=".csv, .xlsx" hidden 
             onChange={e => handleUpload(e)}
