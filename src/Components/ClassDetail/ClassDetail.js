@@ -31,7 +31,7 @@ export default function ClassDetail({socket}) {
     const [assignmentList, setAssignmentList] = useState([]);
     const [gradeBoard, setGradeBoard] = useState([])
     const [listNews, setListNews] = useState([])
-
+    const [classcode, setClasscode] = useState('')
     //Tạm thui
     const [name_work, setName_work] = useState([]);
     //const [point_work, setPoint_work]=useState([]);
@@ -83,12 +83,13 @@ export default function ClassDetail({socket}) {
                             setIsLoaded(true);
                         }
                         else {
-                            console.log(result.isTeacher);
+                            console.log(result);
                             setIsLoaded(true);
                             setIsTeacher(result.isTeacher);
                             setTeachers(result.list_teacher);
                             setStudents(result.list_student);
                             setClassname(result.class_name);
+                            setClasscode(result.code);
                             linkin = DOMAIN_API + 'classes/inviteclass/' + result.invitelink;
                             if (result.isTeacher) {
 
@@ -159,6 +160,7 @@ export default function ClassDetail({socket}) {
         name: class_name,
         info: description,
         invite: linkin,
+        code: classcode,
         grade_structure: name_work,
         news: listNews,
     }

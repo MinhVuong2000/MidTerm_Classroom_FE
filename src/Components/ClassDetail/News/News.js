@@ -254,6 +254,11 @@ export default function News(props) {
         <br />
         <div className="row" >
           <div className="col-md-3">
+            {props.isTeacher &&
+            <Container sx={{ paddingLeft: "10px", paddingRight: "10px", marginLeft: "30px" }}>
+                <b>Class code: {data.code}</b>
+            </Container>}
+            <br/>
             <Container sx={{ paddingLeft: "10px", paddingRight: "10px", marginLeft: "30px" }}>
               <table border="0"style={{maxWidth: "400px"}}>
                 <tr>
@@ -264,6 +269,7 @@ export default function News(props) {
                 
               </table>
             </Container>
+            
           </div>
           {isOpenComment && 
           <div className="col-md-8" >
