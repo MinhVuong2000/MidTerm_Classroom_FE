@@ -128,7 +128,7 @@ export default function EditUser(props) {
                     <DialogContent>
                         
                         <Grid container spacing={4}>
-                            <Grid item xs={6}>
+                            <Grid item xs={7}>
                                 <TextField
                                     id="MSSV"
                                     label="Student ID"
@@ -139,14 +139,14 @@ export default function EditUser(props) {
                                     onChange={e => setMSSV(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={4} sx={{ pb: 0, mb: 0 }}>
+                            {/* <Grid item xs={4} sx={{ pb: 0, mb: 0 }}>
                             <Button
                                 sx={{ pb: 0, mb:0 }}
                                 variant="outlined" endIcon={<SaveIcon />}
                                 onClick={handleSaveEditStudentID}>
-                                Save 
+                                Save nè
                             </Button>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                         
                         
@@ -154,6 +154,12 @@ export default function EditUser(props) {
                         <br />
                     </DialogContent>
                     <DialogActions>
+                    <Button
+                               
+                                variant="contained" endIcon={<SaveIcon />}
+                                onClick={handleSaveEditStudentID}>
+                                Save
+                            </Button>
                         <Button onClick={() => isClose(false)} variant="contained" color="secondary">Close</Button>
                     </DialogActions>
                 </form>
