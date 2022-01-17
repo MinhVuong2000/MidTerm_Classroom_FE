@@ -32,6 +32,7 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import { visuallyHidden } from '@mui/utils';
 import EditIcon from '@mui/icons-material/Edit';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 //phúc khảo
 import ReviewScore from './Review';
@@ -532,31 +533,33 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                     </div>
 
                                     <div className="row">
-                                        <div className="col-6 col-sm-2 ">
+                                        <div className="col-6 col-sm-3 d-flex justify-content-center ">
                                             <ExportReactCSV csvData={gradeboard} fileName={'GradeBoard'} />
                                         </div>
                                         <div className="col-6 col-sm-3 d-flex justify-content-center">
                                             <Button
+                                             style={{width:"200px"}} 
                                                 variant="outlined" endIcon={<FileUploadIcon />}
                                                 aria-controls={openUploadFile ? 'menu-upload-file' : undefined}
                                                 aria-haspopup="true"
                                                 aria-expanded={openUploadFile ? 'true' : undefined}
                                                 onClick={handleClickUploadFile}
                                                 ref={inputButtonUploadFile}>
-                                                Upload Template
+                                                Tải lên mẫu
+                                                
                                             </Button>
                                         </div>
                                         <div className="col-6 col-sm-3 d-flex justify-content-center">
                                             <DownloadButton purpose='grade_assignment' />
                                         </div>
-                                        <div className="col-6 col-sm-4 d-flex justify-content-center">
-                                            <Button variant="outlined" endIcon={<BookmarkAddedIcon />}
+                                        <div className="col-6 col-sm-3 d-flex justify-content-center">
+                                            <Button variant="outlined"  style={{width:"200px"}}  endIcon={<BookmarkAddedIcon />}
                                                 aria-controls={openMarkGrade ? 'menu-mark-grade' : undefined}
                                                 aria-haspopup="true"
                                                 aria-expanded={openMarkGrade ? 'true' : undefined}
                                                 onClick={handleClickMarkGrade}
                                                 ref={inputButtonMarkGrade}>
-                                                Đăng tải điểm cho sinh viên
+                                                Đánh dấu điểm
                                             </Button>
                                         </div>
                                         
@@ -596,7 +599,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                             anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
                                         >
                                             <div className="d-flex justify-content-center" style={{ fontWeight: "bold" }} onClick={handleCloseUploadFile}>
-                                                Upload Template
+                                                Tải lên mẫu
                                             </div>
                                             
                                             {listAssignment.map(row =>
@@ -646,7 +649,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                             anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
                                         >
                                             <div className="d-flex justify-content-center" style={{ fontWeight: "bold" }}>
-                                                Mark A Grade Composition
+                                                Đánh dấu thành phần điểm
                                             </div>
 
                                             {listAssignment.map(row =>
@@ -662,7 +665,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                                                     </Typography>
                                                                 </Grid>
                                                                 <Grid item >
-                                                                    {`${listShowAssignment.includes(row.idAssignment) ? ' Đã public điểm' : ' Chưa public điểm'}`}
+                                                                    {`${listShowAssignment.includes(row.idAssignment) ? ' Đã công khai điểm' : ' Chưa công khai điểm'}`}
                                                                 </Grid>
                                                             </Grid>
                                                         </Button>
