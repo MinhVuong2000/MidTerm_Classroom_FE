@@ -66,11 +66,14 @@ export default function Classroom({idclass, title, description, setItems}) {
             {description}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions style={{position:"relative"}}>
           <Button size="small"><Link to={`/classes/${idclass}`} style={{textDecoration: 'none' }}>Chi tiết</Link></Button>
+          <Button size="small">Chỉnh sửa</Button>
+          <div style={{position:"absolute",top:"0",right:"0",left:"auto"}}>
           <Tooltip title="Xóa">
             <Button onClick={handleDeleteClass}><DeleteIcon /></Button>
           </Tooltip>
+          </div>
         </CardActions>
         {openErrorPermission && <AlertDialog title={ERROR_PERMISSIONS_TITLE} msg={ERROR_PERMISSIONS_DESC} callback={() => {setOpenErrorPermission(() => {return false})}}/>}
       </Card>
