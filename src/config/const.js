@@ -31,8 +31,8 @@ const SUCCESS_PROFILE_DESC = "Thay đổi profile thành công!"
 const NOT_NULL_CLASS_CODE = 'Bạn chưa nhập mã lớp học';
 const NOT_EXIST_CLASS_CODE = 'Mã lớp học không tồn tại';
 
-const googleClientID = '1091140274470-msvgch2pntvkv0pltbq5osuqpgk3to3e.apps.googleusercontent.com';
-const googleClientSecret = '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';
+const googleClientID = '1091140274470-2vb73bkmivqpjj019n00jj4tjnj8pbat.apps.googleusercontent.com';
+const googleClientSecret = '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';
 
 module.exports = {
     DOMAIN_API, DOMAIN_FE, DOMAIN_SOCKET,
