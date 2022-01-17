@@ -172,7 +172,7 @@ export default function ReviewScore({socket, after_sent, rowAssign, idclass}) {
                     });
 
                     console.log("Post Review: ", result);
-                    setDetailReview(result);
+                    setDetailReview(result.review);
                     //setIsLoaded(true);
                 },
                 (error) => {
