@@ -364,11 +364,12 @@ export default function Assignments({ idclass, assignments, data_structure, grad
     }
     else {
       if (items.length == 0) {
-        return <div>Không có bất kì bài tập nào cho lớp này!
+        return <div> <div className="container">Không có bất kì bài tập nào cho lớp này! </div>
           {openErrorPermission && <AlertDialog title={ERROR_PERMISSIONS_TITLE} msg={ERROR_PERMISSIONS_DESC} callback={() => { setOpenErrorPermission(() => { return false }) }} />}
           {openNotValueAdd && <AlertDialog title={NOT_NULL_VALUE_ADD_ASSIGNMENT_TITLE} msg={NOT_NULL_VALUE_ADD_ASSIGNMENT_DESC} callback={() => { setOpenNotValueAdd(() => { return false }) }} />}
           {openNotTypePoint && <AlertDialog title={ERROR_TYPE_POINT_TITLE} msg={ERROR_TYPE_POINT_DESC} callback={() => { setOpenNotTypePoint(() => { return false }) }} />}
-          <Box component='form'>
+          <Box component='form' className="container" style={{ paddingTop: "10px" }}>
+          <div className="card" style={{padding: "15px"}}>
             <TextField
               required
               autoFocus
@@ -391,6 +392,7 @@ export default function Assignments({ idclass, assignments, data_structure, grad
               value={assignmentPointAdded}
               onChange={e => setAssignmentPointAdded(e.target.value)} />
             <Button variant="contained" onClick={HandleAdd}>Thêm bài tập</Button>
+            </div>
           </Box>
         </div>;
       }
@@ -403,7 +405,6 @@ export default function Assignments({ idclass, assignments, data_structure, grad
             <Box component='form' className="container" style={{ paddingTop: "10px" }}>
               <div className="card" style={{padding: "15px"}}>
                 <TextField
-                 
                   required
                   autoFocus
                   margin="normal"
@@ -414,8 +415,7 @@ export default function Assignments({ idclass, assignments, data_structure, grad
                   variant="standard"
                   value={assignmentNameAdded}
                   onChange={e => setAssignmentNameAdded(e.target.value)} />
-                <TextField
-                  
+                <TextField      
                   required
                   margin="normal"
                   id="assignmentPoint"
