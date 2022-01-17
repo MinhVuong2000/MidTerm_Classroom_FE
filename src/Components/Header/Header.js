@@ -9,10 +9,12 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Divider from '@mui/material/Divider';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
@@ -92,29 +94,29 @@ export default function PrimarySearchAppBar({ socket, isLogined, navigate }) {
     fetch(DOMAIN_API + `users/notifications`, {
       method: "GET",
       headers: new Headers({
-          "x-access-token": localStorage.getItem('access_token'),
+        "x-access-token": localStorage.getItem('access_token'),
       }),
     })
       .then(res => res.json())
       .then(
-          (result) => {
-              if (!(result==='400' || result === '401' || result==='403')){
-                console.log("Get noti: ", result);
-                setListNotifications(result);
-                setUnreadNotiCount(result.filter((noti) => noti.status === 0).length)
-              }
-          },
-          (error) => {
-              console.log("Error get notifications", error);
+        (result) => {
+          if (!(result === '400' || result === '401' || result === '403')) {
+            console.log("Get noti: ", result);
+            setListNotifications(result);
+            setUnreadNotiCount(result.filter((noti) => noti.status === 0).length)
           }
-    )
+        },
+        (error) => {
+          console.log("Error get notifications", error);
+        }
+      )
   }, [socket])
-  
+
   React.useEffect(() => {
     console.log('socket in header', socket);
     socket?.on("getNotifications", (data) => {
       setListNotifications((prev) => [...prev, data]);
-      setUnreadNotiCount((prev) => prev+1);
+      setUnreadNotiCount((prev) => prev + 1);
     });
 
   }, [socket]);
@@ -135,56 +137,56 @@ export default function PrimarySearchAppBar({ socket, isLogined, navigate }) {
   };
 
   const handleMarkAllasRead = () => {
-    if (unreadNotiCount!==0){
+    if (unreadNotiCount !== 0) {
       setUnreadNotiCount(0);
       setListNotifications(prev => {
         const new_notis = prev.slice();
-        for (let i =0; i<new_notis.length; i++)
-          new_notis[i].status=1;
+        for (let i = 0; i < new_notis.length; i++)
+          new_notis[i].status = 1;
         return new_notis;
       })
       console.log('List notis after mark all as read', listNotifications)
       fetch(DOMAIN_API + `users/notifications-mark-all-as-read`, {
         method: "PATCH",
         headers: new Headers({
-            "x-access-token": localStorage.getItem('access_token'),
+          "x-access-token": localStorage.getItem('access_token'),
         }),
       })
     }
   }
   const handleMarkOneasRead = (status, id, id_class) => {
-    if (status===0){
-      setUnreadNotiCount(prev => prev-1);
-      console.log('List notis after mark one as read', id, ":",listNotifications)
+    if (status === 0) {
+      setUnreadNotiCount(prev => prev - 1);
+      console.log('List notis after mark one as read', id, ":", listNotifications)
       fetch(DOMAIN_API + `users/notifications-mark-one-as-read`, {
         method: "PATCH",
         headers: new Headers({
-            "x-access-token": localStorage.getItem('access_token'),
-            'Content-Type': 'application/json'
+          "x-access-token": localStorage.getItem('access_token'),
+          'Content-Type': 'application/json'
         }),
         body: JSON.stringify({
-            id: id,
+          id: id,
         })
       })
         .then(res => res.json())
         .then(
-            (result) => {
-              console.log("Success mark one as read", id, ":",  result);
-              setListNotifications(prev => {
-                const new_notis = prev.slice()
-                for (let i =0; i<new_notis.length; i++){
-                  if (new_notis[i].id === id){
-                    new_notis[i].status=1;
-                  }
+          (result) => {
+            console.log("Success mark one as read", id, ":", result);
+            setListNotifications(prev => {
+              const new_notis = prev.slice()
+              for (let i = 0; i < new_notis.length; i++) {
+                if (new_notis[i].id === id) {
+                  new_notis[i].status = 1;
                 }
-                return new_notis;
-              });
-              // window.location.href = `/classes/${id_class}`;
-            },
-            (error) => {
-                console.log("Error mark one as read", id, ":", error);
+              }
+              return new_notis;
+            });
+            // window.location.href = `/classes/${id_class}`;
+          },
+          (error) => {
+            console.log("Error mark one as read", id, ":", error);
 
-            }
+          }
         )
     }
   }
@@ -228,15 +230,21 @@ export default function PrimarySearchAppBar({ socket, isLogined, navigate }) {
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
-      <MenuItem ><a href='/profile' style={{ color: 'black', textDecoration: 'none' }}>Profile</a></MenuItem>
-      <MenuItem >Create class</MenuItem>
+      <MenuItem onClick={() => navigate('/profile')} style={{ color: 'black', textDecoration: 'none', cursor: 'pointer' }} >
+        <ListItemIcon>
+          <AccountCircleIcon fontSize="small" />
+        </ListItemIcon>
+        Profile
+
+      </MenuItem>
+      {/* <MenuItem >Create class</MenuItem>
       <Divider />
       <MenuItem >
         <ListItemIcon>
           <Settings fontSize="small" />
         </ListItemIcon>
         Settings
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={e => HandleLogout(socket)}>
         <ListItemIcon>
           <Logout fontSize="small" />
@@ -284,37 +292,37 @@ export default function PrimarySearchAppBar({ socket, isLogined, navigate }) {
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
       <div className="d-flex justify-content-center"
-        style={{fontSize:"20px",fontWeight:"bold", color:"blue"}}>
+        style={{ fontSize: "20px", fontWeight: "bold", color: "blue" }}>
         Thông báo
       </div>
       <Divider />
       <Divider />
-      {listNotifications.length===0 ? 
+      {listNotifications.length === 0 ?
         <MenuItem >
-            <div >
-                <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
-                  Không có thông báo
-                </Typography>
-            </div>
+          <div >
+            <Typography variant="body2" noWrap sx={{ textOverflow: "ellipsis", width: '400px', overflow: 'hidden', fontSize: "16px", fontWeight: "bold" }}  >
+              Không có thông báo
+            </Typography>
+          </div>
         </MenuItem>
         :
         <div>
-          {listNotifications.map( noti =>
-            <MenuItem onClick={() => handleMarkOneasRead(noti.status, noti.id, noti.id_class)} style={{ color: noti.status===1?'gray':'black'}}> 
+          {listNotifications.map(noti =>
+            <MenuItem onClick={() => handleMarkOneasRead(noti.status, noti.id, noti.id_class)} style={{ color: noti.status === 1 ? 'gray' : 'black' }}>
               <div>
-                <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden',fontSize:"16px", fontWeight:"bold" }}  >
+                <Typography variant="body2" noWrap sx={{ textOverflow: "ellipsis", width: '400px', overflow: 'hidden', fontSize: "16px", fontWeight: "bold" }}  >
                   {`${noti.class_name}`}
                 </Typography>
-                <Typography variant="body2" noWrap sx={{textOverflow: "ellipsis", width: '400px',overflow: 'hidden' }} >
+                <Typography variant="body2" noWrap sx={{ textOverflow: "ellipsis", width: '400px', overflow: 'hidden' }} >
                   {`${noti.message}`}
-                <br />
+                  <br />
                 </Typography>
               </div>
             </MenuItem>
           )}
           <Divider />
           <MenuItem onClick={handleMarkAllasRead}>
-            <ListItemIcon style={{color:unreadNotiCount!==0?"blue":'gray'}}>
+            <ListItemIcon style={{ color: unreadNotiCount !== 0 ? "blue" : 'gray' }}>
               <Check />Đánh dấu đã đọc
             </ListItemIcon>
           </MenuItem>
@@ -343,7 +351,8 @@ export default function PrimarySearchAppBar({ socket, isLogined, navigate }) {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Classroom TVT</a>
+
+            <Link onClick={() => navigate('/')} style={{ color: 'white', textDecoration: 'none', cursor: 'pointer' }}>Classroom TVT</Link>
           </Typography>
           <Search>
             <SearchIconWrapper>
