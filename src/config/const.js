@@ -1,7 +1,7 @@
 // const DOMAIN_API = 'http://localhost:3000/';
 // const DOMAIN_FE = 'http://localhost:3001/';
 // const DOMAIN_SOCKET = 'http://localhost:5000';
-const DOMAIN_SOCKET = 'https://final-project-classroom-api.herokuapp.com:5000';
+const DOMAIN_SOCKET = 'https://final-project-classroom-socket.herokuapp.com';
 const DOMAIN_API = 'https://final-project-classroom-api.herokuapp.com/';//backend
 const DOMAIN_FE = 'https://final-project-classroom-fe.herokuapp.com/';//frontend
 const EXISTED_CLASS_TITLE = "Name {} is existed";
