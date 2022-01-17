@@ -18,14 +18,14 @@ import {
 } from "react-router-dom";
 
 
-export default function RouterURL({socket, setIsLogined}) {
+export default function RouterURL({socket, setIsLogined, navigate}) {
   return (
       <Routes>
         <Route exact path='/' element={<Classes />} />
         <Route path='/notfound' element={<NotFound />} />
         <Route path='/classes/:idclass' element={<ClassDetail socket={socket}/>} />
         <Route path='/register' element={<Register />} />
-        <Route path='/login' element={<Login socket={socket} setIsLogined={setIsLogined}/>} />
+        <Route path='/login' element={<Login socket={socket} setIsLogined={setIsLogined} navigate={navigate}/>} />
         <Route path='/forget-password' element={<ForgetPassword />} />
         <Route path='/forget-password/send-otp/' element={<ForgetPasswordSendOTP />} />
         <Route path='/renew-password/' element={<RenewPassword />} />

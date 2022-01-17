@@ -12,7 +12,7 @@ import LoginByGoogle from './GoogleLogin/GoogleLogin';
 import Button from '@mui/material/Button';
 
 
-export default function Login({socket, setIsLogined}) {
+export default function Login({socket, setIsLogined, navigate}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -71,7 +71,8 @@ export default function Login({socket, setIsLogined}) {
         console.log('ReDirect to main');
         setIsLogined(true);
         // return <Navigate to='/' />
-        window.location.href = '/';
+        // window.location.href = '/';
+        navigate('/');
     }
     return (
         <div className="App">
@@ -143,7 +144,7 @@ export default function Login({socket, setIsLogined}) {
                     </form>
                     <div className="forgot-password text-right">
                         <span className="social-label" style={{fontSize:"16px", color:"#1976D2"}} >Hoặc đăng nhập bằng </span>
-                        <LoginByGoogle reload={setPassword}/>
+                        <LoginByGoogle reload={setPassword} navigate={navigate}/>
                     </div>
                 </div>
             </div>

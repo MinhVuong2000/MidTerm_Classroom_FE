@@ -1,7 +1,7 @@
 import GoogleLogin from "react-google-login";
 import {googleClientID, DOMAIN_API} from '../../../config/const';
 
-export default function LoginByGoogle({reload}){
+export default function LoginByGoogle({reload, navigate}){
     function  onGoogleLoginSuccess(googleAuth){
         const profile = googleAuth.profileObj;
         const accountGoogle = {
@@ -20,7 +20,8 @@ export default function LoginByGoogle({reload}){
             .then((result) => {
                 localStorage.setItem('access_token', result.access_token);
                 console.log('access_token:',result.access_token);
-                reload('')
+                navigate('/');
+                reload('');
             })
             .catch(error => console.log('Google login error', error))
     }

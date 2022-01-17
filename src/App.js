@@ -30,7 +30,7 @@ export default function App() {
         <div>
           {isLogined && <Header socket={socket} isLogined={isLogined} navigate={navigate}/>}
 
-          <RouterURL socket={socket} setIsLogined={setIsLogined}/>
+          <RouterURL socket={socket} setIsLogined={setIsLogined} navigate={navigate}/>
         </div>
     )
 }
