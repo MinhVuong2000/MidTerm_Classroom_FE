@@ -12,7 +12,7 @@ export default function App() {
     let navigate = useNavigate();
 
     useEffect(() => {
-      setSocket(io(DOMAIN_SOCKET[4]==='s' ? DOMAIN_API : DOMAIN_SOCKET,
+      setSocket(io(DOMAIN_SOCKET,
         {
           withCredentials: true,
           // extraHeaders: {
