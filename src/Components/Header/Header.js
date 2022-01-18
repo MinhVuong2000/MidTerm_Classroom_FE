@@ -115,7 +115,7 @@ export default function PrimarySearchAppBar({ socket, isLogined, navigate }) {
   React.useEffect(() => {
     console.log('socket in header', socket);
     socket?.on("getNotifications", (data) => {
-      setListNotifications((prev) => [...prev, data]);
+      setListNotifications((prev) => [data, ...prev]);
       setUnreadNotiCount((prev) => prev + 1);
     });
 
