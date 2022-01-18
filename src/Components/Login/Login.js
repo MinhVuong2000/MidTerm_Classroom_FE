@@ -71,8 +71,8 @@ export default function Login({socket, setIsLogined, navigate}) {
         console.log('ReDirect to main');
         setIsLogined(true);
         // return <Navigate to='/' />
-        // window.location.href = '/';
-        navigate('/');
+        window.location.href = '/';
+        // navigate('/');
     }
     return (
         <div className="App">

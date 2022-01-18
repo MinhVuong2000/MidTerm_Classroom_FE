@@ -20,8 +20,9 @@ export default function LoginByGoogle({reload, navigate}){
             .then((result) => {
                 localStorage.setItem('access_token', result.access_token);
                 console.log('access_token:',result.access_token);
-                navigate('/');
-                reload('');
+                // navigate('/');
+                // reload('');
+                window.location.href = '/';
             })
             .catch(error => console.log('Google login error', error))
     }
