@@ -66,7 +66,7 @@ function createData(board, isteacher) {
             return listtemp;
         }
         else {
-            console.log("Board bi null: ", board);
+            console.log("Board null: ", board);
             return null;
         }
 
@@ -78,7 +78,7 @@ function createData(board, isteacher) {
 }
 
 function createListButtonName(board, isteacher) {
-    console.log('grade board sau khi change: ', board)
+    console.log('Grade board sau khi change: ', board)
     if (isteacher) {
         if (board != null) {
             let lassignment = board.listAssignment;
@@ -139,12 +139,19 @@ function EnhancedTableHead(props) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
+    console.log("ds____",listHeader )
     let headCells = [
         {
             id: 'name',
             numeric: false,
             disablePadding: true,
             label: 'Tên học sinh',
+        },
+        {
+            id: 'id_uni_user',
+            numeric: false,
+            disablePadding: true,
+            label: 'MSSV',
         },
     ];
     listHeader.map((item) => {
@@ -717,6 +724,7 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                 .map((row, index) => {
                                                     console.log("@@@@@@@@@@Row trong doan mapping: ", gradeboard)
+                                                    console.log("@@@@@@@@@@Row : ", row)
                                                     const isItemSelected = isSelected(row.name);
                                                     const labelId = `enhanced-table-checkbox-${index}`;
                                                     let listTableCell = [];
@@ -727,6 +735,15 @@ export default function Scores({ idclass, isTeacher, class_name, grade_board, st
                                                         padding="none"
                                                     >
                                                         {row.name}
+                                                    </TableCell>);
+                                                    
+                                                    listTableCell.push(<TableCell
+                                                        component="th"
+                                                        id={labelId}
+                                                        scope="row"
+                                                        padding="none"
+                                                    >
+                                                        {row.idUserStudent}
                                                     </TableCell>);
 
                                                     for (let i = 0; i < row.listGrade.length; i++) {
