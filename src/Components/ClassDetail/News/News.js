@@ -400,7 +400,7 @@ export default function News(props) {
                               <Avatar sx={{ bgcolor: deepOrange[500] }}>Ava</Avatar>
                               <TextField
                                 id="inpcomment"
-                                label={`${onecomment.student.full_name} - ${onecomment.create_time}`}
+                                label={`${onecomment.student?.full_name} - ${onecomment.create_time}`}
                                 sx={{ width: '600px', marginTop: "10px" }}
                                 value={onecomment.content}
                                 color="info"
