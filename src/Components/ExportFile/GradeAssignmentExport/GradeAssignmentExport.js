@@ -13,6 +13,7 @@ export const ExportReactCSV = ({csvData, fileName}) => {
         let student = listStudent[i];
         let temp = {};
         temp['Tên học sinh'] = student.username;
+        temp['MSSV'] = student.id_uni_user;
         for(let j = 0; j < listAssignment.length; j++){
             let headerName = listAssignment[j].name + ' (' + listAssignment[j].point + ' điểm)';
             if(student.assignmentGrade[j]){
