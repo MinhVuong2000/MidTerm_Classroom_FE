@@ -1,7 +1,6 @@
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import Alert from '@mui/material/Alert';
 import { useState } from 'react';
 import { DOMAIN_API } from '../../config/const';
 
@@ -33,17 +32,7 @@ export default function ForgetPassword() {
                 .then(res => res.json())
                 .then((result) => {
                     if (result===false){
-//                         window.alert("Không có tài khoản nào có email này!");
-                        <Alert severity="error">Không có tài khoản nào có email này!</Alert>
-                        toast.error('Không có tài khoản nào có email này!', {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            });
+                        window.alert("Không có tài khoản nào có email này!");
                     }
                     else{
                         navigate("/forget-password/send-otp", { state: {email: email }});
@@ -52,17 +41,7 @@ export default function ForgetPassword() {
                 .catch(error => console.log('Lỗi submit', error))
         }
         else{
-//             window.alert("Email không được trống!");
-            <Alert severity="error">Email không được trống!</Alert>
-            toast.error('Email không được trống!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                });
+            window.alert("Email không được trống!");
         }
     }
 
@@ -76,7 +55,7 @@ export default function ForgetPassword() {
         <div className="App">
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
-                    <Link className="navbar-brand" to={"/sign-in"}><h1>Classroom</h1></Link>
+                    <Link className="navbar-brand" to={"/login"}><h1>Classroom</h1></Link>
                     <div className="collapse navbar-collapse login-register-link" id="navbarTogglerDemo02">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
@@ -105,7 +84,6 @@ export default function ForgetPassword() {
                         <Button type="submit"  variant="contained" style={{marginRight: "10px"}}
                         onClick={handleSubmit} name="otp_renew_pass" id="otp_renew_pass" 
                         >Nhận OTP</Button>
-//                         <Button  variant="contained" onClick={() => notify('Test notify success')}>Test notify</Button>
                     </form>
                 </div>
             </div>

@@ -34,7 +34,9 @@ export default function ForgetPasswordSendOTP() {
         fetch(url, requestOptions)
             .then(res => res.json())
             .then((result) => {
-                if (result===false){window.alert("Không có tài khoản nào có email này!")}
+                if (result===false){
+                    window.alert("Không có tài khoản nào có email này!")
+                }
                 else{
                     window.alert('Đã gửi lại thanh công OTP!');
                 }
@@ -78,7 +80,7 @@ export default function ForgetPasswordSendOTP() {
         <div className="App">
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
-                    <Link className="navbar-brand" to={"/sign-in"}><h1>Classroom</h1></Link>
+                    <Link className="navbar-brand" to={"/login"}><h1>Classroom</h1></Link>
                     <div className="collapse navbar-collapse login-register-link" id="navbarTogglerDemo02">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">

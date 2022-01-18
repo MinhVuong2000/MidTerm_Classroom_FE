@@ -103,14 +103,14 @@ export default function Register() {
 
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
-                    <Link className="navbar-brand" to={"/sign-in"}>Classroom</Link>
+                    <Link className="navbar-brand" to={"/login"}>Classroom</Link>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <Link className="nav-link" to={"/login"}>Login</Link>
+                                <Link className="nav-link" to={"/login"}>Đăng nhập</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to={"/register"}>Sign up</Link>
+                                <Link className="nav-link" to={"/register"}>Đăng kí</Link>
                             </li>
                         </ul>
                     </div>
@@ -155,7 +155,7 @@ export default function Register() {
                             <input type="address" value={address} onChange={handleChangeAddress} className="form-control" placeholder="Enter địa chỉ" />
                         </div>
                         <br />
-                        <button type="submit" onClick={handleSubmit}  className="btn btn-primary btn-block">Sign Up</button>
+                        <button type="submit" onClick={handleSubmit}  className="btn btn-primary btn-block">Đăng kí</button>
                         <p className="forgot-password text-right">
                             Bạn đã có tài khoản? <Link className="nav-link" to={"/login"}>Login</Link>
                         </p>

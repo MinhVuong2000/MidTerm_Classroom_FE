@@ -78,7 +78,7 @@ export default function Login({socket, setIsLogined, navigate}) {
         <div className="App">
             <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <div className="container">
-                    <Link className="navbar-brand" to={"/sign-in"}><h1>Classroom</h1></Link>
+                    <Link className="navbar-brand" to={"/login"}><h1>Classroom</h1></Link>
                     <div className="collapse navbar-collapse login-register-link" id="navbarTogglerDemo02">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
@@ -136,10 +136,10 @@ export default function Login({socket, setIsLogined, navigate}) {
                         <Button type="submit" onClick={handleSubmit} 
                         name="signin" id="signin"  value="Đăng nhập" variant="contained">Đăng nhập</Button>
                         <p className="forgot-password text-right">
-                            <a href="/forget-password">Quên mật khẩu?</a>
+                            <Link to="/forget-password">Quên mật khẩu?</Link>
                         </p>
                         <p className="forgot-password text-right">
-                            <a href="/register">Bạn chưa có tài khoản?</a>
+                            <Link to="/register">Bạn chưa có tài khoản?</Link>
                         </p>
                     </form>
                     <div className="forgot-password text-right">
