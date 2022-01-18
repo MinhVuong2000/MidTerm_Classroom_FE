@@ -1,6 +1,7 @@
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import Alert from '@mui/material/Alert';
 import { useState } from 'react';
 import { DOMAIN_API } from '../../config/const';
 
@@ -32,7 +33,8 @@ export default function ForgetPassword() {
                 .then(res => res.json())
                 .then((result) => {
                     if (result===false){
-                        window.alert("Không có tài khoản nào có email này!");
+//                         window.alert("Không có tài khoản nào có email này!");
+                        <Alert severity="error">Không có tài khoản nào có email này!</Alert>
                         toast.error('Không có tài khoản nào có email này!', {
                             position: "top-center",
                             autoClose: 5000,
@@ -50,7 +52,8 @@ export default function ForgetPassword() {
                 .catch(error => console.log('Lỗi submit', error))
         }
         else{
-            window.alert("Email không được trống!");
+//             window.alert("Email không được trống!");
+            <Alert severity="error">Email không được trống!</Alert>
             toast.error('Email không được trống!', {
                 position: "top-center",
                 autoClose: 5000,
@@ -102,7 +105,7 @@ export default function ForgetPassword() {
                         <Button type="submit"  variant="contained" style={{marginRight: "10px"}}
                         onClick={handleSubmit} name="otp_renew_pass" id="otp_renew_pass" 
                         >Nhận OTP</Button>
-                        <Button  variant="contained" onClick={() => notify('Test notify success')}>Test notify</Button>
+//                         <Button  variant="contained" onClick={() => notify('Test notify success')}>Test notify</Button>
                     </form>
                 </div>
             </div>
