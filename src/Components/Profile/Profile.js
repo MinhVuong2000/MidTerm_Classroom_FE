@@ -21,6 +21,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import AlertDialog from '../AlertDialog/AlertDialog';
+import Tooltip from '@mui/material/Tooltip';
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -225,7 +226,7 @@ export default function Profile() {
         return (
             <div className="d-flex justify-content-center">
                 {isEditting ? 
-                    <Card sx={{ maxWidth: 600, marginTop: "50px" }}>
+                    <Card sx={{ maxWidth: 600, marginTop: "50px" , padding:"20px" }}>
                         {openExistedMSSV && <AlertDialog title={EXISTED_MSSV_TITLE} msg={EXISTED_MSSV_DESC} callback={() => {setOpenExistedMSSV(false)}}/>}
                         {openNullMSSV && <AlertDialog title={ENTER_MSSV_TITLE} msg={ENTER_MSSV_DESC} callback={() => {setOpenNullMSSV(false)}}/>}
                         <TextField
@@ -237,7 +238,9 @@ export default function Profile() {
                             variant="standard"
                             value={fullName}
                             onChange={e => setFullName(e.target.value)}
+                            style={{paddingBottom:"20px"}}
                         />
+                        
                         {isNullMSSV && <TextField
                             id="MSSV"
                             label="Mã số do trường cung cấp"
@@ -247,7 +250,9 @@ export default function Profile() {
                             variant="standard"
                             value={MSSV!=null ? MSSV : ''} 
                             onChange={e => setMSSV(e.target.value)}
+                            style={{paddingBottom:"20px"}}
                         />}
+                    
                         <TextField
                             id="email"
                             label="Email"
@@ -256,6 +261,7 @@ export default function Profile() {
                             variant="standard"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
+                            style={{paddingBottom:"20px"}}
                         />
                         <TextField
                             id="phone"
@@ -265,6 +271,7 @@ export default function Profile() {
                             variant="standard"
                             value={phone}
                             onChange={e => setPhone(e.target.value)}
+                            style={{paddingBottom:"20px"}}
                         />
                         <TextField
                             id="address"
@@ -274,12 +281,13 @@ export default function Profile() {
                             variant="standard"
                             value={address}
                             onChange={e => setAddress(e.target.value)}
+                            style={{paddingBottom:"20px"}}
                         />
                         <CardActions disableSpacing>
-                            <IconButton aria-label="share" onClick={handleSaveEditProfile}>
-                                <SaveIcon/>
-                            </IconButton>
-                            <Button aria-label="share" onClick={() => {setIsEditting(false)}}>
+                            <Button variant="contained" aria-label="share" onClick={handleSaveEditProfile} endIcon={ <SaveIcon/>}> Lưu 
+                               
+                            </Button>
+                            <Button color="secondary" style={{marginLeft:"20px"}} variant="contained" aria-label="share" onClick={() => {setIsEditting(false)}}>
                                 Cancel
                             </Button>
                         </CardActions>
@@ -293,11 +301,13 @@ export default function Profile() {
                                 
                                 <div style={{display:'flex', justifyContent: 'space-between'}}>
                                     <h1>Thông tin cá nhân</h1>
+                                    <Tooltip title="Chỉnh sửa">
                                     <CardActions disableSpacing sx={{marginLeft:'30px'}}>
                                         <IconButton aria-label="share" onClick={() => {setIsEditting(true);}}>
                                             <ModeEditIcon/>
                                         </IconButton>
                                     </CardActions>
+                                    </Tooltip>
                                 </div>
                                 <CardHeader
                                     avatar={
@@ -454,11 +464,11 @@ export default function Profile() {
                                     )
                                 }}
                             />
-                            <CardActions disableSpacing>
-                                <IconButton onClick={handleChangePassword}>
-                                    Thay đổi<SaveIcon/>
-                                </IconButton>
-                            </CardActions>
+                           <div style={{marginTop:"20px"}}>
+                                <Button  variant="contained" onClick={handleChangePassword} endIcon={<SaveIcon/>}> 
+                                    Thay đổi
+                                </Button>
+                                </div>
                         </Card>}
                     </div>
                 }

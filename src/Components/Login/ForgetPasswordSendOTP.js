@@ -3,7 +3,7 @@ import "./Login.css";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useState } from 'react';
 import { DOMAIN_API } from '../../config/const';
-
+import Button from '@mui/material/Button';
 
 export default function ForgetPasswordSendOTP() {
     const [otp, setOTP] = useState('');
@@ -106,12 +106,14 @@ export default function ForgetPasswordSendOTP() {
                             placeholder="Nhập OTP" value={otp} onChange={handleChangeOTP}/>
                         </div>
                         <br />
-                        <button type="submit" className="btn btn-primary btn-block" 
+                        <Button type="submit" variant="contained"
                         onClick={handleSubmit} name="otp_renew_pass" id="otp_renew_pass" 
-                        class="form-submit">Kiểm tra OTP</button>
+                       >Kiểm tra OTP</Button>
+                        {/* <Button type="submit" onClick={handleSubmit} 
+                        name="signin" id="signin"  value="Đăng nhập" variant="contained">Đăng nhập</Button> */}
                         <p className="forgot-password text-right">
-                            <button onClick={resendOTP}> Gửi lại OTP </button>
-                        </p>
+                            <Button variant="contained" onClick={resendOTP}> Gửi lại OTP </Button>
+                        </p> 
                     </form>
                 </div>
             </div>
