@@ -7,30 +7,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function App() {
-    const [isLogined, setIsLogined] = useState(localStorage.getItem('access_token')!='undefined');
-    const [socket, setSocket] = useState(null);
-    let navigate = useNavigate();
-
-    useEffect(() => {
-      setSocket(io(DOMAIN_SOCKET,
-        {
-          withCredentials: true,
-          // extraHeaders: {
-          //     "x-access-token": localStorage.getItem('access_token'),
-          // }
-        }
-    ));
-    }, []);
-  
-    useEffect(() => {
-      socket?.emit("newUser", localStorage.getItem('access_token'));
-    }, [socket]);
-
+    const [isLogined, setIsLogined] = useState(true);
     return (
         <div>
-          {isLogined && <Header socket={socket} isLogined={isLogined} navigate={navigate}/>}
-
-          <RouterURL socket={socket} setIsLogined={setIsLogined} navigate={navigate}/>
+          <RouterURL/>
         </div>
     )
 }
