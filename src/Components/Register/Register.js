@@ -1,99 +1,167 @@
+import React, { Component } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import "./Register.css"
-import { useState } from "react";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import InputAdornment from "@mui/material/InputAdornment";
-import Input from "@mui/material/Input";
-import IconButton from '@mui/material/IconButton';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate} from 'react-router-dom';
 import { DOMAIN_API } from '../../config/const';
+import { useState, useEffect } from "react";
 
-import Button from '@mui/material/Button';
-import Header from '../Header/Header'
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-
-
-
-export default function Login({ socket, setIsLogined, navigate }) {
-    const [name, setUsername] = useState('');
+export default function Register() {
+    
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [fullname, setFullname] = useState('');
+    const [address, setAddress] = useState('');
+    const [mssv, setMSSV] = useState('');
     const [email, setEmail] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+    const [phone, setPhone] = useState('');
+    const [canLogin, setCanLogin] = useState(false);
+    const [isEnoughInforRegister, setIsEnoughInforRegister] = useState(false);
 
+    function handleChangeUsername(event) {
+        setUsername(event.target.value)
+    }
+    function handleChangePassword(event) {
+        setPassword(event.target.value)
+    }
+    function handleChangeFullname(event) {
+        setFullname(event.target.value)
+    }
+    function handleChangeEmail(event) {
+        setEmail(event.target.value)
+    }
+    function handleChangeAddress(event) {
+        setAddress(event.target.value)
+    }
+    function handleChangeMSSV(event) {
+        setMSSV(event.target.value)
+    }
+    function handleChangePhone(event) {
+        setPhone(event.target.value)
+    }
+    function handleSubmit(event) {
+        event.preventDefault();
+        fetch(DOMAIN_API+`is-available`,{
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, mssv })
+        })
+        .then(res => res.json())
+        .then(
+            (result)=>{
+                console.log(result);
+                if(result == true){
+                    if (username !== '' && password !== '' && mssv !=='' && email!=='' && fullname!=='') {
+                        const url = DOMAIN_API + "register";
+                        const requestOptions = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ username, password, fullname, mssv, phone, email, address })
+                        };
+                        fetch(url, requestOptions)
+                        .then(res => res.json())
+                        .then((result) => {
+                            console.log(result);
+                            if(result == true){
+                                setCanLogin(true)
+                            }
+                        })
+                        .catch(error => console.log('Form submit error', error))
+                    }
+                    else{
+                        if(username == '') window.alert("Username không được trống!");
+                        else{
+                            if(password == '') window.alert("Password không được trống!");
+                            else{
+                                if(email == '') window.alert("Email không được trống!");
+                                else{
+                                    if(mssv == '') window.alert("MSSV không được trống!");
+                                    else if(fullname == '') window.alert("Họ tên không được trống!");
+                                }
+                            }
+                        }
+                    }
+                }
+                else{
+                   window.alert(result.message);
+                }
+            }
+        )
+    };
+    if(canLogin){
+        return (
+            <Navigate to="/login"/>
+        )
+    }
+    if (localStorage.access_token){
+        localStorage.removeItem("access_token");
+        return (
+            <Navigate to="/login"/>
+        );
+    }
     return (
-        <div className="container">
-            <Grid container spacing={2}>
-                <Grid item xs={6}>
-                    <div style={{ margin: "60px", justifyContent: "center" }}>
-                        <form>
-                            <h2>Đăng ký</h2>
+        <div className="App">
 
-                            <div className="form-group">
-                                <label>Họ và tên</label>
-                                <Input type="text" name="username" id="username" className="form-control" placeholder="Nhập họ và tên của bạn" value={name} />
-                            </div>
-
-                            <div className="form-group" style={{marginTop:"10px"}}> 
-                                <label>Email</label>
-                                <Input type="text" name="username" id="username" className="form-control" placeholder="Nhập Email của bạn" value={email} />
-                            </div>
-
-                            <div className="form-group" style={{marginTop:"10px"}}>
-                                <label>Mật khẩu</label>
-                                {/* <input type="password" name="password" id="password" className="form-control" placeholder="Nhập password" value={password} onChange={handleChangePassword}/> */}
-                                <Input
-                                    type={showPassword ? "text" : "password"}
-                                    name="password"
-                                    
-                                    id="password"
-                                    className="form-control"
-                                  
-                                    placeholder="Nhập mật khẩu"
-                                    value={password}
-                                    onChange
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                            >
-                                                {showPassword ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                />
-                            </div>
-
-                            <div className="form-group" style={{marginTop:"5px"}}>
-                        
-                                <p className="forgot-password text-right"> <span>  Bằng việc đăng ký tài khoản, bạn đã đồng ý với</span>
-                                    <Link to="/register" style={{color:"#00B14F",textDecoration: "none"}}> Điều khoản dịch vụ</Link>
-                                    <span> và</span> <Link to="/register" style={{color:"#00B14F", textDecoration: "none"}}>  Chính sách bảo mật </Link>
-                                    <span>của chúng tôi</span>
-                                </p>
-                            </div>
-
-                            <Button type="submit" fullWidth
-                                name="signin" id="signin" value="Đăng nhập" variant="contained"
-                                style={{ backgroundColor: "#00B14F", width: "auto" }}>Đăng ký
-                            </Button>                            
-                           
-                        </form>
-                        <div style={{marginTop:"10px"}}> 
-                        <p className="forgot-password text-left"> <span> Bạn đã có tài khoản?</span>
-                                    <Link to="/login" style={{color:"#00B14F", fontWeight: "bold",textDecoration: "none"}}> Đăng nhập ngay</Link>
-                                </p>
-                                </div>
-
+            <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+                <div className="container">
+                    <Link className="navbar-brand" to={"/login"}>Classroom</Link>
+                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/login"}>Đăng nhập</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/register"}>Đăng kí</Link>
+                            </li>
+                        </ul>
                     </div>
-                </Grid>
-                <Grid item xs={6} className="center-parent">
-                    <div className="center-me">
-                        <img src="login_user.jpg"></img>
-                    </div>
-                </Grid>
+                </div>
+            </nav>
 
-            </Grid>
-        </div >
-    )
+            <div className="auth-wrapper">
+                <div className="auth-inner">
+                    <form>
+
+                        <h3>Đăng kí tài khoản</h3>
+
+                        <div className="form-group">
+                            <label>Username</label>
+                            <input type="text" value={username} onChange={handleChangeUsername} className="form-control" placeholder="User name" />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input type="password" value={password} onChange={handleChangePassword} className="form-control" placeholder="Enter password" />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Tên đầy đủ</label>
+                            <input type="text" value={fullname} onChange={handleChangeFullname} className="form-control" placeholder="Full name" />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input type="email" value={email} onChange={handleChangeEmail} className="form-control" placeholder="Enter email" />
+                        </div>
+                        <div className="form-group">
+                            <label>Phone</label>
+                            <input type="phone" value={phone} onChange={handleChangePhone} className="form-control" placeholder="Enter phone" />
+                        </div>
+                        <div className="form-group">
+                            <label>MSSV</label>
+                            <input type="mssv" value={mssv} onChange={handleChangeMSSV} className="form-control" placeholder="Enter MSSV" />
+                        </div>
+                        <div className="form-group">
+                            <label>Địa chỉ</label>
+                            <input type="address" value={address} onChange={handleChangeAddress} className="form-control" placeholder="Enter địa chỉ" />
+                        </div>
+                        <br />
+                        <button type="submit" onClick={handleSubmit}  className="btn btn-primary btn-block">Đăng kí</button>
+                        <p className="forgot-password text-right">
+                            Bạn đã có tài khoản? <Link className="nav-link" to={"/login"}>Login</Link>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
 }

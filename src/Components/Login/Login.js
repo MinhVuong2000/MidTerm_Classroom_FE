@@ -10,85 +10,144 @@ import { Navigate, Link } from 'react-router-dom';
 import { DOMAIN_API } from '../../config/const';
 import LoginByGoogle from './GoogleLogin/GoogleLogin';
 import Button from '@mui/material/Button';
-import Header from '../Header/Header'
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
 
 
-
-export default function Login({ socket, setIsLogined, navigate }) {
-    const [email, setUsername] = useState('');
+export default function Login({socket, setIsLogined, navigate}) {
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+    function handleChangeUsername(event) {
+        setUsername(event.target.value)
+    }
+    function handleChangePassword(event) {
+        setPassword(event.target.value)
+    }
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    
+    const handleMouseDown = (event) => {
+    event.preventDefault();
+    };
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        if (username !== '' && password !== '') {
+
+            const url = DOMAIN_API + "login";
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            };
+            fetch(url, requestOptions)
+                .then(res => res.json())
+                .then((result) => {
+                    if (result.access_token==='error_username'){window.alert("Username không tồn tại!")}
+                    else if (result.access_token==='error_password'){window.alert("Password không đúng!")}
+                    else{
+                        localStorage.setItem('access_token', result.access_token);
+                        localStorage.setItem('check_admin', result.isAdmin);
+                        setPassword('');
+                    }
+                })
+                .catch(error => console.log('Form submit error', error))
+        }
+        else{
+            window.alert("Username và Password không được trống!");
+        }
+    }
+    if(localStorage.getItem('check_admin')=='true' && localStorage.getItem('access_token')){
+        return (
+            <Navigate to="/admin"/>
+        )
+    }
+    if (localStorage.getItem('access_token')){
+        const access_token = localStorage.getItem('access_token');
+        console.log("Login success, access token", access_token);
+        socket.emit('newUser', access_token);
+        console.log('ReDirect to main');
+        setIsLogined(true);
+        // return <Navigate to='/' />
+        window.location.href = '/';
+        // navigate('/');
+    }
     return (
-        <div className="container">
-            <Grid container spacing={2}>
-                <Grid item xs={6}>
-                    <div style={{ margin: "60px", justifyContent: "center" }}>
-                        <form>
-                            <h2>Đăng nhập</h2>
-
-                            <div className="form-group">
-                                <label>Email</label>
-                                <Input type="text" name="username" id="username" className="form-control" placeholder="Nhập Email" value={email} />
-                            </div>
-
-                            <div className="form-group" style={{marginTop:"10px"}}>
-                                <label>Mật khẩu</label>
-                                {/* <input type="password" name="password" id="password" className="form-control" placeholder="Nhập password" value={password} onChange={handleChangePassword}/> */}
-                                <Input
-                                    type={showPassword ? "text" : "password"}
-                                    name="password"
-                                    
-                                    id="password"
-                                    className="form-control"
-                                  
-                                    placeholder="Nhập mật khẩu"
-                                    value={password}
-                                    onChange
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                            >
-                                                {showPassword ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                />
-                            </div>
-
-                            <div className="form-group" style={{marginTop:"5px"}}>
-                                <p className="forgot-password text-right">
-                                    <Link to="/forget-password"  style={{color:"#00B14F",textDecoration: "none"}}>Quên mật khẩu?</Link>
-                                </p>
-                            </div>
-
-                            <Button type="submit"
-                                name="signin" id="signin" value="Đăng nhập" variant="contained"
-                                style={{ backgroundColor: "#00B14F", width: "auto" }}>Đăng nhập
-                            </Button>
-                            <div className="d-flex align-items-end flex-column">
-                                <div style={{ fontSize: "16px", marginBottom:"5px" }}>
-                                    Hoặc đăng nhập bằng </div>
-                                <LoginByGoogle reload={setPassword} navigate={navigate}  />
-                                <div style={{marginTop:"20px"}}>
-                                <p className="forgot-password text-right"> <span> Bạn chưa có tài khoản?</span>
-                                    <Link to="/register" style={{color:"#00B14F", fontWeight: "bold",textDecoration: "none"}}> Đăng ký ngay</Link>
-                                </p>
-                                </div>
-                            </div>
-                        </form>
-
+        <div className="App">
+            <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+                <div className="container">
+                    <Link className="navbar-brand" to={"/login"}><h1>Classroom</h1></Link>
+                    <div className="collapse navbar-collapse login-register-link" id="navbarTogglerDemo02">
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/login"}>Đăng nhập</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to={"/register"}>Đăng kí</Link>
+                            </li>
+                        </ul>
                     </div>
-                </Grid>
-                <Grid item xs={6} className="center-parent">
-                    <div className="center-me">
-                        <img src="login_user.jpg"></img>
-                    </div>
-                </Grid>
+                </div>
+            </nav>
 
-            </Grid>
-        </div >
+            <div className="auth-wrapper">
+                <div className="auth-inner">
+                    <form>
+                        <h2>Đăng nhập</h2>
+
+                        <div className="form-group">
+                            <label>Username</label>
+                            <Input type="text" name="username" id="username" className="form-control" placeholder="Nhập Username" value={username} onChange={handleChangeUsername}/>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Password</label>
+                            {/* <input type="password" name="password" id="password" className="form-control" placeholder="Nhập password" value={password} onChange={handleChangePassword}/> */}
+                            <Input
+                                type={showPassword ? "text" : "password"} 
+                                name="password" 
+                                id="password" 
+                                className="form-control" 
+                                placeholder="Nhập mật khẩu" 
+                                value={password} 
+                                onChange={handleChangePassword}
+                                endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDown}
+                                    >
+                                        {showPassword ? <Visibility  fontSize="small" /> : <VisibilityOff  fontSize="small" />}
+                                    </IconButton>
+                                </InputAdornment>
+                                }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <div className="custom-control custom-checkbox">
+                                <input type="checkbox" className="custom-control-input" id="customCheck1" style={{marginRight: "5px"}}/>
+                                <label className="custom-control-label" htmlFor="customCheck1">Nhớ đăng nhập</label>
+                            </div>
+                        </div>
+                        <br />
+                        <Button type="submit" onClick={handleSubmit} 
+                        name="signin" id="signin"  value="Đăng nhập" variant="contained">Đăng nhập</Button>
+                        <p className="forgot-password text-right">
+                            <Link to="/forget-password">Quên mật khẩu?</Link>
+                        </p>
+                        <p className="forgot-password text-right">
+                            <Link to="/register">Bạn chưa có tài khoản?</Link>
+                        </p>
+                    </form>
+                    <div className="forgot-password text-right">
+                        <span className="social-label" style={{fontSize:"16px", color:"#1976D2"}} >Hoặc đăng nhập bằng </span>
+                        <LoginByGoogle reload={setPassword} navigate={navigate}/>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
